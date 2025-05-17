@@ -1,4 +1,3 @@
-
 import { Department, Document, DocumentStatus, DocumentType, User, UserRole } from "./types";
 
 // Mock Users
@@ -47,6 +46,15 @@ export const mockUsers: User[] = [
     role: UserRole.STAFF,
     department: Department.FINANCE,
     avatarUrl: "https://i.pravatar.cc/150?img=5"
+  },
+  {
+    id: "user-6",
+    email: "admin@hospital.org",
+    firstName: "Alex",
+    lastName: "Morgan",
+    role: UserRole.ADMIN,
+    department: Department.IT,
+    avatarUrl: "https://i.pravatar.cc/150?img=8"
   }
 ];
 

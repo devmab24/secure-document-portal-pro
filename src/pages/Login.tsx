@@ -94,6 +94,7 @@ const Login = () => {
                 <li>cmd@hospital.org (Chief Medical Director)</li>
                 <li>clinical-hod@hospital.org (Head of Department)</li>
                 <li>clinical-staff@hospital.org (Staff)</li>
+                <li>admin@hospital.org (System Administrator)</li>
               </ul>
             </div>
           </CardContent>
