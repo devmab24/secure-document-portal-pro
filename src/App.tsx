@@ -5,7 +5,6 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider } from "./contexts/AuthContext";
-import { SidebarProvider } from "@/components/ui/sidebar";
 import ProtectedRoute from "./components/ProtectedRoute";
 
 // Pages
@@ -33,31 +32,11 @@ const App = () => (
             
             {/* Protected routes */}
             <Route element={<ProtectedRoute />}>
-              <Route path="/dashboard" element={
-                <SidebarProvider collapsedWidth={60}>
-                  <Dashboard />
-                </SidebarProvider>
-              } />
-              <Route path="/documents" element={
-                <SidebarProvider collapsedWidth={60}>
-                  <Documents />
-                </SidebarProvider>
-              } />
-              <Route path="/documents/:id" element={
-                <SidebarProvider collapsedWidth={60}>
-                  <DocumentView />
-                </SidebarProvider>
-              } />
-              <Route path="/upload" element={
-                <SidebarProvider collapsedWidth={60}>
-                  <Upload />
-                </SidebarProvider>
-              } />
-              <Route path="/settings" element={
-                <SidebarProvider collapsedWidth={60}>
-                  <Settings />
-                </SidebarProvider>
-              } />
+              <Route path="/dashboard" element={<Dashboard />} />
+              <Route path="/documents" element={<Documents />} />
+              <Route path="/documents/:id" element={<DocumentView />} />
+              <Route path="/upload" element={<Upload />} />
+              <Route path="/settings" element={<Settings />} />
             </Route>
             
             <Route path="*" element={<NotFound />} />

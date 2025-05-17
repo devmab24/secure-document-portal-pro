@@ -17,7 +17,8 @@ import { useAuth } from "@/contexts/AuthContext";
 import { UserRole } from "@/lib/types";
 
 const AppSidebar = () => {
-  const { collapsed } = useSidebar();
+  const { state } = useSidebar();
+  const collapsed = state === "collapsed";
   const location = useLocation();
   const currentPath = location.pathname;
   const { user } = useAuth();
@@ -33,11 +34,11 @@ const AppSidebar = () => {
   return (
     <Sidebar
       className={`${collapsed ? "w-16" : "w-64"} border-r border-border transition-all duration-300 ease-in-out`}
-      collapsible
+      collapsible="icon"
     >
       <SidebarContent className="p-3">
         {/* Main Navigation */}
-        <SidebarGroup defaultOpen={true}>
+        <SidebarGroup>
           <SidebarGroupLabel className={collapsed ? "sr-only" : ""}>
             Main
           </SidebarGroupLabel>
@@ -75,7 +76,7 @@ const AppSidebar = () => {
 
         {/* Admin Section - Only visible to CMD and Admin */}
         {user && (user.role === UserRole.CMD || user.role === UserRole.ADMIN) && (
-          <SidebarGroup defaultOpen={false}>
+          <SidebarGroup>
             <SidebarGroupLabel className={collapsed ? "sr-only" : ""}>
               Administration
             </SidebarGroupLabel>
