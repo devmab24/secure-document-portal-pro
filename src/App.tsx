@@ -16,6 +16,7 @@ import Upload from "./pages/Upload";
 import DocumentView from "./pages/DocumentView";
 import Settings from "./pages/Settings";
 import NotFound from "./pages/NotFound";
+import Users from "./pages/Users";
 
 const queryClient = new QueryClient();
 
@@ -37,6 +38,7 @@ const App = () => (
               <Route path="/documents/:id" element={<DocumentView />} />
               <Route path="/upload" element={<Upload />} />
               <Route path="/settings" element={<Settings />} />
+              <Route path="/users" element={<Users />} />
             </Route>
             
             <Route path="*" element={<NotFound />} />
