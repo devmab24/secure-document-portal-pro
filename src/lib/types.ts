@@ -9,9 +9,12 @@ export enum UserRole {
 
 // Department Enum
 export enum Department {
-  CLINICAL = "Clinical",
-  SURGERY = "Surgery",
-  RADIOLOGY = "Radiology", 
+  RADIOLOGY = "Radiology",
+  DENTAL = "Dental",
+  EYE_CLINIC = "Eye Clinic",
+  ANTENATAL = "Antenatal",
+  A_AND_E = "Accident & Emergency",
+  PHYSIOTHERAPY = "Physiotherapy",
   PHARMACY = "Pharmacy",
   HR = "Human Resources",
   FINANCE = "Finance",

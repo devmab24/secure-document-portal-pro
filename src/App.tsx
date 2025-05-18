@@ -17,6 +17,8 @@ import DocumentView from "./pages/DocumentView";
 import Settings from "./pages/Settings";
 import NotFound from "./pages/NotFound";
 import Users from "./pages/Users";
+import AuditLogs from "./pages/AuditLogs";
+import DepartmentDashboard from "./pages/DepartmentDashboard";
 
 const queryClient = new QueryClient();
 
@@ -39,6 +41,10 @@ const App = () => (
               <Route path="/upload" element={<Upload />} />
               <Route path="/settings" element={<Settings />} />
               <Route path="/users" element={<Users />} />
+              <Route path="/audit" element={<AuditLogs />} />
+              <Route path="/department/:departmentSlug" element={<DepartmentDashboard />} />
+              <Route path="/department/approvals" element={<DepartmentDashboard />} />
+              <Route path="/department/staff" element={<DepartmentDashboard />} />
             </Route>
             
             <Route path="*" element={<NotFound />} />
