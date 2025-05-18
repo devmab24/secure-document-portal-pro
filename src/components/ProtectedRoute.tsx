@@ -18,10 +18,12 @@ const ProtectedRoute = () => {
 
   // Redirect to login if not authenticated
   if (!user) {
+    console.log("User not authenticated, redirecting to login");
     return <Navigate to="/login" state={{ from: location }} replace />;
   }
 
   // If authenticated, render the protected route inside the app layout
+  console.log("User authenticated, rendering protected content");
   return (
     <AppLayout>
       <Outlet />

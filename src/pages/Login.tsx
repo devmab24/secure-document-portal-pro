@@ -34,13 +34,19 @@ const Login = () => {
     }
     
     setIsSubmitting(true);
-    const success = await login(email, password);
-    
-    if (success) {
-      navigate(from, { replace: true });
+    try {
+      const success = await login(email, password);
+      
+      if (success) {
+        // Added console log for debugging
+        console.log("Login successful, redirecting to:", from);
+        navigate(from, { replace: true });
+      }
+    } catch (error) {
+      console.error("Login error:", error);
+    } finally {
+      setIsSubmitting(false);
     }
-    
-    setIsSubmitting(false);
   };
 
   return (

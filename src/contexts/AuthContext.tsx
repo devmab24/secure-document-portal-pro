@@ -1,6 +1,6 @@
 
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import { User } from '@/lib/types';
+import { User, UserRole, Department } from '@/lib/types';
 import { mockUsers } from '@/lib/mock-data';
 import { useToast } from '@/components/ui/use-toast';
 
@@ -33,31 +33,45 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const login = async (email: string, password: string): Promise<boolean> => {
-    setIsLoading(true);
-    
-    // Simulate API call delay
-    await new Promise(resolve => setTimeout(resolve, 800));
-    
-    // In a real app, this would be an API call to Supabase auth
-    const foundUser = mockUsers.find(u => u.email.toLowerCase() === email.toLowerCase());
-    
-    if (foundUser) {
-      setUser(foundUser);
-      localStorage.setItem('hospital-portal-user', JSON.stringify(foundUser));
+    try {
+      setIsLoading(true);
+      
+      // Simulate API call delay
+      await new Promise(resolve => setTimeout(resolve, 800));
+      
+      // In a real app, this would be an API call to backend auth
+      const foundUser = mockUsers.find(u => u.email.toLowerCase() === email.toLowerCase());
+      
+      // Debug logs to see if user was found
+      console.log("Login attempt for:", email);
+      console.log("User found:", foundUser);
+      
+      if (foundUser) {
+        setUser(foundUser);
+        localStorage.setItem('hospital-portal-user', JSON.stringify(foundUser));
+        toast({
+          title: "Login successful",
+          description: `Welcome back, ${foundUser.firstName}!`,
+        });
+        return true;
+      } else {
+        toast({
+          title: "Login failed",
+          description: "Invalid email or password",
+          variant: "destructive",
+        });
+        return false;
+      }
+    } catch (error) {
+      console.error("Login error:", error);
       toast({
-        title: "Login successful",
-        description: `Welcome back, ${foundUser.firstName}!`,
-      });
-      setIsLoading(false);
-      return true;
-    } else {
-      toast({
-        title: "Login failed",
-        description: "Invalid email or password",
+        title: "Login error",
+        description: "An unexpected error occurred. Please try again.",
         variant: "destructive",
       });
-      setIsLoading(false);
       return false;
+    } finally {
+      setIsLoading(false);
     }
   };
 
