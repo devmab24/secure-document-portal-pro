@@ -22,18 +22,19 @@ import DepartmentDashboard from "./pages/DepartmentDashboard";
 
 const queryClient = new QueryClient();
 
+// Create the App component with proper provider nesting
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <BrowserRouter>
-      <TooltipProvider>
-        <Toaster />
-        <Sonner />
-        <AuthProvider>
+      <AuthProvider>
+        <TooltipProvider>
+          <Toaster />
+          <Sonner />
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/login" element={<Login />} />
             
-            {/* Protected routes - now properly wrapped by AuthProvider */}
+            {/* Protected routes - wrapped in ProtectedRoute for auth check */}
             <Route element={<ProtectedRoute />}>
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/documents" element={<Documents />} />
@@ -49,8 +50,8 @@ const App = () => (
             
             <Route path="*" element={<NotFound />} />
           </Routes>
-        </AuthProvider>
-      </TooltipProvider>
+        </TooltipProvider>
+      </AuthProvider>
     </BrowserRouter>
   </QueryClientProvider>
 );
