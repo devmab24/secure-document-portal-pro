@@ -11,23 +11,35 @@ interface AuthContextType {
   isLoading: boolean;
 }
 
-const AuthContext = createContext<AuthContextType | undefined>(undefined);
+// Create context with a meaningful default value for better error messages
+const AuthContext = createContext<AuthContextType>({
+  user: null,
+  login: async () => false,
+  logout: () => {},
+  isLoading: true,
+});
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const { toast } = useToast();
 
+  // Initialize auth state from localStorage
   useEffect(() => {
+    console.log("AuthProvider initializing...");
     // Check for saved user in localStorage
     const storedUser = localStorage.getItem('hospital-portal-user');
     if (storedUser) {
       try {
-        setUser(JSON.parse(storedUser));
+        const parsedUser = JSON.parse(storedUser);
+        console.log("Found stored user:", parsedUser.email);
+        setUser(parsedUser);
       } catch (error) {
         console.error('Failed to parse stored user data:', error);
         localStorage.removeItem('hospital-portal-user');
       }
+    } else {
+      console.log("No stored user found");
     }
     setIsLoading(false);
   }, []);
@@ -84,8 +96,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     });
   };
 
+  const contextValue = {
+    user,
+    login,
+    logout,
+    isLoading
+  };
+
+  console.log("AuthProvider rendering, isLoading:", isLoading, "user:", user?.email || "none");
+
   return (
-    <AuthContext.Provider value={{ user, login, logout, isLoading }}>
+    <AuthContext.Provider value={contextValue}>
       {children}
     </AuthContext.Provider>
   );
@@ -93,7 +114,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
 export const useAuth = () => {
   const context = useContext(AuthContext);
-  if (context === undefined) {
+  if (!context) {
     throw new Error('useAuth must be used within an AuthProvider');
   }
   return context;
