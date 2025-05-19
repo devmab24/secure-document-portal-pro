@@ -14,6 +14,7 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  SidebarTrigger,
   useSidebar,
 } from "@/components/ui/sidebar";
 import { useAuth } from "@/contexts/AuthContext";
@@ -29,7 +30,7 @@ const AppSidebar = () => {
 
   const isActive = (path: string) => currentPath === path || currentPath.startsWith(`${path}/`);
   
-  // Custom class for active navigation link
+  // Custom class for active navigation link - enhanced with text-primary color
   const getNavClass = ({ isActive }: { isActive: boolean }) =>
     isActive
       ? "bg-sidebar-accent text-primary font-medium w-full flex items-center gap-2 p-2 rounded-md"
