@@ -13,6 +13,7 @@ import {
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
 import { SidebarTrigger } from "./ui/sidebar";
+import { LogOut } from "lucide-react";
 
 const AppHeader = () => {
   const { user, logout } = useAuth();
@@ -53,15 +54,19 @@ const AppHeader = () => {
                   <p className="text-xs leading-none text-muted-foreground">
                     {user.email}
                   </p>
+                  <p className="text-xs leading-none text-muted-foreground mt-1">
+                    {user.role} • {user.department}
+                  </p>
                 </div>
               </DropdownMenuLabel>
               <DropdownMenuSeparator />
               <DropdownMenuGroup>
                 <DropdownMenuItem 
                   onClick={handleLogout}
-                  className="cursor-pointer"
+                  className="cursor-pointer text-destructive focus:text-destructive"
                 >
-                  Sign out
+                  <LogOut className="mr-2 h-4 w-4" />
+                  Logout
                 </DropdownMenuItem>
               </DropdownMenuGroup>
             </DropdownMenuContent>

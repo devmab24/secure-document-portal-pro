@@ -1,4 +1,3 @@
-
 import { Department, Document, DocumentStatus, DocumentType, User, UserRole, AuditLog } from "./types";
 
 // Mock Users
@@ -74,6 +73,79 @@ export const mockUsers: User[] = [
     role: UserRole.STAFF,
     department: Department.PHYSIOTHERAPY,
     avatarUrl: "https://i.pravatar.cc/150?img=10"
+  },
+  // New users added for complete department coverage
+  {
+    id: "user-9",
+    email: "ae-hod@hospital.org",
+    firstName: "Grace",
+    lastName: "Thompson",
+    role: UserRole.HOD,
+    department: Department.A_AND_E,
+    avatarUrl: "https://i.pravatar.cc/150?img=11"
+  },
+  {
+    id: "user-10",
+    email: "ae-staff@hospital.org",
+    firstName: "Marcus",
+    lastName: "Wilson",
+    role: UserRole.STAFF,
+    department: Department.A_AND_E,
+    avatarUrl: "https://i.pravatar.cc/150?img=12"
+  },
+  {
+    id: "user-11",
+    email: "pharmacy-hod@hospital.org",
+    firstName: "Victoria",
+    lastName: "Adekunle",
+    role: UserRole.HOD,
+    department: Department.PHARMACY,
+    avatarUrl: "https://i.pravatar.cc/150?img=13"
+  },
+  {
+    id: "user-12",
+    email: "dental-staff@hospital.org",
+    firstName: "Kevin",
+    lastName: "Zhao",
+    role: UserRole.STAFF,
+    department: Department.DENTAL,
+    avatarUrl: "https://i.pravatar.cc/150?img=14"
+  },
+  {
+    id: "user-13",
+    email: "eyeclinic-staff@hospital.org",
+    firstName: "Priya",
+    lastName: "Sharma",
+    role: UserRole.STAFF,
+    department: Department.EYE_CLINIC,
+    avatarUrl: "https://i.pravatar.cc/150?img=15"
+  },
+  {
+    id: "user-14",
+    email: "pharmacy-staff@hospital.org",
+    firstName: "Nathan",
+    lastName: "Bakare",
+    role: UserRole.STAFF,
+    department: Department.PHARMACY,
+    avatarUrl: "https://i.pravatar.cc/150?img=16"
+  },
+  {
+    id: "user-15",
+    email: "physio-hod@hospital.org",
+    firstName: "Sophia",
+    lastName: "Lee",
+    role: UserRole.HOD,
+    department: Department.PHYSIOTHERAPY,
+    avatarUrl: "https://i.pravatar.cc/150?img=17"
+  },
+  {
+    id: "user-16",
+    email: "antenatal-hod@hospital.org",
+    firstName: "Omar",
+    lastName: "Hassan",
+    role: UserRole.HOD,
+    department: Department.ANTENATAL,
+    avatarUrl: "https://i.pravatar.cc/150?img=18"
   }
 ];
 
