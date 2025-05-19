@@ -44,7 +44,7 @@ const DepartmentSidebar = () => {
       case Department.DENTAL: return <FolderHeart className="h-5 w-5" />;
       case Department.EYE_CLINIC: return <FileSearch className="h-5 w-5" />;
       case Department.ANTENATAL: return <UserRound className="h-5 w-5" />;
-      case Department.ACCIDENT_AND_EMERGENCY: return <Activity className="h-5 w-5" />;
+      case Department.A_AND_E: return <Activity className="h-5 w-5" />;
       case Department.PHYSIOTHERAPY: return <Stethoscope className="h-5 w-5" />;
       default: return <FolderHeart className="h-5 w-5" />;
     }
