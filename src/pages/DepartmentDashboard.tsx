@@ -4,7 +4,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
-import { mockDocuments } from "@/lib/mock-data";
+import { mockDocuments } from "@/lib/mock";
 import { Department, DocumentStatus, UserRole } from "@/lib/types";
 import { Activity, FileCheck, FileX, Upload } from "lucide-react";
 import { useMemo } from "react";

@@ -4,7 +4,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Progress } from "@/components/ui/progress";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Department, DocumentStatus, UserRole } from "@/lib/types";
-import { mockDocuments } from "@/lib/mock-data";
+import { mockDocuments } from "@/lib/mock";
 import { Archive, File, FileCheck, FileX, Upload } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { Badge } from "@/components/ui/badge";
