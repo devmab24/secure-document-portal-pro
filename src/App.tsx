@@ -5,6 +5,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider } from "./contexts/AuthContext";
+import { ThemeProvider } from "./contexts/ThemeContext";
 import ProtectedRoute from "./components/ProtectedRoute";
 
 // Pages
@@ -37,32 +38,34 @@ const App = () => {
   return (
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
-        <AuthProvider>
-          <TooltipProvider>
-            <Toaster />
-            <Sonner />
-            <Routes>
-              <Route path="/" element={<Index />} />
-              <Route path="/login" element={<Login />} />
-              
-              {/* Protected routes - wrapped in ProtectedRoute for auth check */}
-              <Route element={<ProtectedRoute />}>
-                <Route path="/dashboard" element={<Dashboard />} />
-                <Route path="/documents" element={<Documents />} />
-                <Route path="/documents/:id" element={<DocumentView />} />
-                <Route path="/upload" element={<Upload />} />
-                <Route path="/settings" element={<Settings />} />
-                <Route path="/users" element={<Users />} />
-                <Route path="/audit" element={<AuditLogs />} />
-                <Route path="/department/:departmentSlug" element={<DepartmentDashboard />} />
-                <Route path="/department/approvals" element={<DepartmentDashboard />} />
-                <Route path="/department/staff" element={<DepartmentDashboard />} />
-              </Route>
-              
-              <Route path="*" element={<NotFound />} />
-            </Routes>
-          </TooltipProvider>
-        </AuthProvider>
+        <ThemeProvider>
+          <AuthProvider>
+            <TooltipProvider>
+              <Toaster />
+              <Sonner />
+              <Routes>
+                <Route path="/" element={<Index />} />
+                <Route path="/login" element={<Login />} />
+                
+                {/* Protected routes - wrapped in ProtectedRoute for auth check */}
+                <Route element={<ProtectedRoute />}>
+                  <Route path="/dashboard" element={<Dashboard />} />
+                  <Route path="/documents" element={<Documents />} />
+                  <Route path="/documents/:id" element={<DocumentView />} />
+                  <Route path="/upload" element={<Upload />} />
+                  <Route path="/settings" element={<Settings />} />
+                  <Route path="/users" element={<Users />} />
+                  <Route path="/audit" element={<AuditLogs />} />
+                  <Route path="/department/:departmentSlug" element={<DepartmentDashboard />} />
+                  <Route path="/department/approvals" element={<DepartmentDashboard />} />
+                  <Route path="/department/staff" element={<DepartmentDashboard />} />
+                </Route>
+                
+                <Route path="*" element={<NotFound />} />
+              </Routes>
+            </TooltipProvider>
+          </AuthProvider>
+        </ThemeProvider>
       </BrowserRouter>
     </QueryClientProvider>
   );
