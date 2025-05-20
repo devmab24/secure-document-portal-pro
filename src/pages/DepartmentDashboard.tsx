@@ -11,6 +11,7 @@ import { useMemo } from "react";
 import { format } from "date-fns";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { useNavigate } from "react-router-dom";
+import DepartmentCharts from "@/components/DepartmentCharts";
 
 const DepartmentDashboard = () => {
   const { departmentSlug } = useParams<{ departmentSlug: string }>();
@@ -99,6 +100,9 @@ const DepartmentDashboard = () => {
     );
   }
   
+  // Check if user is CMD or HOD for showing charts
+  const showCharts = user?.role === UserRole.CMD || user?.role === UserRole.HOD;
+  
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
@@ -156,6 +160,9 @@ const DepartmentDashboard = () => {
           </CardContent>
         </Card>
       </div>
+      
+      {/* Charts section - Only shown for CMD or HOD */}
+      {showCharts && <DepartmentCharts />}
       
       {/* Department content tabs */}
       <Tabs defaultValue="recent" className="w-full">
