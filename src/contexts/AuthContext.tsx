@@ -1,8 +1,9 @@
 
-import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import { User, UserRole, Department } from '@/lib/types';
-import { mockUsers } from '@/lib/mock-data';
-import { useToast } from '@/components/ui/use-toast';
+import React, { createContext, useContext, useEffect } from "react";
+import { User } from "@/lib/types";
+import { mockUsers } from "@/lib/mock-data";
+import { useAppDispatch, useAppSelector } from "@/store";
+import { setUser, logout as logoutAction, setLoading } from "@/store/slices/authSlice";
 
 interface AuthContextType {
   user: User | null;
@@ -11,110 +12,72 @@ interface AuthContextType {
   isLoading: boolean;
 }
 
-// Create context with a meaningful default value for better error messages
-const AuthContext = createContext<AuthContextType>({
-  user: null,
-  login: async () => false,
-  logout: () => {},
-  isLoading: true,
-});
+const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-export function AuthProvider({ children }: { children: ReactNode }) {
-  const [user, setUser] = useState<User | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
-  const { toast } = useToast();
+export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const dispatch = useAppDispatch();
+  const { user, isAuthenticated, loading } = useAppSelector(state => state.auth);
 
-  // Initialize auth state from localStorage
+  console.log("AuthProvider rendering, isLoading:", loading, "user:", user ? `${user.firstName} ${user.lastName}` : "none");
+
   useEffect(() => {
     console.log("AuthProvider initializing...");
-    // Check for saved user in localStorage
-    const storedUser = localStorage.getItem('hospital-portal-user');
+    
+    const storedUser = localStorage.getItem('user');
     if (storedUser) {
       try {
-        const parsedUser = JSON.parse(storedUser);
-        console.log("Found stored user:", parsedUser.email);
-        setUser(parsedUser);
+        const userData = JSON.parse(storedUser);
+        console.log("Found stored user:", userData.email);
+        dispatch(setUser(userData));
       } catch (error) {
-        console.error('Failed to parse stored user data:', error);
-        localStorage.removeItem('hospital-portal-user');
+        console.error("Error parsing stored user:", error);
+        localStorage.removeItem('user');
+        dispatch(setLoading(false));
       }
     } else {
       console.log("No stored user found");
+      dispatch(setLoading(false));
     }
-    setIsLoading(false);
-  }, []);
+  }, [dispatch]);
 
   const login = async (email: string, password: string): Promise<boolean> => {
-    try {
-      setIsLoading(true);
-      
-      // Simulate API call delay
-      await new Promise(resolve => setTimeout(resolve, 800));
-      
-      // In a real app, this would be an API call to backend auth
-      const foundUser = mockUsers.find(u => u.email.toLowerCase() === email.toLowerCase());
-      
-      // Debug logs to see if user was found
-      console.log("Login attempt for:", email);
-      console.log("User found:", foundUser);
-      
-      if (foundUser) {
-        setUser(foundUser);
-        localStorage.setItem('hospital-portal-user', JSON.stringify(foundUser));
-        toast({
-          title: "Login successful",
-          description: `Welcome back, ${foundUser.firstName}!`,
-        });
-        return true;
-      } else {
-        toast({
-          title: "Login failed",
-          description: "Invalid email or password",
-          variant: "destructive",
-        });
-        return false;
-      }
-    } catch (error) {
-      console.error("Login error:", error);
-      toast({
-        title: "Login error",
-        description: "An unexpected error occurred. Please try again.",
-        variant: "destructive",
-      });
-      return false;
-    } finally {
-      setIsLoading(false);
+    console.log("Login attempt for:", email);
+    
+    // Simple authentication check
+    const foundUser = mockUsers.find(u => u.email === email);
+    
+    if (foundUser && password === "password") {
+      console.log("Login successful for:", foundUser.email);
+      localStorage.setItem('user', JSON.stringify(foundUser));
+      dispatch(setUser(foundUser));
+      return true;
     }
+    
+    console.log("Login failed for:", email);
+    return false;
   };
 
   const logout = () => {
-    setUser(null);
-    localStorage.removeItem('hospital-portal-user');
-    toast({
-      title: "Logged out",
-      description: "You have been successfully logged out.",
-    });
+    console.log("Logging out user");
+    localStorage.removeItem('user');
+    dispatch(logoutAction());
   };
-
-  const contextValue = {
-    user,
-    login,
-    logout,
-    isLoading
-  };
-
-  console.log("AuthProvider rendering, isLoading:", isLoading, "user:", user?.email || "none");
 
   return (
-    <AuthContext.Provider value={contextValue}>
+    <AuthContext.Provider value={{
+      user,
+      login,
+      logout,
+      isLoading: loading
+    }}>
       {children}
     </AuthContext.Provider>
   );
-}
+};
 
 export const useAuth = () => {
   const context = useContext(AuthContext);
-  if (!context) {
+  if (context === undefined) {
     throw new Error('useAuth must be used within an AuthProvider');
   }
   return context;

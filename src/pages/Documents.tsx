@@ -1,9 +1,9 @@
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
-import { Department, Document as DocumentType, DocumentStatus, DocumentType as DocType, UserRole } from "@/lib/types";
-import { mockDocuments } from "@/lib/mock-data";
+import { useDocuments } from "@/hooks/useDocuments";
+import { Department, DocumentStatus, DocumentType as DocType, UserRole } from "@/lib/types";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -38,41 +38,25 @@ import {
 const Documents = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
+  const { documents, loading, loadDocuments, updateFilters, filters } = useDocuments();
   const [searchTerm, setSearchTerm] = useState("");
   const [departmentFilter, setDepartmentFilter] = useState<string>("all");
   const [statusFilter, setStatusFilter] = useState<string>("all");
   const [typeFilter, setTypeFilter] = useState<string>("all");
 
-  // Filter documents based on user role and department
-  const accessibleDocuments = useMemo(() => {
-    if (!user) return [];
-    
-    return mockDocuments.filter(doc => {
-      if (user.role === UserRole.CMD || user.role === UserRole.ADMIN) {
-        // CMD and Admin can see all documents
-        return true;
-      } else if (user.role === UserRole.HOD) {
-        // HOD can see documents from their department and documents assigned to them
-        return (
-          doc.department === user.department ||
-          doc.assignedTo?.includes(user.id) ||
-          doc.uploadedBy === user.id
-        );
-      } else {
-        // Staff can only see documents they uploaded, documents from their department that were approved,
-        // or documents specifically assigned to them
-        return (
-          doc.uploadedBy === user.id ||
-          (doc.department === user.department && doc.status === DocumentStatus.APPROVED) ||
-          doc.assignedTo?.includes(user.id)
-        );
-      }
-    });
-  }, [user]);
+  // Load documents on component mount and when user changes
+  useEffect(() => {
+    if (user) {
+      const filterOptions = user.role === UserRole.CMD || user.role === UserRole.ADMIN 
+        ? {} 
+        : { userId: user.id };
+      loadDocuments(filterOptions);
+    }
+  }, [user, loadDocuments]);
 
   // Apply filters and search
   const filteredDocuments = useMemo(() => {
-    return accessibleDocuments.filter(doc => {
+    return documents.filter(doc => {
       // Apply search term
       const matchesSearch = 
         searchTerm === "" ||
@@ -97,14 +81,14 @@ const Documents = () => {
       
       return matchesSearch && matchesDepartment && matchesStatus && matchesType;
     });
-  }, [accessibleDocuments, searchTerm, departmentFilter, statusFilter, typeFilter]);
+  }, [documents, searchTerm, departmentFilter, statusFilter, typeFilter]);
 
   // Get unique departments from documents
   const departments = useMemo(() => {
     const deptSet = new Set<Department>();
-    accessibleDocuments.forEach(doc => deptSet.add(doc.department));
+    documents.forEach(doc => deptSet.add(doc.department));
     return Array.from(deptSet);
-  }, [accessibleDocuments]);
+  }, [documents]);
 
   // Get statuses from enum
   const statuses = Object.values(DocumentStatus);
@@ -130,6 +114,14 @@ const Documents = () => {
         return "outline";
     }
   };
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <div className="text-lg">Loading documents...</div>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6">

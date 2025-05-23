@@ -1,10 +1,12 @@
 
+import { useEffect } from "react";
 import { useAuth } from "@/contexts/AuthContext";
+import { useDashboard } from "@/hooks/useDashboard";
+import { useDocuments } from "@/hooks/useDocuments";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Department, DocumentStatus, UserRole } from "@/lib/types";
-import { mockDocuments } from "@/lib/mock";
 import { Archive, File, FileCheck, FileX, Upload } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { Badge } from "@/components/ui/badge";
@@ -13,58 +15,47 @@ import RecentDocumentsTable from "@/components/RecentDocumentsTable";
 const Dashboard = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
+  const { stats, loading, loadStats } = useDashboard();
+  const { documents, loadDocuments } = useDocuments();
   
-  if (!user) return null;
-  
-  // Filter documents based on user role and department
-  const userDocuments = mockDocuments.filter(doc => {
-    if (user.role === UserRole.CMD || user.role === UserRole.ADMIN) {
-      // CMD and Admin can see all documents
-      return true;
-    } else if (user.role === UserRole.HOD) {
-      // HOD can see documents from their department and documents assigned to them
-      return (
-        doc.department === user.department ||
-        doc.assignedTo?.includes(user.id) ||
-        doc.uploadedBy === user.id
-      );
-    } else {
-      // Staff can only see documents they uploaded, documents from their department that were approved,
-      // or documents specifically assigned to them
-      return (
-        doc.uploadedBy === user.id ||
-        (doc.department === user.department && doc.status === DocumentStatus.APPROVED) ||
-        doc.assignedTo?.includes(user.id)
-      );
+  useEffect(() => {
+    if (user) {
+      loadStats();
+      const filterOptions = user.role === UserRole.CMD || user.role === UserRole.ADMIN 
+        ? {} 
+        : { userId: user.id };
+      loadDocuments(filterOptions);
     }
-  });
+  }, [user, loadStats, loadDocuments]);
   
-  // Calculate metrics
-  const totalDocuments = userDocuments.length;
-  const pendingApprovals = userDocuments.filter(
-    doc => doc.status === DocumentStatus.SUBMITTED || doc.status === DocumentStatus.UNDER_REVIEW
-  ).length;
-  const approved = userDocuments.filter(doc => doc.status === DocumentStatus.APPROVED).length;
-  const rejected = userDocuments.filter(doc => doc.status === DocumentStatus.REJECTED).length;
+  if (!user || loading) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <div className="text-lg">Loading dashboard...</div>
+      </div>
+    );
+  }
   
-  // Get documents by department
-  const departmentCounts = Object.values(Department).reduce((acc, dept) => {
-    acc[dept] = userDocuments.filter(doc => doc.department === dept).length;
-    return acc;
-  }, {} as Record<Department, number>);
+  // Calculate metrics from Redux state
+  const totalDocuments = stats?.totalDocuments || 0;
+  const pendingApprovals = stats?.byStatus[DocumentStatus.SUBMITTED] + stats?.byStatus[DocumentStatus.UNDER_REVIEW] || 0;
+  const approved = stats?.byStatus[DocumentStatus.APPROVED] || 0;
+  const rejected = stats?.byStatus[DocumentStatus.REJECTED] || 0;
   
   // Get the top 5 departments
-  const topDepartments = Object.entries(departmentCounts)
-    .sort(([, countA], [, countB]) => countB - countA)
-    .slice(0, 5);
+  const topDepartments = stats?.byDepartment 
+    ? Object.entries(stats.byDepartment)
+        .sort(([, countA], [, countB]) => countB - countA)
+        .slice(0, 5)
+    : [];
   
   // Recent documents - last 5
-  const recentDocuments = [...userDocuments]
+  const recentDocuments = [...documents]
     .sort((a, b) => b.uploadedAt.getTime() - a.uploadedAt.getTime())
     .slice(0, 5);
   
   // Documents waiting for user's approval
-  const documentsNeedingMyApproval = userDocuments.filter(
+  const documentsNeedingMyApproval = documents.filter(
     doc => doc.currentApprover === user.id
   );
 
