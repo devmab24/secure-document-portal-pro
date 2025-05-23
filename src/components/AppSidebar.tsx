@@ -3,7 +3,7 @@ import { useLocation } from "react-router-dom";
 import { NavLink } from "react-router-dom";
 import { 
   File, Upload, LayoutDashboard, Settings, Users, 
-  FileText, Home
+  FileText, Home, ShieldCheck
 } from "lucide-react";
 import {
   Sidebar,
@@ -51,12 +51,24 @@ const AppSidebar = () => {
             <SidebarMenu>
               <SidebarMenuItem>
                 <SidebarMenuButton asChild>
-                  <NavLink to="/dashboard" className={getNavClass}>
+                  <NavLink to="/" className={getNavClass}>
                     <LayoutDashboard className="h-5 w-5" />
                     {!collapsed && <span>Dashboard</span>}
                   </NavLink>
                 </SidebarMenuButton>
               </SidebarMenuItem>
+              
+              {/* CMD Dashboard - Only visible to CMD */}
+              {user && (user.role === UserRole.CMD || user.role === UserRole.ADMIN) && (
+                <SidebarMenuItem>
+                  <SidebarMenuButton asChild>
+                    <NavLink to="/dashboard/cmd" className={getNavClass}>
+                      <ShieldCheck className="h-5 w-5" />
+                      {!collapsed && <span>CMD Dashboard</span>}
+                    </NavLink>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              )}
               
               <SidebarMenuItem>
                 <SidebarMenuButton asChild>

@@ -1,4 +1,3 @@
-
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { Toaster } from "@/components/ui/toaster";
 import { ReduxProvider } from "@/providers/ReduxProvider";
@@ -16,6 +15,7 @@ import Users from "@/pages/Users";
 import Settings from "@/pages/Settings";
 import AuditLogs from "@/pages/AuditLogs";
 import NotFound from "@/pages/NotFound";
+import CmdDashboard from "@/pages/CmdDashboard";
 
 function App() {
   console.log("App rendering");
@@ -27,18 +27,32 @@ function App() {
           <Router>
             <Routes>
               <Route path="/login" element={<Login />} />
+              
+              {/* Main dashboard route */}
               <Route path="/" element={<ProtectedRoute />}>
                 <Route index element={<Dashboard />} />
               </Route>
+              
+              {/* CMD specific dashboard routes */}
+              <Route path="/dashboard/cmd" element={<ProtectedRoute />}>
+                <Route index element={<CmdDashboard />} />
+                <Route path=":departmentSlug" element={<CmdDashboard />} />
+              </Route>
+              
+              {/* Document routes */}
               <Route path="/documents" element={<ProtectedRoute />}>
                 <Route index element={<Documents />} />
               </Route>
               <Route path="/documents/:id" element={<ProtectedRoute />}>
                 <Route index element={<DocumentView />} />
               </Route>
+              
+              {/* Department routes */}
               <Route path="/department/:departmentSlug" element={<ProtectedRoute />}>
                 <Route index element={<DepartmentDashboard />} />
               </Route>
+              
+              {/* Other routes */}
               <Route path="/upload" element={<ProtectedRoute />}>
                 <Route index element={<Upload />} />
               </Route>
@@ -51,6 +65,8 @@ function App() {
               <Route path="/audit" element={<ProtectedRoute />}>
                 <Route index element={<AuditLogs />} />
               </Route>
+              
+              {/* 404 route */}
               <Route path="*" element={<NotFound />} />
             </Routes>
             <Toaster />
