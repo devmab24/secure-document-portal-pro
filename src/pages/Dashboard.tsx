@@ -38,7 +38,7 @@ const Dashboard = () => {
   
   // Calculate metrics from Redux state
   const totalDocuments = stats?.totalDocuments || 0;
-  const pendingApprovals = stats?.byStatus[DocumentStatus.SUBMITTED] + stats?.byStatus[DocumentStatus.UNDER_REVIEW] || 0;
+  const pendingApprovals = (stats?.byStatus[DocumentStatus.SUBMITTED] || 0) + (stats?.byStatus[DocumentStatus.UNDER_REVIEW] || 0);
   const approved = stats?.byStatus[DocumentStatus.APPROVED] || 0;
   const rejected = stats?.byStatus[DocumentStatus.REJECTED] || 0;
   
@@ -148,7 +148,7 @@ const Dashboard = () => {
           <div className="space-y-4">
             {topDepartments.map(([dept, count]) => {
               // Calculate percentage
-              const percentage = Math.round((count / totalDocuments) * 100);
+              const percentage = totalDocuments > 0 ? Math.round((count / totalDocuments) * 100) : 0;
               
               return (
                 <div key={dept} className="space-y-2">

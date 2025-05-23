@@ -27,62 +27,30 @@ function App() {
           <Router>
             <Routes>
               <Route path="/login" element={<Login />} />
-              <Route path="/" element={
-                <ProtectedRoute>
-                  <AppLayout>
-                    <Dashboard />
-                  </AppLayout>
-                </ProtectedRoute>
-              } />
-              <Route path="/documents" element={
-                <ProtectedRoute>
-                  <AppLayout>
-                    <Documents />
-                  </AppLayout>
-                </ProtectedRoute>
-              } />
-              <Route path="/documents/:id" element={
-                <ProtectedRoute>
-                  <AppLayout>
-                    <DocumentView />
-                  </AppLayout>
-                </ProtectedRoute>
-              } />
-              <Route path="/department/:departmentSlug" element={
-                <ProtectedRoute>
-                  <AppLayout>
-                    <DepartmentDashboard />
-                  </AppLayout>
-                </ProtectedRoute>
-              } />
-              <Route path="/upload" element={
-                <ProtectedRoute>
-                  <AppLayout>
-                    <Upload />
-                  </AppLayout>
-                </ProtectedRoute>
-              } />
-              <Route path="/users" element={
-                <ProtectedRoute>
-                  <AppLayout>
-                    <Users />
-                  </AppLayout>
-                </ProtectedRoute>
-              } />
-              <Route path="/settings" element={
-                <ProtectedRoute>
-                  <AppLayout>
-                    <Settings />
-                  </AppLayout>
-                </ProtectedRoute>
-              } />
-              <Route path="/audit" element={
-                <ProtectedRoute>
-                  <AppLayout>
-                    <AuditLogs />
-                  </AppLayout>
-                </ProtectedRoute>
-              } />
+              <Route path="/" element={<ProtectedRoute />}>
+                <Route index element={<Dashboard />} />
+              </Route>
+              <Route path="/documents" element={<ProtectedRoute />}>
+                <Route index element={<Documents />} />
+              </Route>
+              <Route path="/documents/:id" element={<ProtectedRoute />}>
+                <Route index element={<DocumentView />} />
+              </Route>
+              <Route path="/department/:departmentSlug" element={<ProtectedRoute />}>
+                <Route index element={<DepartmentDashboard />} />
+              </Route>
+              <Route path="/upload" element={<ProtectedRoute />}>
+                <Route index element={<Upload />} />
+              </Route>
+              <Route path="/users" element={<ProtectedRoute />}>
+                <Route index element={<Users />} />
+              </Route>
+              <Route path="/settings" element={<ProtectedRoute />}>
+                <Route index element={<Settings />} />
+              </Route>
+              <Route path="/audit" element={<ProtectedRoute />}>
+                <Route index element={<AuditLogs />} />
+              </Route>
               <Route path="*" element={<NotFound />} />
             </Routes>
             <Toaster />
