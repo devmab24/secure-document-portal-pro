@@ -1,7 +1,7 @@
 
 import React, { createContext, useContext, useEffect } from "react";
 import { User } from "@/lib/types";
-import { mockUsers } from "@/lib/mock-data";
+import { mockUsers } from "@/lib/mock/users";
 import { useAppDispatch, useAppSelector } from "@/store";
 import { setUser, logout as logoutAction, setLoading } from "@/store/slices/authSlice";
 
@@ -42,18 +42,19 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const login = async (email: string, password: string): Promise<boolean> => {
     console.log("Login attempt for:", email);
+    console.log("Available mock users:", mockUsers.map(u => u.email));
     
     // Simple authentication check
     const foundUser = mockUsers.find(u => u.email === email);
     
     if (foundUser && password === "password") {
-      console.log("Login successful for:", foundUser.email);
+      console.log("Login successful for:", foundUser.email, "Role:", foundUser.role);
       localStorage.setItem('user', JSON.stringify(foundUser));
       dispatch(setUser(foundUser));
       return true;
     }
     
-    console.log("Login failed for:", email);
+    console.log("Login failed for:", email, "User found:", !!foundUser, "Password correct:", password === "password");
     return false;
   };
 

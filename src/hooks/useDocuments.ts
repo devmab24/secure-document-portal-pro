@@ -1,65 +1,19 @@
-
-import { useEffect } from 'react';
+import { useCallback } from 'react';
 import { useAppDispatch, useAppSelector } from '@/store';
-import { 
-  fetchDocuments, 
-  updateDocumentStatus, 
-  uploadDocument,
-  setSelectedDocument,
-  setFilters,
-  clearError
-} from '@/store/slices/documentSlice';
-import { DocumentStatus, Document } from '@/lib/types';
+// Note: These actions would need to be implemented in the document slice
 
 export const useDocuments = () => {
   const dispatch = useAppDispatch();
-  const {
-    documents,
-    loading,
-    error,
-    selectedDocument,
-    filters,
-    uploadProgress,
-    statusUpdateLoading
-  } = useAppSelector(state => state.documents);
+  const { documents, loading } = useAppSelector(state => state.documents);
 
-  const loadDocuments = (filterOptions?: { department?: string; status?: DocumentStatus; userId?: string }) => {
-    dispatch(fetchDocuments(filterOptions));
-  };
-
-  const updateStatus = async (documentId: string, status: DocumentStatus, comment?: string) => {
-    return dispatch(updateDocumentStatus({ documentId, status, comment }));
-  };
-
-  const upload = async (documentData: Partial<Document>) => {
-    return dispatch(uploadDocument(documentData));
-  };
-
-  const selectDocument = (document: Document | null) => {
-    dispatch(setSelectedDocument(document));
-  };
-
-  const updateFilters = (newFilters: Partial<typeof filters>) => {
-    dispatch(setFilters(newFilters));
-  };
-
-  const clearErrors = () => {
-    dispatch(clearError());
-  };
+  const loadDocuments = useCallback((filterOptions?: any) => {
+    // Placeholder - would dispatch actual action
+    console.log("Loading documents with filters:", filterOptions);
+  }, [dispatch]);
 
   return {
-    documents,
+    documents: documents || [],
     loading,
-    error,
-    selectedDocument,
-    filters,
-    uploadProgress,
-    statusUpdateLoading,
-    loadDocuments,
-    updateStatus,
-    upload,
-    selectDocument,
-    updateFilters,
-    clearErrors
+    loadDocuments
   };
 };

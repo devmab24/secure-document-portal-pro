@@ -16,8 +16,8 @@ const Login = () => {
   const navigate = useNavigate();
   const location = useLocation();
   
-  // Get the redirect path from location state or default to dashboard
-  const from = (location.state as { from?: { pathname: string } })?.from?.pathname || '/dashboard';
+  // Get the redirect path from location state or default to root
+  const from = (location.state as { from?: { pathname: string } })?.from?.pathname || '/';
   
   useEffect(() => {
     // If already logged in, redirect
@@ -79,7 +79,7 @@ const Login = () => {
                   type="button"
                   variant="link"
                   className="text-sm text-hospital-600 px-0 h-auto"
-                  onClick={() => alert('This is a demo app. Use any password.')}
+                  onClick={() => alert('This is a demo app. Use password: password')}
                 >
                   Forgot password?
                 </Button>
@@ -95,12 +95,13 @@ const Login = () => {
               />
             </div>
             <div className="text-sm text-muted-foreground">
-              <p>Demo Accounts (use any password):</p>
-              <ul className="list-disc list-inside mt-1">
-                <li>cmd@hospital.org (Chief Medical Director)</li>
-                <li>clinical-hod@hospital.org (Head of Department)</li>
-                <li>clinical-staff@hospital.org (Staff)</li>
-                <li>admin@hospital.org (System Administrator)</li>
+              <p>Demo Accounts (password: "password"):</p>
+              <ul className="list-disc list-inside mt-1 space-y-1">
+                <li><strong>CMD:</strong> cmd@hospital.org</li>
+                <li><strong>Admin:</strong> admin@hospital.org</li>
+                <li><strong>HOD Radiology:</strong> radiology-hod@hospital.org</li>
+                <li><strong>HOD Dental:</strong> dental-hod@hospital.org</li>
+                <li><strong>Staff:</strong> radiology-staff@hospital.org</li>
               </ul>
             </div>
           </CardContent>
