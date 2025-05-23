@@ -1,19 +1,25 @@
+
 import { useCallback } from 'react';
 import { useAppDispatch, useAppSelector } from '@/store';
-// Note: These actions would need to be implemented in the document slice
+import { fetchDocuments, setFilters } from '@/store/slices/documentSlice';
 
 export const useDocuments = () => {
   const dispatch = useAppDispatch();
-  const { documents, loading } = useAppSelector(state => state.documents);
+  const { documents, loading, filters } = useAppSelector(state => state.documents);
 
   const loadDocuments = useCallback((filterOptions?: any) => {
-    // Placeholder - would dispatch actual action
-    console.log("Loading documents with filters:", filterOptions);
+    dispatch(fetchDocuments(filterOptions));
+  }, [dispatch]);
+
+  const updateFilters = useCallback((newFilters: any) => {
+    dispatch(setFilters(newFilters));
   }, [dispatch]);
 
   return {
     documents: documents || [],
     loading,
-    loadDocuments
+    filters,
+    loadDocuments,
+    updateFilters
   };
 };
