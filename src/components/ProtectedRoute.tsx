@@ -1,7 +1,9 @@
 
 import { Navigate, Outlet, useLocation } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
+import { UserRole } from "@/lib/types";
 import AppLayout from "./AppLayout";
+import DepartmentLayout from "./DepartmentLayout";
 
 const ProtectedRoute = () => {
   const { user, isLoading } = useAuth();
@@ -24,8 +26,19 @@ const ProtectedRoute = () => {
     return <Navigate to="/login" state={{ from: location }} replace />;
   }
 
-  // If authenticated, render the protected route inside the app layout
+  // If authenticated, render the protected route inside the appropriate layout
   console.log("User authenticated as", user.email, "rendering protected content");
+  
+  // Use department-specific layout for HODs and Staff
+  if (user.role === UserRole.HOD || user.role === UserRole.STAFF) {
+    return (
+      <DepartmentLayout>
+        <Outlet />
+      </DepartmentLayout>
+    );
+  }
+
+  // Use default AppLayout for other users
   return (
     <AppLayout>
       <Outlet />

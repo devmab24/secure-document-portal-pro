@@ -1,10 +1,8 @@
-
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { Toaster } from "@/components/ui/toaster";
 import { ReduxProvider } from "@/providers/ReduxProvider";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { ThemeProvider } from "@/contexts/ThemeContext";
-import AppLayout from "@/components/AppLayout";
 import ProtectedRoute from "@/components/ProtectedRoute";
 import CmdProtectedRoute from "@/components/CmdProtectedRoute";
 import AdminProtectedRoute from "@/components/AdminProtectedRoute";
@@ -48,13 +46,16 @@ function App() {
                 <Route path=":departmentSlug" element={<CmdDashboard />} />
               </Route>
               
-              {/* Admin specific routes - All under /admin */}
-              <Route path="/admin" element={<AdminProtectedRoute />}>
+              {/* Admin specific routes - All under /dashboard/admin */}
+              <Route path="/dashboard/admin" element={<AdminProtectedRoute />}>
                 <Route index element={<AdminDashboard />} />
+                <Route path="documents" element={<Documents />} />
+                <Route path="upload" element={<Upload />} />
                 <Route path="users/manage" element={<UserManagement />} />
                 <Route path="users/roles" element={<UserManagement />} />
                 <Route path="reports" element={<AdminDashboard />} />
                 <Route path="system" element={<AdminDashboard />} />
+                <Route path="department/:departmentSlug" element={<DepartmentDashboard />} />
               </Route>
               
               {/* Regular document routes */}
@@ -65,9 +66,15 @@ function App() {
                 <Route index element={<DocumentView />} />
               </Route>
               
-              {/* Department routes (for non-CMD users) */}
+              {/* Department routes (for HODs and Staff) */}
               <Route path="/department/:departmentSlug" element={<ProtectedRoute />}>
                 <Route index element={<DepartmentDashboard />} />
+              </Route>
+              <Route path="/department/approvals" element={<ProtectedRoute />}>
+                <Route index element={<DepartmentDashboard />} />
+              </Route>
+              <Route path="/department/staff" element={<ProtectedRoute />}>
+                <Route index element={<Users />} />
               </Route>
               
               {/* Other routes */}

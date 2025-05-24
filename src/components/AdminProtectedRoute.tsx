@@ -2,7 +2,7 @@
 import { Navigate, Outlet, useLocation } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { UserRole } from "@/lib/types";
-import AppLayout from "./AppLayout";
+import AdminLayout from "./AdminLayout";
 
 const AdminProtectedRoute = () => {
   const { user, isLoading } = useAuth();
@@ -31,12 +31,12 @@ const AdminProtectedRoute = () => {
     return <Navigate to="/" replace />;
   }
 
-  // If authenticated and has proper role, render the protected route inside the app layout
+  // If authenticated and has proper role, render the protected route inside the admin layout
   console.log("Admin access granted for", user.email, "with role", user.role);
   return (
-    <AppLayout>
+    <AdminLayout>
       <Outlet />
-    </AppLayout>
+    </AdminLayout>
   );
 };
 

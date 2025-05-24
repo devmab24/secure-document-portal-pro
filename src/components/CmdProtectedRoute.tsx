@@ -2,7 +2,7 @@
 import { Navigate, Outlet, useLocation } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { UserRole } from "@/lib/types";
-import AppLayout from "./AppLayout";
+import CmdLayout from "./CmdLayout";
 
 const CmdProtectedRoute = () => {
   const { user, isLoading } = useAuth();
@@ -25,18 +25,18 @@ const CmdProtectedRoute = () => {
     return <Navigate to="/login" state={{ from: location }} replace />;
   }
 
-  // Check if user has CMD or ADMIN role
-  if (user.role !== UserRole.CMD && user.role !== UserRole.ADMIN) {
+  // Check if user has CMD or SUPER_ADMIN role
+  if (user.role !== UserRole.CMD && user.role !== UserRole.SUPER_ADMIN) {
     console.log("Access denied: User", user.email, "with role", user.role, "cannot access CMD routes");
     return <Navigate to="/" replace />;
   }
 
-  // If authenticated and has proper role, render the protected route inside the app layout
+  // If authenticated and has proper role, render the protected route inside the CMD layout
   console.log("CMD access granted for", user.email, "with role", user.role);
   return (
-    <AppLayout>
+    <CmdLayout>
       <Outlet />
-    </AppLayout>
+    </CmdLayout>
   );
 };
 
