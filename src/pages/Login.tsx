@@ -97,8 +97,9 @@ const Login = () => {
             <div className="text-sm text-muted-foreground">
               <p>Demo Accounts (password: "password"):</p>
               <ul className="list-disc list-inside mt-1 space-y-1">
-                <li><strong>CMD:</strong> cmd@hospital.org</li>
+                <li><strong>Super Admin:</strong> superadmin@hospital.org</li>
                 <li><strong>Admin:</strong> admin@hospital.org</li>
+                <li><strong>CMD:</strong> cmd@hospital.org</li>
                 <li><strong>HOD Radiology:</strong> radiology-hod@hospital.org</li>
                 <li><strong>HOD Dental:</strong> dental-hod@hospital.org</li>
                 <li><strong>Staff:</strong> radiology-staff@hospital.org</li>
