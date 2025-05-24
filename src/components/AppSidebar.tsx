@@ -58,18 +58,6 @@ const AppSidebar = () => {
                 </SidebarMenuButton>
               </SidebarMenuItem>
               
-              {/* CMD Dashboard - Only visible to CMD */}
-              {user && (user.role === UserRole.CMD || user.role === UserRole.ADMIN) && (
-                <SidebarMenuItem>
-                  <SidebarMenuButton asChild>
-                    <NavLink to="/dashboard/cmd" className={getNavClass}>
-                      <ShieldCheck className="h-5 w-5" />
-                      {!collapsed && <span>CMD Dashboard</span>}
-                    </NavLink>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              )}
-              
               <SidebarMenuItem>
                 <SidebarMenuButton asChild>
                   <NavLink to="/documents" className={getNavClass}>
@@ -90,6 +78,45 @@ const AppSidebar = () => {
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
+
+        {/* CMD Section - Only visible to CMD and Admin */}
+        {user && (user.role === UserRole.CMD || user.role === UserRole.ADMIN) && (
+          <SidebarGroup>
+            <SidebarGroupLabel className={collapsed ? "sr-only" : ""}>
+              CMD Management
+            </SidebarGroupLabel>
+            <SidebarGroupContent>
+              <SidebarMenu>
+                <SidebarMenuItem>
+                  <SidebarMenuButton asChild>
+                    <NavLink to="/dashboard/cmd" className={getNavClass}>
+                      <ShieldCheck className="h-5 w-5" />
+                      {!collapsed && <span>CMD Dashboard</span>}
+                    </NavLink>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+                
+                <SidebarMenuItem>
+                  <SidebarMenuButton asChild>
+                    <NavLink to="/dashboard/cmd/documents" className={getNavClass}>
+                      <FileText className="h-5 w-5" />
+                      {!collapsed && <span>CMD Documents</span>}
+                    </NavLink>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+                
+                <SidebarMenuItem>
+                  <SidebarMenuButton asChild>
+                    <NavLink to="/dashboard/cmd/upload" className={getNavClass}>
+                      <Upload className="h-5 w-5" />
+                      {!collapsed && <span>CMD Upload</span>}
+                    </NavLink>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              </SidebarMenu>
+            </SidebarGroupContent>
+          </SidebarGroup>
+        )}
 
         {/* Departments Section */}
         {user && <DepartmentSidebar />}

@@ -1,3 +1,4 @@
+
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { Toaster } from "@/components/ui/toaster";
 import { ReduxProvider } from "@/providers/ReduxProvider";
@@ -5,6 +6,7 @@ import { AuthProvider } from "@/contexts/AuthContext";
 import { ThemeProvider } from "@/contexts/ThemeContext";
 import AppLayout from "@/components/AppLayout";
 import ProtectedRoute from "@/components/ProtectedRoute";
+import CmdProtectedRoute from "@/components/CmdProtectedRoute";
 import Login from "@/pages/Login";
 import Dashboard from "@/pages/Dashboard";
 import Documents from "@/pages/Documents";
@@ -16,6 +18,8 @@ import Settings from "@/pages/Settings";
 import AuditLogs from "@/pages/AuditLogs";
 import NotFound from "@/pages/NotFound";
 import CmdDashboard from "@/pages/CmdDashboard";
+import CmdUpload from "@/pages/cmd/CmdUpload";
+import CmdDocuments from "@/pages/cmd/CmdDocuments";
 
 function App() {
   console.log("App rendering");
@@ -33,13 +37,15 @@ function App() {
                 <Route index element={<Dashboard />} />
               </Route>
               
-              {/* CMD specific dashboard routes */}
-              <Route path="/dashboard/cmd" element={<ProtectedRoute />}>
+              {/* CMD specific nested routes - All under /dashboard/cmd */}
+              <Route path="/dashboard/cmd" element={<CmdProtectedRoute />}>
                 <Route index element={<CmdDashboard />} />
+                <Route path="upload" element={<CmdUpload />} />
+                <Route path="documents" element={<CmdDocuments />} />
                 <Route path=":departmentSlug" element={<CmdDashboard />} />
               </Route>
               
-              {/* Document routes */}
+              {/* Regular document routes */}
               <Route path="/documents" element={<ProtectedRoute />}>
                 <Route index element={<Documents />} />
               </Route>
@@ -47,7 +53,7 @@ function App() {
                 <Route index element={<DocumentView />} />
               </Route>
               
-              {/* Department routes */}
+              {/* Department routes (for non-CMD users) */}
               <Route path="/department/:departmentSlug" element={<ProtectedRoute />}>
                 <Route index element={<DepartmentDashboard />} />
               </Route>
