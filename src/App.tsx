@@ -7,6 +7,7 @@ import { ThemeProvider } from "@/contexts/ThemeContext";
 import AppLayout from "@/components/AppLayout";
 import ProtectedRoute from "@/components/ProtectedRoute";
 import CmdProtectedRoute from "@/components/CmdProtectedRoute";
+import AdminProtectedRoute from "@/components/AdminProtectedRoute";
 import Login from "@/pages/Login";
 import Dashboard from "@/pages/Dashboard";
 import Documents from "@/pages/Documents";
@@ -20,6 +21,8 @@ import NotFound from "@/pages/NotFound";
 import CmdDashboard from "@/pages/CmdDashboard";
 import CmdUpload from "@/pages/cmd/CmdUpload";
 import CmdDocuments from "@/pages/cmd/CmdDocuments";
+import AdminDashboard from "@/pages/admin/AdminDashboard";
+import UserManagement from "@/pages/admin/UserManagement";
 
 function App() {
   console.log("App rendering");
@@ -43,6 +46,15 @@ function App() {
                 <Route path="upload" element={<CmdUpload />} />
                 <Route path="documents" element={<CmdDocuments />} />
                 <Route path=":departmentSlug" element={<CmdDashboard />} />
+              </Route>
+              
+              {/* Admin specific routes - All under /admin */}
+              <Route path="/admin" element={<AdminProtectedRoute />}>
+                <Route index element={<AdminDashboard />} />
+                <Route path="users/manage" element={<UserManagement />} />
+                <Route path="users/roles" element={<UserManagement />} />
+                <Route path="reports" element={<AdminDashboard />} />
+                <Route path="system" element={<AdminDashboard />} />
               </Route>
               
               {/* Regular document routes */}

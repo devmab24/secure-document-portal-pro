@@ -3,7 +3,7 @@ import { useLocation } from "react-router-dom";
 import { NavLink } from "react-router-dom";
 import { 
   File, Upload, LayoutDashboard, Settings, Users, 
-  FileText, Home, ShieldCheck
+  FileText, Home, ShieldCheck, Shield, UserCog
 } from "lucide-react";
 import {
   Sidebar,
@@ -79,8 +79,8 @@ const AppSidebar = () => {
           </SidebarGroupContent>
         </SidebarGroup>
 
-        {/* CMD Section - Only visible to CMD and Admin */}
-        {user && (user.role === UserRole.CMD || user.role === UserRole.ADMIN) && (
+        {/* CMD Section - Only visible to CMD and Super Admin */}
+        {user && (user.role === UserRole.CMD || user.role === UserRole.SUPER_ADMIN) && (
           <SidebarGroup>
             <SidebarGroupLabel className={collapsed ? "sr-only" : ""}>
               CMD Management
@@ -118,22 +118,40 @@ const AppSidebar = () => {
           </SidebarGroup>
         )}
 
-        {/* Departments Section */}
-        {user && <DepartmentSidebar />}
-
-        {/* Admin Section - Only visible to CMD and Admin */}
-        {user && (user.role === UserRole.CMD || user.role === UserRole.ADMIN) && (
+        {/* Admin Section - Only visible to Admins and Super Admins */}
+        {user && (user.role === UserRole.ADMIN || user.role === UserRole.SUPER_ADMIN) && (
           <SidebarGroup>
             <SidebarGroupLabel className={collapsed ? "sr-only" : ""}>
-              Administration
+              Admin Panel
             </SidebarGroupLabel>
             <SidebarGroupContent>
               <SidebarMenu>
                 <SidebarMenuItem>
                   <SidebarMenuButton asChild>
+                    <NavLink to="/admin" className={getNavClass}>
+                      <Shield className="h-5 w-5" />
+                      {!collapsed && <span>Admin Dashboard</span>}
+                    </NavLink>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+                
+                {/* User Management - Super Admin Only */}
+                {user.role === UserRole.SUPER_ADMIN && (
+                  <SidebarMenuItem>
+                    <SidebarMenuButton asChild>
+                      <NavLink to="/admin/users/manage" className={getNavClass}>
+                        <UserCog className="h-5 w-5" />
+                        {!collapsed && <span>User Management</span>}
+                      </NavLink>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                )}
+                
+                <SidebarMenuItem>
+                  <SidebarMenuButton asChild>
                     <NavLink to="/users" className={getNavClass}>
                       <Users className="h-5 w-5" />
-                      {!collapsed && <span>Users</span>}
+                      {!collapsed && <span>All Users</span>}
                     </NavLink>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
@@ -150,6 +168,9 @@ const AppSidebar = () => {
             </SidebarGroupContent>
           </SidebarGroup>
         )}
+
+        {/* Departments Section */}
+        {user && <DepartmentSidebar />}
 
         {/* HOD Section - Only visible to HODs */}
         {user && user.role === UserRole.HOD && (

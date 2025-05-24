@@ -1,10 +1,10 @@
-
 // User Roles Enum
 export enum UserRole {
   CMD = "CMD",         // Chief Medical Director
   HOD = "HOD",         // Head of Department
   STAFF = "STAFF",     // Regular Staff
-  ADMIN = "ADMIN"      // System Administrator
+  ADMIN = "ADMIN",     // System Administrator
+  SUPER_ADMIN = "SUPER_ADMIN"  // Super Administrator
 }
 
 // Department Enum

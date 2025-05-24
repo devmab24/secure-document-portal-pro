@@ -1,4 +1,3 @@
-
 import { Department, UserRole, User } from "../types";
 
 // Mock Users categorized by roles for comprehensive testing
@@ -12,6 +11,17 @@ export const mockUsers: User[] = [
     role: UserRole.CMD,
     department: Department.ADMIN,
     avatarUrl: "https://i.pravatar.cc/150?img=1"
+  },
+  
+  // Super Administrators - 1 user
+  {
+    id: "user-super-admin-1",
+    email: "superadmin@hospital.org",
+    firstName: "Robert",
+    lastName: "Martinez",
+    role: UserRole.SUPER_ADMIN,
+    department: Department.IT,
+    avatarUrl: "https://i.pravatar.cc/150?img=31"
   },
   
   // System Administrators - 2 users
@@ -281,5 +291,6 @@ export const getUsersByDepartment = (department: Department): User[] => {
 
 export const getCMDUsers = (): User[] => getUsersByRole(UserRole.CMD);
 export const getAdminUsers = (): User[] => getUsersByRole(UserRole.ADMIN);
+export const getSuperAdminUsers = (): User[] => getUsersByRole(UserRole.SUPER_ADMIN);
 export const getHODUsers = (): User[] => getUsersByRole(UserRole.HOD);
 export const getStaffUsers = (): User[] => getUsersByRole(UserRole.STAFF);
