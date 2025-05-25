@@ -49,12 +49,14 @@ const DepartmentSpecificSidebar = () => {
   };
 
   const getDepartmentSlug = (department: Department) => {
-    return department.toLowerCase().replace(/_/g, '-');
+    return department.toLowerCase().replace(/_/g, '-').replace(/ /g, '-').replace(/&/g, 'and');
   };
 
   if (!user || !user.department) {
     return null;
   }
+
+  const departmentSlug = getDepartmentSlug(user.department);
 
   return (
     <Sidebar
@@ -71,7 +73,7 @@ const DepartmentSpecificSidebar = () => {
             <SidebarMenu>
               <SidebarMenuItem>
                 <SidebarMenuButton asChild>
-                  <NavLink to={`/department/${getDepartmentSlug(user.department)}`} className={getNavClass}>
+                  <NavLink to={`/dashboard/${departmentSlug}`} className={getNavClass}>
                     {getDepartmentIcon(user.department)}
                     {!collapsed && <span>Dashboard</span>}
                   </NavLink>
@@ -80,7 +82,7 @@ const DepartmentSpecificSidebar = () => {
               
               <SidebarMenuItem>
                 <SidebarMenuButton asChild>
-                  <NavLink to="/documents" className={getNavClass}>
+                  <NavLink to={`/dashboard/${departmentSlug}/documents`} className={getNavClass}>
                     <File className="h-5 w-5" />
                     {!collapsed && <span>Documents</span>}
                   </NavLink>
@@ -89,7 +91,7 @@ const DepartmentSpecificSidebar = () => {
               
               <SidebarMenuItem>
                 <SidebarMenuButton asChild>
-                  <NavLink to="/upload" className={getNavClass}>
+                  <NavLink to={`/dashboard/${departmentSlug}/upload`} className={getNavClass}>
                     <Upload className="h-5 w-5" />
                     {!collapsed && <span>Upload</span>}
                   </NavLink>
@@ -109,7 +111,7 @@ const DepartmentSpecificSidebar = () => {
               <SidebarMenu>
                 <SidebarMenuItem>
                   <SidebarMenuButton asChild>
-                    <NavLink to="/department/approvals" className={getNavClass}>
+                    <NavLink to={`/dashboard/${departmentSlug}/approvals`} className={getNavClass}>
                       <FileText className="h-5 w-5" />
                       {!collapsed && <span>Pending Approvals</span>}
                     </NavLink>
@@ -118,7 +120,7 @@ const DepartmentSpecificSidebar = () => {
                 
                 <SidebarMenuItem>
                   <SidebarMenuButton asChild>
-                    <NavLink to="/department/staff" className={getNavClass}>
+                    <NavLink to={`/dashboard/${departmentSlug}/staff`} className={getNavClass}>
                       <Users className="h-5 w-5" />
                       {!collapsed && <span>Department Staff</span>}
                     </NavLink>

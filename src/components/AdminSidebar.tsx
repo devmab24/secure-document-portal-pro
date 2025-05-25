@@ -118,7 +118,7 @@ const AdminSidebar = () => {
                   <SidebarMenuItem key={department}>
                     <SidebarMenuButton asChild>
                       <NavLink 
-                        to={`/dashboard/admin/department/${department.toLowerCase().replace(/_/g, '-')}`} 
+                        to={`/dashboard/admin/department/${department.toLowerCase().replace(/_/g, '-').replace(/ /g, '-').replace(/&/g, 'and')}`} 
                         className={getNavClass}
                       >
                         <FolderHeart className="h-5 w-5" />
@@ -142,7 +142,7 @@ const AdminSidebar = () => {
               <SidebarMenu>
                 <SidebarMenuItem>
                   <SidebarMenuButton asChild>
-                    <NavLink to="/dashboard/admin/department/admin" className={getNavClass}>
+                    <NavLink to="/dashboard/admin/department/administration" className={getNavClass}>
                       <FolderHeart className="h-5 w-5" />
                       {!collapsed && <span>Administration</span>}
                     </NavLink>
@@ -160,18 +160,33 @@ const AdminSidebar = () => {
           </SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
-              <SidebarMenuItem>
-                <SidebarMenuButton asChild>
-                  <NavLink to="/dashboard/admin/reports" className={getNavClass}>
-                    <FileText className="h-5 w-5" />
-                    {!collapsed && <span>Reports</span>}
-                  </NavLink>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
+              {/* Super Admin Only - Reports */}
+              {isSuperAdmin && (
+                <SidebarMenuItem>
+                  <SidebarMenuButton asChild>
+                    <NavLink to="/dashboard/admin/reports" className={getNavClass}>
+                      <FileText className="h-5 w-5" />
+                      {!collapsed && <span>Reports</span>}
+                    </NavLink>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              )}
+              
+              {/* Super Admin Only - Audit Logs */}
+              {isSuperAdmin && (
+                <SidebarMenuItem>
+                  <SidebarMenuButton asChild>
+                    <NavLink to="/dashboard/admin/audit" className={getNavClass}>
+                      <Activity className="h-5 w-5" />
+                      {!collapsed && <span>Audit Logs</span>}
+                    </NavLink>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              )}
               
               <SidebarMenuItem>
                 <SidebarMenuButton asChild>
-                  <NavLink to="/settings" className={getNavClass}>
+                  <NavLink to="/dashboard/admin/settings" className={getNavClass}>
                     <Settings className="h-5 w-5" />
                     {!collapsed && <span>Settings</span>}
                   </NavLink>

@@ -1,3 +1,4 @@
+
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { Toaster } from "@/components/ui/toaster";
 import { ReduxProvider } from "@/providers/ReduxProvider";
@@ -55,7 +56,21 @@ function App() {
                 <Route path="users/roles" element={<UserManagement />} />
                 <Route path="reports" element={<AdminDashboard />} />
                 <Route path="system" element={<AdminDashboard />} />
+                <Route path="settings" element={<Settings />} />
+                <Route path="settings/profile" element={<Settings />} />
+                <Route path="settings/account" element={<Settings />} />
+                <Route path="settings/notifications" element={<Settings />} />
+                <Route path="audit" element={<AuditLogs />} />
                 <Route path="department/:departmentSlug" element={<DepartmentDashboard />} />
+              </Route>
+              
+              {/* Department specific routes for staff access */}
+              <Route path="/dashboard/:departmentSlug" element={<ProtectedRoute />}>
+                <Route index element={<DepartmentDashboard />} />
+                <Route path="staff" element={<Users />} />
+                <Route path="documents" element={<Documents />} />
+                <Route path="upload" element={<Upload />} />
+                <Route path="approvals" element={<DepartmentDashboard />} />
               </Route>
               
               {/* Regular document routes */}
@@ -66,7 +81,7 @@ function App() {
                 <Route index element={<DocumentView />} />
               </Route>
               
-              {/* Department routes (for HODs and Staff) */}
+              {/* Legacy department routes (for backward compatibility) */}
               <Route path="/department/:departmentSlug" element={<ProtectedRoute />}>
                 <Route index element={<DepartmentDashboard />} />
               </Route>
