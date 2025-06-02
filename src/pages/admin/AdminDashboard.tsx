@@ -145,7 +145,7 @@ const AdminDashboard = () => {
           </Card>
         )}
 
-        {/* System Settings - Super Admin Only */}
+        {/* System Configuration - Super Admin Only */}
         {isSuperAdmin && (
           <Card>
             <CardHeader>

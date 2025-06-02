@@ -1,4 +1,3 @@
-
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { Toaster } from "@/components/ui/toaster";
 import { ReduxProvider } from "@/providers/ReduxProvider";
@@ -56,12 +55,13 @@ function App() {
                 <Route path="users/roles" element={<UserManagement />} />
                 <Route path="reports" element={<AdminDashboard />} />
                 <Route path="system" element={<AdminDashboard />} />
+                <Route path="audit" element={<AuditLogs />} />
+                <Route path="department/:departmentSlug" element={<DepartmentDashboard />} />
+                {/* Nested settings routes */}
                 <Route path="settings" element={<Settings />} />
                 <Route path="settings/profile" element={<Settings />} />
                 <Route path="settings/account" element={<Settings />} />
                 <Route path="settings/notifications" element={<Settings />} />
-                <Route path="audit" element={<AuditLogs />} />
-                <Route path="department/:departmentSlug" element={<DepartmentDashboard />} />
               </Route>
               
               {/* Department specific routes for staff access */}
