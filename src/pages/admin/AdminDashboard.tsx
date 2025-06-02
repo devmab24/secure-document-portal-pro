@@ -10,7 +10,8 @@ import {
   Activity,
   UserCog,
   Lock,
-  Eye
+  Eye,
+  FolderHeart
 } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { UserRole } from "@/lib/types";
