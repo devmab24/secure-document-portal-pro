@@ -101,13 +101,13 @@ const AdminDashboard = () => {
             </CardHeader>
             <CardContent className="space-y-3">
               <Button asChild className="w-full">
-                <Link to="/dashboard/admin/users/manage">
+                <Link to="/dashboard/super-admin/users/management">
                   <Users className="h-4 w-4 mr-2" />
                   Manage Users
                 </Link>
               </Button>
               <Button asChild variant="outline" className="w-full">
-                <Link to="/dashboard/admin/users/roles">
+                <Link to="/dashboard/super-admin/users/roles">
                   <Lock className="h-4 w-4 mr-2" />
                   Role Management
                 </Link>
@@ -130,13 +130,13 @@ const AdminDashboard = () => {
             </CardHeader>
             <CardContent className="space-y-3">
               <Button asChild variant="outline" className="w-full">
-                <Link to="/dashboard/admin/audit">
+                <Link to="/dashboard/super-admin/audits">
                   <Eye className="h-4 w-4 mr-2" />
                   View Audit Logs
                 </Link>
               </Button>
               <Button asChild variant="outline" className="w-full">
-                <Link to="/dashboard/admin/reports">
+                <Link to="/dashboard/super-admin/reports">
                   <Database className="h-4 w-4 mr-2" />
                   System Reports
                 </Link>
@@ -165,7 +165,7 @@ const AdminDashboard = () => {
                 </Link>
               </Button>
               <Button asChild variant="outline" className="w-full">
-                <Link to="/dashboard/admin/system">
+                <Link to="/dashboard/super-admin/systems">
                   <Shield className="h-4 w-4 mr-2" />
                   Advanced Settings
                 </Link>
@@ -185,7 +185,7 @@ const AdminDashboard = () => {
             </CardHeader>
             <CardContent className="space-y-3">
               <Button asChild variant="outline" className="w-full">
-                <Link to="/users">
+                <Link to="/dashboard/super-admin/users/management">
                   <Users className="h-4 w-4 mr-2" />
                   View All Users
                 </Link>
@@ -217,7 +217,7 @@ const AdminDashboard = () => {
                 </Link>
               </Button>
               <Button asChild variant="outline" className="w-full">
-                <Link to="/dashboard/admin/department/administration">
+                <Link to="/dashboard/admin/department">
                   <FolderHeart className="h-4 w-4 mr-2" />
                   Administrative Unit
                 </Link>
