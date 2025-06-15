@@ -1,3 +1,4 @@
+
 import { Department, UserRole, User } from "../types";
 
 // Mock Users categorized by roles for comprehensive testing
@@ -24,7 +25,7 @@ export const mockUsers: User[] = [
     avatarUrl: "https://i.pravatar.cc/150?img=31"
   },
   
-  // System Administrators - 2 users
+  // System Administrators - 3 users (IT, Admin, Finance)
   {
     id: "user-admin-1",
     email: "admin@hospital.org",
@@ -36,15 +37,24 @@ export const mockUsers: User[] = [
   },
   {
     id: "user-admin-2", 
-    email: "it-admin@hospital.org",
+    email: "admin-finance@hospital.org",
     firstName: "Sarah",
     lastName: "Tech",
     role: UserRole.ADMIN,
-    department: Department.IT,
+    department: Department.FINANCE,
     avatarUrl: "https://i.pravatar.cc/150?img=20"
   },
+  {
+    id: "user-admin-3", 
+    email: "admin-general@hospital.org",
+    firstName: "Michael",
+    lastName: "Director",
+    role: UserRole.ADMIN,
+    department: Department.ADMIN,
+    avatarUrl: "https://i.pravatar.cc/150?img=32"
+  },
   
-  // Heads of Departments (HODs) - 8 users (one for each major department)
+  // Heads of Departments (HODs) - 11 users (one for each department)
   {
     id: "user-hod-1",
     email: "radiology-hod@hospital.org",
@@ -117,8 +127,35 @@ export const mockUsers: User[] = [
     department: Department.HR,
     avatarUrl: "https://i.pravatar.cc/150?img=21"
   },
+  {
+    id: "user-hod-9",
+    email: "finance-hod@hospital.org",
+    firstName: "David",
+    lastName: "Williams",
+    role: UserRole.HOD,
+    department: Department.FINANCE,
+    avatarUrl: "https://i.pravatar.cc/150?img=33"
+  },
+  {
+    id: "user-hod-10",
+    email: "it-hod@hospital.org",
+    firstName: "Lisa",
+    lastName: "Brown",
+    role: UserRole.HOD,
+    department: Department.IT,
+    avatarUrl: "https://i.pravatar.cc/150?img=34"
+  },
+  {
+    id: "user-hod-11",
+    email: "admin-hod@hospital.org",
+    firstName: "Mark",
+    lastName: "Davis",
+    role: UserRole.HOD,
+    department: Department.ADMIN,
+    avatarUrl: "https://i.pravatar.cc/150?img=35"
+  },
   
-  // Department Staff - 16 users (2 per major department)
+  // Department Staff - 22 users (2 per department)
   // Radiology Staff
   {
     id: "user-staff-1",
@@ -277,6 +314,66 @@ export const mockUsers: User[] = [
     role: UserRole.STAFF,
     department: Department.HR,
     avatarUrl: "https://i.pravatar.cc/150?img=30"
+  },
+
+  // Finance Staff
+  {
+    id: "user-staff-17",
+    email: "finance-staff@hospital.org",
+    firstName: "John",
+    lastName: "Miller",
+    role: UserRole.STAFF,
+    department: Department.FINANCE,
+    avatarUrl: "https://i.pravatar.cc/150?img=36"
+  },
+  {
+    id: "user-staff-18",
+    email: "accountant@hospital.org",
+    firstName: "Susan",
+    lastName: "Johnson",
+    role: UserRole.STAFF,
+    department: Department.FINANCE,
+    avatarUrl: "https://i.pravatar.cc/150?img=37"
+  },
+
+  // IT Staff
+  {
+    id: "user-staff-19",
+    email: "it-staff@hospital.org",
+    firstName: "James",
+    lastName: "Wright",
+    role: UserRole.STAFF,
+    department: Department.IT,
+    avatarUrl: "https://i.pravatar.cc/150?img=38"
+  },
+  {
+    id: "user-staff-20",
+    email: "developer@hospital.org",
+    firstName: "Emma",
+    lastName: "Wilson",
+    role: UserRole.STAFF,
+    department: Department.IT,
+    avatarUrl: "https://i.pravatar.cc/150?img=39"
+  },
+
+  // Admin Staff
+  {
+    id: "user-staff-21",
+    email: "admin-staff@hospital.org",
+    firstName: "Peter",
+    lastName: "Thompson",
+    role: UserRole.STAFF,
+    department: Department.ADMIN,
+    avatarUrl: "https://i.pravatar.cc/150?img=40"
+  },
+  {
+    id: "user-staff-22",
+    email: "secretary@hospital.org",
+    firstName: "Nancy",
+    lastName: "Clark",
+    role: UserRole.STAFF,
+    department: Department.ADMIN,
+    avatarUrl: "https://i.pravatar.cc/150?img=41"
   }
 ];
 
