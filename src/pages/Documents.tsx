@@ -1,4 +1,3 @@
-
 import { useState, useMemo, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
@@ -34,6 +33,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { DocumentVersionHistory } from "@/components/DocumentVersionHistory";
 
 const Documents = () => {
   const { user } = useAuth();
@@ -127,10 +127,15 @@ const Documents = () => {
     <div className="space-y-6">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <h1 className="text-3xl font-bold tracking-tight">Documents</h1>
-        <Button className="bg-hospital-600 hover:bg-hospital-700" onClick={() => navigate("/upload")}>
-          <Upload className="mr-2 h-4 w-4" />
-          Upload Document
-        </Button>
+        <div className="flex gap-2">
+          <Button variant="outline" onClick={() => navigate("/forms")}>
+            Create Digital Form
+          </Button>
+          <Button className="bg-hospital-600 hover:bg-hospital-700" onClick={() => navigate("/upload")}>
+            <Upload className="mr-2 h-4 w-4" />
+            Upload Document
+          </Button>
+        </div>
       </div>
       
       {/* Search and Filter Bar */}
@@ -220,13 +225,14 @@ const Documents = () => {
               <TableHead className="hidden md:table-cell">Department</TableHead>
               <TableHead>Status</TableHead>
               <TableHead className="hidden md:table-cell">Modified</TableHead>
-              <TableHead className="hidden lg:table-cell">Size</TableHead>
+              <TableHead className="hidden lg:table-cell">Version</TableHead>
+              <TableHead className="text-right">Actions</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {filteredDocuments.length === 0 ? (
               <TableRow>
-                <TableCell colSpan={6} className="h-32 text-center">
+                <TableCell colSpan={7} className="h-32 text-center">
                   <div className="flex flex-col items-center justify-center text-muted-foreground">
                     <File className="h-10 w-10 mb-2 opacity-30" />
                     <span className="font-medium">No documents found</span>
@@ -240,10 +246,14 @@ const Documents = () => {
               filteredDocuments.map((document) => (
                 <TableRow
                   key={document.id}
-                  className="cursor-pointer hover:bg-muted/50"
-                  onClick={() => navigate(`/documents/${document.id}`)}
+                  className="hover:bg-muted/50"
                 >
-                  <TableCell className="font-medium">{document.name}</TableCell>
+                  <TableCell 
+                    className="font-medium cursor-pointer"
+                    onClick={() => navigate(`/documents/${document.id}`)}
+                  >
+                    {document.name}
+                  </TableCell>
                   <TableCell className="hidden md:table-cell">{document.type}</TableCell>
                   <TableCell className="hidden md:table-cell">{document.department}</TableCell>
                   <TableCell>
@@ -255,7 +265,16 @@ const Documents = () => {
                     {format(document.modifiedAt, "MMM d, yyyy")}
                   </TableCell>
                   <TableCell className="hidden lg:table-cell text-muted-foreground">
-                    {(document.fileSize / 1024 / 1024).toFixed(1)} MB
+                    v{document.version} ({document.versions?.length || 0} versions)
+                  </TableCell>
+                  <TableCell className="text-right">
+                    <DocumentVersionHistory 
+                      document={document}
+                      onRestoreVersion={(versionId) => {
+                        // Handle version restoration
+                        console.log('Restore version:', versionId);
+                      }}
+                    />
                   </TableCell>
                 </TableRow>
               ))

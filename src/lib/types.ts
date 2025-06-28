@@ -1,4 +1,3 @@
-
 // User Roles Enum
 export enum UserRole {
   CMD = "CMD",         // Chief Medical Director
@@ -67,6 +66,20 @@ export interface DocumentShare {
   acknowledgedAt?: Date;
 }
 
+// Document Version Interface
+export interface DocumentVersion {
+  id: string;
+  documentId: string;
+  version: number;
+  name: string;
+  content: any; // JSON content for digital forms or file data for uploaded docs
+  modifiedBy: string; // User ID
+  modifiedAt: Date;
+  changeDescription?: string;
+  fileUrl?: string; // For uploaded documents
+  fileSize?: number;
+}
+
 // User Interface
 export interface User {
   id: string;
@@ -88,9 +101,9 @@ export interface Document {
   uploadedAt: Date;
   modifiedAt: Date;
   status: DocumentStatus;
-  fileUrl: string;
-  fileSize: number; // in bytes
-  fileType: string; // MIME type
+  fileUrl?: string; // Optional for digital forms
+  fileSize?: number; // in bytes
+  fileType?: string; // MIME type
   description?: string;
   tags?: string[];
   priority?: 'low' | 'medium' | 'high' | 'urgent';
@@ -100,6 +113,10 @@ export interface Document {
   version: number;
   comments?: Comment[];
   shares?: DocumentShare[]; // Track document shares
+  versions?: DocumentVersion[]; // Document version history
+  isDigitalForm?: boolean; // Whether this is a digital form or uploaded file
+  formData?: any; // JSON data for digital forms
+  templateId?: string; // Reference to form template if created from template
 }
 
 // Comment Interface

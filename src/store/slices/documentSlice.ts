@@ -1,6 +1,5 @@
-
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
-import { Document, DocumentStatus, DocumentShare, ShareStatus } from '@/lib/types';
+import { Document, DocumentStatus, DocumentShare, ShareStatus, DocumentVersion } from '@/lib/types';
 import { mockDocuments } from '@/lib/mock-data';
 
 // Async thunks for document operations
@@ -96,6 +95,55 @@ export const updateShareStatus = createAsyncThunk(
     
     const timestamp = new Date();
     return { shareId, status, timestamp };
+  }
+);
+
+export const createDocumentVersion = createAsyncThunk(
+  'documents/createVersion',
+  async ({ 
+    documentId, 
+    content, 
+    changeDescription, 
+    userId 
+  }: { 
+    documentId: string; 
+    content: any; 
+    changeDescription?: string; 
+    userId: string;
+  }) => {
+    // Simulate API call
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    
+    const newVersion: DocumentVersion = {
+      id: Date.now().toString(),
+      documentId,
+      version: Date.now(), // In real app, this would be incremented properly
+      name: `Version ${Date.now()}`,
+      content,
+      modifiedBy: userId,
+      modifiedAt: new Date(),
+      changeDescription
+    };
+    
+    return newVersion;
+  }
+);
+
+export const restoreDocumentVersion = createAsyncThunk(
+  'documents/restoreVersion',
+  async ({ 
+    documentId, 
+    versionId, 
+    userId 
+  }: { 
+    documentId: string; 
+    versionId: string; 
+    userId: string;
+  }) => {
+    // Simulate API call
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    
+    return { documentId, versionId, userId, timestamp: new Date() };
   }
 );
 
@@ -239,6 +287,46 @@ const documentSlice = createSlice({
             share.seenAt = timestamp;
           } else if (status === ShareStatus.ACKNOWLEDGED) {
             share.acknowledgedAt = timestamp;
+          }
+        }
+      })
+      
+    // Create document version
+    builder
+      .addCase(createDocumentVersion.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(createDocumentVersion.fulfilled, (state, action) => {
+        state.loading = false;
+        const version = action.payload;
+        const document = state.documents.find(doc => doc.id === version.documentId);
+        if (document) {
+          if (!document.versions) document.versions = [];
+          document.versions.push(version);
+          document.version = version.version;
+          document.modifiedAt = version.modifiedAt;
+        }
+      })
+      .addCase(createDocumentVersion.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message || 'Failed to create document version';
+      })
+      
+    // Restore document version
+    builder
+      .addCase(restoreDocumentVersion.fulfilled, (state, action) => {
+        const { documentId, versionId } = action.payload;
+        const document = state.documents.find(doc => doc.id === documentId);
+        if (document && document.versions) {
+          const version = document.versions.find(v => v.id === versionId);
+          if (version) {
+            // Restore document to this version
+            document.version = version.version;
+            document.modifiedAt = new Date();
+            if (version.content) {
+              document.formData = version.content;
+            }
           }
         }
       });

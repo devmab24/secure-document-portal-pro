@@ -1,5 +1,5 @@
-
 import { DocumentType, Department } from './types';
+import { additionalTemplates } from './additional-templates';
 
 export interface FormField {
   id: string;
@@ -323,7 +323,8 @@ export const formTemplates: FormTemplate[] = [
         placeholder: 'Outline goals and objectives for the coming month'
       }
     ]
-  }
+  },
+  ...additionalTemplates
 ];
 
 export const getTemplatesByCategory = (category: string) => {
