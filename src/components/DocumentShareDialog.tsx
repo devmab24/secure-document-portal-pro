@@ -145,7 +145,7 @@ export const DocumentShareDialog: React.FC<DocumentShareDialogProps> = ({
           {shareType === 'department' && (
             <div className="space-y-2">
               <Label>Select Department</Label>
-              <Select value={selectedDepartment} onValueChange={setSelectedDepartment}>
+              <Select value={selectedDepartment} onValueChange={(value) => setSelectedDepartment(value as Department)}>
                 <SelectTrigger>
                   <SelectValue placeholder="Choose a department..." />
                 </SelectTrigger>
