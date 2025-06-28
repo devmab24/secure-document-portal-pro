@@ -2,7 +2,7 @@
 import { NavLink } from "react-router-dom";
 import { 
   LayoutDashboard, File, Upload, Settings, Users, 
-  FileText, FolderHeart
+  FileText, FolderHeart, FormInput
 } from "lucide-react";
 import {
   Sidebar,
@@ -43,6 +43,15 @@ const HodSidebar = () => {
                   <NavLink to="/dashboard/hod" className={getNavClass}>
                     <LayoutDashboard className="h-5 w-5" />
                     {!collapsed && <span>Dashboard</span>}
+                  </NavLink>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+              
+              <SidebarMenuItem>
+                <SidebarMenuButton asChild>
+                  <NavLink to="/forms" className={getNavClass}>
+                    <FormInput className="h-5 w-5" />
+                    {!collapsed && <span>Digital Forms</span>}
                   </NavLink>
                 </SidebarMenuButton>
               </SidebarMenuItem>
@@ -91,22 +100,3 @@ const HodSidebar = () => {
 };
 
 export default HodSidebar;
-
-
- {/* <SidebarMenuItem>
-  <SidebarMenuButton asChild>
-    <NavLink to="/dashboard/hod/department" className={getNavClass}>
-      <FolderHeart className="h-5 w-5" />
-      {!collapsed && <span>Department</span>}
-    </NavLink>
-  </SidebarMenuButton>
-</SidebarMenuItem> */}
-
-{/* <SidebarMenuItem>
-  <SidebarMenuButton asChild>
-    <NavLink to="/dashboard/hod/approvals" className={getNavClass}>
-      <FileText className="h-5 w-5" />
-      {!collapsed && <span>Approvals</span>}
-    </NavLink>
-  </SidebarMenuButton>
-</SidebarMenuItem> */}
