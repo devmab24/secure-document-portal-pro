@@ -80,6 +80,22 @@ export interface DocumentVersion {
   fileSize?: number;
 }
 
+// Digital Signature Interface
+export interface DigitalSignature {
+  id: string;
+  documentId: string;
+  signerId: string; // User ID of the signer
+  signerName: string;
+  signerRole: UserRole;
+  signatureData: string; // Base64 encoded signature image or hash
+  signedAt: Date;
+  ipAddress?: string;
+  userAgent?: string;
+  signatureType: 'approval' | 'rejection' | 'acknowledgment';
+  comments?: string;
+  isValid: boolean; // For signature verification
+}
+
 // User Interface
 export interface User {
   id: string;
@@ -117,6 +133,9 @@ export interface Document {
   isDigitalForm?: boolean; // Whether this is a digital form or uploaded file
   formData?: any; // JSON data for digital forms
   templateId?: string; // Reference to form template if created from template
+  signatures?: DigitalSignature[]; // Digital signatures
+  isLocked?: boolean; // Whether document is locked after signing
+  requiresSignature?: boolean; // Whether document requires digital signature
 }
 
 // Comment Interface

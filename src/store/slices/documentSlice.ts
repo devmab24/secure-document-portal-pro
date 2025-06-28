@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
-import { Document, DocumentStatus, DocumentShare, ShareStatus, DocumentVersion } from '@/lib/types';
+import { Document, DocumentStatus, DocumentShare, ShareStatus, DocumentVersion, DigitalSignature } from '@/lib/types';
 import { mockDocuments } from '@/lib/mock-data';
 
 // Async thunks for document operations
@@ -147,6 +147,38 @@ export const restoreDocumentVersion = createAsyncThunk(
   }
 );
 
+export const addDigitalSignature = createAsyncThunk(
+  'documents/addDigitalSignature',
+  async ({ 
+    documentId, 
+    signatureData 
+  }: { 
+    documentId: string; 
+    signatureData: Omit<DigitalSignature, 'id' | 'signedAt'>;
+  }) => {
+    // Simulate API call
+    await new Promise(resolve => setTimeout(resolve, 1500));
+    
+    const newSignature: DigitalSignature = {
+      ...signatureData,
+      id: Date.now().toString(),
+      signedAt: new Date()
+    };
+    
+    return { documentId, signature: newSignature };
+  }
+);
+
+export const verifySignature = createAsyncThunk(
+  'documents/verifySignature',
+  async ({ signatureId }: { signatureId: string }) => {
+    // Simulate API call for signature verification
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    
+    return { signatureId, isValid: true };
+  }
+);
+
 interface DocumentState {
   documents: Document[];
   shares: DocumentShare[];
@@ -161,6 +193,7 @@ interface DocumentState {
   uploadProgress: number;
   statusUpdateLoading: boolean;
   shareLoading: boolean;
+  signatureLoading: boolean;
 }
 
 const initialState: DocumentState = {
@@ -174,7 +207,8 @@ const initialState: DocumentState = {
   },
   uploadProgress: 0,
   statusUpdateLoading: false,
-  shareLoading: false
+  shareLoading: false,
+  signatureLoading: false
 };
 
 const documentSlice = createSlice({
@@ -329,6 +363,63 @@ const documentSlice = createSlice({
             }
           }
         }
+      })
+      
+    // Add digital signature
+    builder
+      .addCase(addDigitalSignature.pending, (state) => {
+        state.signatureLoading = true;
+        state.error = null;
+      })
+      .addCase(addDigitalSignature.fulfilled, (state, action) => {
+        state.signatureLoading = false;
+        const { documentId, signature } = action.payload;
+        const document = state.documents.find(doc => doc.id === documentId);
+        if (document) {
+          if (!document.signatures) document.signatures = [];
+          document.signatures.push(signature);
+          
+          // Update document status based on signature type
+          if (signature.signatureType === 'approval') {
+            document.status = DocumentStatus.APPROVED;
+            document.isLocked = true; // Lock document after approval
+          } else if (signature.signatureType === 'rejection') {
+            document.status = DocumentStatus.REJECTED;
+          }
+          
+          document.modifiedAt = new Date();
+        }
+        
+        if (state.selectedDocument?.id === documentId) {
+          if (!state.selectedDocument.signatures) state.selectedDocument.signatures = [];
+          state.selectedDocument.signatures.push(signature);
+          if (signature.signatureType === 'approval') {
+            state.selectedDocument.status = DocumentStatus.APPROVED;
+            state.selectedDocument.isLocked = true;
+          } else if (signature.signatureType === 'rejection') {
+            state.selectedDocument.status = DocumentStatus.REJECTED;
+          }
+          state.selectedDocument.modifiedAt = new Date();
+        }
+      })
+      .addCase(addDigitalSignature.rejected, (state, action) => {
+        state.signatureLoading = false;
+        state.error = action.error.message || 'Failed to add digital signature';
+      })
+      
+    // Verify signature
+    builder
+      .addCase(verifySignature.fulfilled, (state, action) => {
+        const { signatureId, isValid } = action.payload;
+        // Update signature validity in all documents
+        state.documents.forEach(doc => {
+          if (doc.signatures) {
+            const signature = doc.signatures.find(sig => sig.id === signatureId);
+            if (signature) {
+              signature.isValid = isValid;
+            }
+          }
+        });
       });
   }
 });

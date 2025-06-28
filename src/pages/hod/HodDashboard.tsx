@@ -1,4 +1,3 @@
-
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -9,7 +8,9 @@ import {
   Upload,
   Activity,
   UserCog,
-  Settings
+  Settings,
+  PenTool,
+  Shield
 } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { UserRole } from "@/lib/types";
@@ -28,10 +29,44 @@ const HodDashboard = () => {
             <div className="flex items-center gap-2">
               <p className="text-muted-foreground">Department management panel</p>
               <Badge variant="secondary">Head of Department</Badge>
+              <Badge variant="outline" className="flex items-center gap-1">
+                <Shield className="h-3 w-3" />
+                Digital Signing
+              </Badge>
             </div>
           </div>
         </div>
       </div>
+
+      {/* Digital Signature Feature Highlight */}
+      <Card className="border-green-200 bg-green-50/50">
+        <CardHeader className="pb-3">
+          <CardTitle className="flex items-center gap-2 text-green-800">
+            <PenTool className="h-5 w-5" />
+            Digital Signature Authority
+          </CardTitle>
+          <CardDescription className="text-green-700">
+            As an HOD, you can digitally sign documents for approval, rejection, or acknowledgment. 
+            Once signed, documents are locked to ensure integrity and authenticity.
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="flex flex-wrap gap-2">
+            <Badge variant="outline" className="text-green-700 border-green-300">
+              Remote Approval
+            </Badge>
+            <Badge variant="outline" className="text-green-700 border-green-300">
+              Document Locking
+            </Badge>
+            <Badge variant="outline" className="text-green-700 border-green-300">
+              Audit Trail
+            </Badge>
+            <Badge variant="outline" className="text-green-700 border-green-300">
+              Legal Compliance
+            </Badge>
+          </div>
+        </CardContent>
+      </Card>
 
       {/* Quick Stats */}
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
@@ -111,24 +146,24 @@ const HodDashboard = () => {
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              <FileText className="h-5 w-5" />
-              Document Management
+              <PenTool className="h-5 w-5" />
+              Digital Signing & Approvals
             </CardTitle>
             <CardDescription>
-              Review and approve department documents
+              Review and digitally sign department documents
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-3">
-            <Button asChild className="w-full">
-              <Link to="/dashboard/hod/approvals">
-                <FileText className="h-4 w-4 mr-2" />
-                Pending Approvals
+            <Button asChild className="w-full bg-green-600 hover:bg-green-700">
+              <Link to="/dashboard/documents">
+                <PenTool className="h-4 w-4 mr-2" />
+                Sign Documents
               </Link>
             </Button>
             <Button asChild variant="outline" className="w-full">
-              <Link to="/dashboard/hod/documents">
-                <FolderHeart className="h-4 w-4 mr-2" />
-                All Documents
+              <Link to="/dashboard/hod/approvals">
+                <FileText className="h-4 w-4 mr-2" />
+                Pending Approvals
               </Link>
             </Button>
           </CardContent>
