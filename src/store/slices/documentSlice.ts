@@ -1,6 +1,6 @@
 
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
-import { Document, DocumentStatus } from '@/lib/types';
+import { Document, DocumentStatus, DocumentShare, ShareStatus } from '@/lib/types';
 import { mockDocuments } from '@/lib/mock-data';
 
 // Async thunks for document operations
@@ -64,6 +64,7 @@ export const uploadDocument = createAsyncThunk(
       tags: documentData.tags || [],
       priority: documentData.priority || 'medium',
       version: 1,
+      shares: [],
       ...documentData
     };
     
@@ -71,8 +72,36 @@ export const uploadDocument = createAsyncThunk(
   }
 );
 
+export const shareDocument = createAsyncThunk(
+  'documents/share',
+  async (shareData: Omit<DocumentShare, 'id' | 'sharedAt'>) => {
+    // Simulate API call
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    
+    const newShare: DocumentShare = {
+      ...shareData,
+      id: Date.now().toString(),
+      sharedAt: new Date()
+    };
+    
+    return newShare;
+  }
+);
+
+export const updateShareStatus = createAsyncThunk(
+  'documents/updateShareStatus',
+  async ({ shareId, status }: { shareId: string; status: ShareStatus }) => {
+    // Simulate API call
+    await new Promise(resolve => setTimeout(resolve, 500));
+    
+    const timestamp = new Date();
+    return { shareId, status, timestamp };
+  }
+);
+
 interface DocumentState {
   documents: Document[];
+  shares: DocumentShare[];
   loading: boolean;
   error: string | null;
   selectedDocument: Document | null;
@@ -83,10 +112,12 @@ interface DocumentState {
   };
   uploadProgress: number;
   statusUpdateLoading: boolean;
+  shareLoading: boolean;
 }
 
 const initialState: DocumentState = {
   documents: [],
+  shares: [],
   loading: false,
   error: null,
   selectedDocument: null,
@@ -94,7 +125,8 @@ const initialState: DocumentState = {
     searchTerm: ''
   },
   uploadProgress: 0,
-  statusUpdateLoading: false
+  statusUpdateLoading: false,
+  shareLoading: false
 };
 
 const documentSlice = createSlice({
@@ -172,6 +204,43 @@ const documentSlice = createSlice({
         state.loading = false;
         state.error = action.error.message || 'Failed to upload document';
         state.uploadProgress = 0;
+      })
+      
+    // Share document
+    builder
+      .addCase(shareDocument.pending, (state) => {
+        state.shareLoading = true;
+        state.error = null;
+      })
+      .addCase(shareDocument.fulfilled, (state, action) => {
+        state.shareLoading = false;
+        state.shares.push(action.payload);
+        
+        // Add share to the document
+        const document = state.documents.find(doc => doc.id === action.payload.documentId);
+        if (document) {
+          if (!document.shares) document.shares = [];
+          document.shares.push(action.payload);
+        }
+      })
+      .addCase(shareDocument.rejected, (state, action) => {
+        state.shareLoading = false;
+        state.error = action.error.message || 'Failed to share document';
+      })
+      
+    // Update share status
+    builder
+      .addCase(updateShareStatus.fulfilled, (state, action) => {
+        const { shareId, status, timestamp } = action.payload;
+        const share = state.shares.find(s => s.id === shareId);
+        if (share) {
+          share.status = status;
+          if (status === ShareStatus.SEEN) {
+            share.seenAt = timestamp;
+          } else if (status === ShareStatus.ACKNOWLEDGED) {
+            share.acknowledgedAt = timestamp;
+          }
+        }
       });
   }
 });

@@ -1,3 +1,4 @@
+
 // User Roles Enum
 export enum UserRole {
   CMD = "CMD",         // Chief Medical Director
@@ -43,6 +44,29 @@ export enum DocumentType {
   OTHER = "Other"
 }
 
+// Document Share Status Enum
+export enum ShareStatus {
+  SENT = "Sent",
+  RECEIVED = "Received",
+  SEEN = "Seen",
+  ACKNOWLEDGED = "Acknowledged"
+}
+
+// Document Share Interface
+export interface DocumentShare {
+  id: string;
+  documentId: string;
+  fromUserId: string;
+  toUserId?: string;
+  toDepartment?: Department;
+  status: ShareStatus;
+  message?: string;
+  sharedAt: Date;
+  receivedAt?: Date;
+  seenAt?: Date;
+  acknowledgedAt?: Date;
+}
+
 // User Interface
 export interface User {
   id: string;
@@ -75,6 +99,7 @@ export interface Document {
   approvalChain?: string[]; // Ordered list of user IDs in approval chain
   version: number;
   comments?: Comment[];
+  shares?: DocumentShare[]; // Track document shares
 }
 
 // Comment Interface
@@ -91,7 +116,7 @@ export interface AuditLog {
   id: string;
   documentId: string;
   userId: string;
-  action: 'create' | 'view' | 'update' | 'delete' | 'download' | 'approve' | 'reject';
+  action: 'create' | 'view' | 'update' | 'delete' | 'download' | 'approve' | 'reject' | 'share';
   timestamp: Date;
   details?: string;
 }

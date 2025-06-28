@@ -11,7 +11,7 @@ import HodProtectedRoute from "@/components/HodProtectedRoute";
 import StaffProtectedRoute from "@/components/StaffProtectedRoute";
 import Login from "@/pages/Login";
 import Documents from "@/pages/Documents";
-// import DocumentView from "@/pages/DocumentView";
+import DocumentSharing from "@/pages/DocumentSharing";
 import DepartmentDashboard from "@/pages/DepartmentDashboard";
 import Upload from "@/pages/Upload";
 import Users from "@/pages/Users";
@@ -57,6 +57,11 @@ function App() {
                 <Route path="my-forms" element={<MyForms />} />
                 <Route path="view/:formId" element={<MyForms />} />
                 <Route path="edit/:formId" element={<FormCreate />} />
+              </Route>
+              
+              {/* Document Sharing Routes - Available to all authenticated users */}
+              <Route path="/documents" element={<ProtectedRoute />}>
+                <Route path="sharing" element={<DocumentSharing />} />
               </Route>
               
               {/* CMD specific routes - All under /dashboard/cmd */}
