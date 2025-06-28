@@ -8,25 +8,47 @@ import { mockUsers } from "@/lib/mock-data";
 import { UserRole, Department } from "@/lib/types";
 import { Search, UserCog } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { useAuth } from "@/contexts/AuthContext";
+// import { currentUser } from "@/lib/currentUser"; // Assuming this is how you get the current user
 
 const Users = () => {
   const [searchTerm, setSearchTerm] = useState("");
+  const { user: currentUser } = useAuth();
   
   // Filter users based on search term
   const filteredUsers = mockUsers.filter((user) => {
-    const fullName = `${user.firstName} ${user.lastName}`.toLowerCase();
-    const email = user.email.toLowerCase();
-    const department = user.department.toLowerCase();
-    const role = user.role.toLowerCase();
-    const search = searchTerm.toLowerCase();
-    
-    return (
-      fullName.includes(search) ||
-      email.includes(search) ||
-      department.includes(search) ||
-      role.includes(search)
-    );
-  });
+  const fullName = `${user.firstName} ${user.lastName}`.toLowerCase();
+  const email = user.email.toLowerCase();
+  const department = user.department.toLowerCase();
+  const role = user.role.toLowerCase();
+  const search = searchTerm.toLowerCase();
+
+  const matchesSearch =
+    fullName.includes(search) ||
+    email.includes(search) ||
+    department.includes(search) ||
+    role.includes(search);
+
+  // CMD and Admins can see all users
+  if (
+    currentUser?.role === UserRole.CMD ||
+    currentUser?.role === UserRole.ADMIN
+  ) {
+    return matchesSearch;
+  }
+
+  // HODs only see staff in their department
+  if (
+    currentUser?.role === UserRole.HOD &&
+    user.role === UserRole.STAFF &&
+    user.department === currentUser.department
+  ) {
+    return matchesSearch;
+  }
+
+  // Default: hide users from others (like staff)
+  return false;
+});
 
   // Map role to badge color
   const getRoleBadgeColor = (role: UserRole) => {

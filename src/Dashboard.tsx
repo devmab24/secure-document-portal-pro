@@ -4,7 +4,8 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { UserRole } from "@/lib/types";
 
-const Dashboard = () => {
+// Main dashboard route - Redirects to specific role-dashboard when visited on succesful Login
+const RedirectDashboard = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
 
@@ -41,4 +42,4 @@ const Dashboard = () => {
   );
 };
 
-export default Dashboard;
+export default RedirectDashboard;

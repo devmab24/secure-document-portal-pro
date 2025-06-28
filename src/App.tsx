@@ -11,9 +11,8 @@ import SuperAdminProtectedRoute from "@/components/SuperAdminProtectedRoute";
 import HodProtectedRoute from "@/components/HodProtectedRoute";
 import StaffProtectedRoute from "@/components/StaffProtectedRoute";
 import Login from "@/pages/Login";
-import Dashboard from "@/pages/Dashboard";
 import Documents from "@/pages/Documents";
-import DocumentView from "@/pages/DocumentView";
+// import DocumentView from "@/pages/DocumentView";
 import DepartmentDashboard from "@/pages/DepartmentDashboard";
 import Upload from "@/pages/Upload";
 import Users from "@/pages/Users";
@@ -28,6 +27,8 @@ import UserManagement from "@/pages/admin/UserManagement";
 import HodDashboard from "@/pages/hod/HodDashboard";
 import SuperAdminDashboard from "@/pages/super-admin/SuperAdminDashboard";
 import StaffDashboard from "@/pages/staff/StaffDashboard";
+import Index from "./pages/Index";
+import RedirectDashboard from "./Dashboard";
 
 function App() {
   console.log("App rendering");
@@ -38,11 +39,13 @@ function App() {
         <AuthProvider>
           <Router>
             <Routes>
+              {/* Guest pages - Landing and login page */}
               <Route path="/login" element={<Login />} />
+              <Route index element={<Index />} />
               
-              {/* Main dashboard route - redirects to role-specific dashboard */}
-              <Route path="/" element={<ProtectedRoute />}>
-                <Route index element={<Dashboard />} />
+              {/* Redirect page route - redirects to role-specific dashboard when visited on succesful Login */}
+              <Route path="/redirect" element={<ProtectedRoute />}>
+                <Route index element={<RedirectDashboard />} />
               </Route>
               
               {/* CMD specific routes - All under /dashboard/cmd */}
@@ -54,6 +57,7 @@ function App() {
                 <Route path="approvals" element={<CmdDashboard />} />
                 <Route path="audits" element={<AuditLogs />} />
                 <Route path="settings" element={<Settings />} />
+                <Route path="staff" element={<Users />} />
                 <Route path="settings/profiles" element={<Settings />} />
                 <Route path="settings/notifications" element={<Settings />} />
                 <Route path="settings/accounts" element={<Settings />} />
@@ -63,10 +67,10 @@ function App() {
               {/* HOD specific routes - All under /dashboard/hod */}
               <Route path="/dashboard/hod" element={<HodProtectedRoute />}>
                 <Route index element={<HodDashboard />} />
-                <Route path="department" element={<DepartmentDashboard />} />
+                {/* <Route path="department" element={<DepartmentDashboard />} /> */}
                 <Route path="uploads" element={<Upload />} />
                 <Route path="documents" element={<Documents />} />
-                <Route path="approvals" element={<DepartmentDashboard />} />
+                {/* <Route path="approvals" element={<DepartmentDashboard />} /> */}
                 <Route path="staff" element={<Users />} />
                 <Route path="settings" element={<Settings />} />
                 <Route path="settings/profiles" element={<Settings />} />
@@ -90,9 +94,9 @@ function App() {
               {/* Super Admin specific routes - All under /dashboard/super-admin */}
               <Route path="/dashboard/super-admin" element={<SuperAdminProtectedRoute />}>
                 <Route index element={<SuperAdminDashboard />} />
-                <Route path="documents" element={<Documents />} />
+                {/* <Route path="documents" element={<Documents />} /> */}
                 <Route path="systems" element={<SuperAdminDashboard />} />
-                <Route path="uploads" element={<Upload />} />
+                {/* <Route path="uploads" element={<Upload />} /> */}
                 <Route path="reports" element={<SuperAdminDashboard />} />
                 <Route path="users/management" element={<UserManagement />} />
                 <Route path="users/roles" element={<UserManagement />} />
@@ -106,20 +110,20 @@ function App() {
               {/* Staff specific routes - All under /dashboard/staff */}
               <Route path="/dashboard/staff" element={<StaffProtectedRoute />}>
                 <Route index element={<StaffDashboard />} />
-                <Route path="department" element={<DepartmentDashboard />} />
+                {/* <Route path="department" element={<DepartmentDashboard />} /> */}
                 <Route path="uploads" element={<Upload />} />
                 <Route path="documents" element={<Documents />} />
-                <Route path="approvals" element={<DepartmentDashboard />} />
+                {/* <Route path="approvals" element={<DepartmentDashboard />} /> */}
                 <Route path="settings" element={<Settings />} />
                 <Route path="settings/profiles" element={<Settings />} />
                 <Route path="settings/notifications" element={<Settings />} />
                 <Route path="settings/accounts" element={<Settings />} />
               </Route>
               
-              {/* Document view routes */}
-              <Route path="/documents/:id" element={<ProtectedRoute />}>
+              {/* Document view routes but commented out: All documents should be within user dashboard */}
+              {/* <Route path="/documents/:id" element={<ProtectedRoute />}>
                 <Route index element={<DocumentView />} />
-              </Route>
+              </Route> */}
               
               {/* 404 route */}
               <Route path="*" element={<NotFound />} />

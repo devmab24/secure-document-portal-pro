@@ -35,7 +35,7 @@ const AdminSidebar = () => {
 
   return (
     <Sidebar
-      className={`${collapsed ? "w-16" : "w-64"} border-r border-border transition-all duration-300 ease-in-out`}
+      className={`${collapsed ? "w-16" : "w-64"} pt-12 border-r border-border transition-all duration-300 ease-in-out`}
       collapsible="icon"
     >
       <SidebarContent className="p-3">
@@ -66,7 +66,7 @@ const AdminSidebar = () => {
               
               <SidebarMenuItem>
                 <SidebarMenuButton asChild>
-                  <NavLink to="/dashboard/admin/upload" className={getNavClass}>
+                  <NavLink to="/dashboard/admin/uploads" className={getNavClass}>
                     <Upload className="h-5 w-5" />
                     {!collapsed && <span>Upload</span>}
                   </NavLink>
@@ -142,7 +142,7 @@ const AdminSidebar = () => {
               <SidebarMenu>
                 <SidebarMenuItem>
                   <SidebarMenuButton asChild>
-                    <NavLink to="/dashboard/admin/department/administration" className={getNavClass}>
+                    <NavLink to="/dashboard/admin/department" className={getNavClass}>
                       <FolderHeart className="h-5 w-5" />
                       {!collapsed && <span>Administration</span>}
                     </NavLink>

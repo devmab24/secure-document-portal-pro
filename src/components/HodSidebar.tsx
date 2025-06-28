@@ -27,7 +27,7 @@ const HodSidebar = () => {
 
   return (
     <Sidebar
-      className={`${collapsed ? "w-16" : "w-64"} border-r border-border transition-all duration-300 ease-in-out`}
+      className={`${collapsed ? "w-16" : "w-64"} pt-12 border-r border-border transition-all duration-300 ease-in-out`}
       collapsible="icon"
     >
       <SidebarContent className="p-3">
@@ -49,15 +49,6 @@ const HodSidebar = () => {
               
               <SidebarMenuItem>
                 <SidebarMenuButton asChild>
-                  <NavLink to="/dashboard/hod/department" className={getNavClass}>
-                    <FolderHeart className="h-5 w-5" />
-                    {!collapsed && <span>Department</span>}
-                  </NavLink>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-              
-              <SidebarMenuItem>
-                <SidebarMenuButton asChild>
                   <NavLink to="/dashboard/hod/uploads" className={getNavClass}>
                     <Upload className="h-5 w-5" />
                     {!collapsed && <span>Uploads</span>}
@@ -65,20 +56,11 @@ const HodSidebar = () => {
                 </SidebarMenuButton>
               </SidebarMenuItem>
               
-              <SidebarMenuItem>
+              <SidebarMenuItem> 
                 <SidebarMenuButton asChild>
                   <NavLink to="/dashboard/hod/documents" className={getNavClass}>
                     <File className="h-5 w-5" />
                     {!collapsed && <span>Documents</span>}
-                  </NavLink>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-              
-              <SidebarMenuItem>
-                <SidebarMenuButton asChild>
-                  <NavLink to="/dashboard/hod/approvals" className={getNavClass}>
-                    <FileText className="h-5 w-5" />
-                    {!collapsed && <span>Approvals</span>}
                   </NavLink>
                 </SidebarMenuButton>
               </SidebarMenuItem>
@@ -109,3 +91,22 @@ const HodSidebar = () => {
 };
 
 export default HodSidebar;
+
+
+ {/* <SidebarMenuItem>
+  <SidebarMenuButton asChild>
+    <NavLink to="/dashboard/hod/department" className={getNavClass}>
+      <FolderHeart className="h-5 w-5" />
+      {!collapsed && <span>Department</span>}
+    </NavLink>
+  </SidebarMenuButton>
+</SidebarMenuItem> */}
+
+{/* <SidebarMenuItem>
+  <SidebarMenuButton asChild>
+    <NavLink to="/dashboard/hod/approvals" className={getNavClass}>
+      <FileText className="h-5 w-5" />
+      {!collapsed && <span>Approvals</span>}
+    </NavLink>
+  </SidebarMenuButton>
+</SidebarMenuItem> */}

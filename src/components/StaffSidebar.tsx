@@ -27,7 +27,7 @@ const StaffSidebar = () => {
 
   return (
     <Sidebar
-      className={`${collapsed ? "w-16" : "w-64"} border-r border-border transition-all duration-300 ease-in-out`}
+      className={`${collapsed ? "w-16" : "w-64"} pt-12 border-r border-border transition-all duration-300 ease-in-out`}
       collapsible="icon"
     >
       <SidebarContent className="p-3">
@@ -43,15 +43,6 @@ const StaffSidebar = () => {
                   <NavLink to="/dashboard/staff" className={getNavClass}>
                     <LayoutDashboard className="h-5 w-5" />
                     {!collapsed && <span>Dashboard</span>}
-                  </NavLink>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-              
-              <SidebarMenuItem>
-                <SidebarMenuButton asChild>
-                  <NavLink to="/dashboard/staff/department" className={getNavClass}>
-                    <FolderHeart className="h-5 w-5" />
-                    {!collapsed && <span>Department</span>}
                   </NavLink>
                 </SidebarMenuButton>
               </SidebarMenuItem>
@@ -76,15 +67,6 @@ const StaffSidebar = () => {
               
               <SidebarMenuItem>
                 <SidebarMenuButton asChild>
-                  <NavLink to="/dashboard/staff/approvals" className={getNavClass}>
-                    <FileText className="h-5 w-5" />
-                    {!collapsed && <span>Approvals</span>}
-                  </NavLink>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-              
-              <SidebarMenuItem>
-                <SidebarMenuButton asChild>
                   <NavLink to="/dashboard/staff/settings" className={getNavClass}>
                     <Settings className="h-5 w-5" />
                     {!collapsed && <span>Settings</span>}
@@ -100,3 +82,23 @@ const StaffSidebar = () => {
 };
 
 export default StaffSidebar;
+
+
+{/* <SidebarMenuItem>
+  <SidebarMenuButton asChild>
+    <NavLink to="/dashboard/staff/department" className={getNavClass}>
+      <FolderHeart className="h-5 w-5" />
+      {!collapsed && <span>Department</span>}
+    </NavLink>
+  </SidebarMenuButton>
+</SidebarMenuItem> */}
+
+
+{/* <SidebarMenuItem>
+  <SidebarMenuButton asChild>
+    <NavLink to="/dashboard/staff/approvals" className={getNavClass}>
+      <FileText className="h-5 w-5" />
+      {!collapsed && <span>Approvals</span>}
+    </NavLink>
+  </SidebarMenuButton>
+</SidebarMenuItem> */}

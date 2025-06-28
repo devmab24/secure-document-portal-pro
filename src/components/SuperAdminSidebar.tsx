@@ -27,10 +27,10 @@ const SuperAdminSidebar = () => {
 
   return (
     <Sidebar
-      className={`${collapsed ? "w-16" : "w-64"} border-r border-border transition-all duration-300 ease-in-out`}
+      className={`${collapsed ? "w-16" : "w-64"} pt-12 border-r border-border transition-all duration-300 ease-in-out`}
       collapsible="icon"
     >
-      <SidebarContent className="p-3">
+      <SidebarContent className="p-3 pt-6">
         {/* Super Admin Main Navigation */}
         <SidebarGroup>
           <SidebarGroupLabel className={collapsed ? "sr-only" : ""}>
@@ -49,27 +49,9 @@ const SuperAdminSidebar = () => {
               
               <SidebarMenuItem>
                 <SidebarMenuButton asChild>
-                  <NavLink to="/dashboard/super-admin/documents" className={getNavClass}>
-                    <FileText className="h-5 w-5" />
-                    {!collapsed && <span>Documents</span>}
-                  </NavLink>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-              
-              <SidebarMenuItem>
-                <SidebarMenuButton asChild>
                   <NavLink to="/dashboard/super-admin/systems" className={getNavClass}>
                     <Database className="h-5 w-5" />
                     {!collapsed && <span>Systems</span>}
-                  </NavLink>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-              
-              <SidebarMenuItem>
-                <SidebarMenuButton asChild>
-                  <NavLink to="/dashboard/super-admin/uploads" className={getNavClass}>
-                    <Upload className="h-5 w-5" />
-                    {!collapsed && <span>Uploads</span>}
                   </NavLink>
                 </SidebarMenuButton>
               </SidebarMenuItem>
@@ -147,3 +129,24 @@ const SuperAdminSidebar = () => {
 };
 
 export default SuperAdminSidebar;
+
+
+              
+{/* <SidebarMenuItem>
+  <SidebarMenuButton asChild>
+    <NavLink to="/dashboard/super-admin/documents" className={getNavClass}>
+      <FileText className="h-5 w-5" />
+      {!collapsed && <span>Documents</span>}
+    </NavLink>
+  </SidebarMenuButton>
+</SidebarMenuItem> */}
+
+
+{/* <SidebarMenuItem>
+  <SidebarMenuButton asChild>
+    <NavLink to="/dashboard/super-admin/uploads" className={getNavClass}>
+      <Upload className="h-5 w-5" />
+      {!collapsed && <span>Uploads</span>}
+    </NavLink>
+  </SidebarMenuButton>
+</SidebarMenuItem> */}

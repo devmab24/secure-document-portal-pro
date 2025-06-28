@@ -11,7 +11,7 @@ const Index = () => {
   useEffect(() => {
     // If already logged in, redirect to dashboard
     if (user) {
-      navigate('/dashboard');
+      navigate('/redirect', { replace: true });
     }
   }, [user, navigate]);
 
@@ -23,12 +23,12 @@ const Index = () => {
             <div className="lg:w-1/2 space-y-6">
               <div className="inline-block">
                 <div className="inline-flex items-center rounded-full px-3 py-1 text-sm bg-hospital-200 text-hospital-800">
-                  <span className="font-medium">Healthcare Document Management</span>
+                  <span className="font-medium">FMC Jalingo File Management System</span>
                 </div>
               </div>
               
               <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900">
-                Secure Document Portal for Healthcare Institutions
+                Secure Document Portal for FMC Jalingo
               </h1>
               
               <p className="text-lg text-gray-600">
@@ -47,23 +47,10 @@ const Index = () => {
                   variant="outline"
                   size="lg"
                   className="text-md border-hospital-600 text-hospital-600 hover:bg-hospital-50"
-                  onClick={() => window.open('https://docs.lovable.dev/integrations/supabase/', '_blank')}
+                  onClick={() => window.open('https://fmcjalingo.gov.ng/about-us/', '_blank')}
                 >
                   Learn More
                 </Button>
-              </div>
-              
-              <div className="pt-4">
-                <p className="text-sm text-gray-500">
-                  Demo credentials: Use any email from the list below with any password:
-                </p>
-                <ul className="text-sm text-gray-500 list-disc list-inside mt-1">
-                  <li>cmd@hospital.org (Chief Medical Director)</li>
-                  <li>clinical-hod@hospital.org (Head of Clinical Department)</li>
-                  <li>hr-hod@hospital.org (Head of HR)</li>
-                  <li>clinical-staff@hospital.org (Clinical Staff)</li>
-                  <li>finance-staff@hospital.org (Finance Staff)</li>
-                </ul>
               </div>
             </div>
             

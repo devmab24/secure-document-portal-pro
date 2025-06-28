@@ -2,7 +2,7 @@
 import { NavLink, useLocation } from "react-router-dom";
 import { 
   LayoutDashboard, File, Upload, Settings, ShieldCheck, 
-  FileText, Activity, FolderHeart, FileSearch, UserRound, Stethoscope
+  FileText, Users, Activity, FolderHeart, FileSearch, UserRound, Stethoscope
 } from "lucide-react";
 import {
   Sidebar,
@@ -52,10 +52,10 @@ const CmdSidebar = () => {
 
   return (
     <Sidebar
-      className={`${collapsed ? "w-16" : "w-64"} border-r border-border transition-all duration-300 ease-in-out`}
+      className={`${collapsed ? "w-16" : "w-64"}  pt-12 border-r border-border transition-all duration-300 ease-in-out`}
       collapsible="icon"
     >
-      <SidebarContent className="p-3">
+      <SidebarContent className="p-3  pt-3">
         {/* CMD Main Navigation */}
         <SidebarGroup>
           <SidebarGroupLabel className={collapsed ? "sr-only" : ""}>
@@ -83,9 +83,18 @@ const CmdSidebar = () => {
               
               <SidebarMenuItem>
                 <SidebarMenuButton asChild>
-                  <NavLink to="/dashboard/cmd/upload" className={getNavClass}>
+                  <NavLink to="/dashboard/cmd/uploads" className={getNavClass}>
                     <Upload className="h-5 w-5" />
                     {!collapsed && <span>Upload Document</span>}
+                  </NavLink>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+
+              <SidebarMenuItem>
+                <SidebarMenuButton asChild>
+                  <NavLink to="/dashboard/cmd/staff" className={getNavClass}>
+                    <Users className="h-5 w-5" />
+                    {!collapsed && <span>All Staffs</span>}
                   </NavLink>
                 </SidebarMenuButton>
               </SidebarMenuItem>
@@ -123,7 +132,7 @@ const CmdSidebar = () => {
             <SidebarMenu>
               <SidebarMenuItem>
                 <SidebarMenuButton asChild>
-                  <NavLink to="/settings" className={getNavClass}>
+                  <NavLink to="/dashboard/cmd/settings" className={getNavClass}>
                     <Settings className="h-5 w-5" />
                     {!collapsed && <span>Settings</span>}
                   </NavLink>

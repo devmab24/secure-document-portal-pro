@@ -15,31 +15,30 @@ const Login = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { login, user } = useAuth();
   const navigate = useNavigate();
-  const location = useLocation();
+  const location = useLocation(); 
   
   // Get the redirect path from location state or default to root
   const from = (location.state as { from?: { pathname: string } })?.from?.pathname || '/';
-  
+
   useEffect(() => {
-    // If already logged in, redirect
-    if (user) {
+    // Redirect only after login completes and user is available
+    if (user && !isSubmitting) {
+      console.log("Already logged in, redirecting to:", from);
       navigate(from, { replace: true });
     }
-  }, [user, navigate, from]);
+  }, [user, isSubmitting, navigate, from]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!email || !password) {
       return;
     }
-    
+
     setIsSubmitting(true);
     try {
       const success = await login(email, password);
-      
       if (success) {
-        // Added console log for debugging
         console.log("Login successful, redirecting to:", from);
         navigate(from, { replace: true });
       }
@@ -169,26 +168,6 @@ const Login = () => {
             <div>
               <h4 className="font-semibold text-blue-600 mb-2">System Administrators</h4>
               <div className="space-y-1">
-                <Button
-                  variant="ghost"
-                  className="w-full justify-start text-sm h-auto p-2"
-                  onClick={() => quickLogin('admin@hospital.org')}
-                >
-                  <div className="text-left">
-                    <div className="font-medium">admin@hospital.org</div>
-                    <div className="text-xs text-muted-foreground">Alex Morgan - IT Dept</div>
-                  </div>
-                </Button>
-                <Button
-                  variant="ghost"
-                  className="w-full justify-start text-sm h-auto p-2"
-                  onClick={() => quickLogin('admin-finance@hospital.org')}
-                >
-                  <div className="text-left">
-                    <div className="font-medium">admin-finance@hospital.org</div>
-                    <div className="text-xs text-muted-foreground">Sarah Tech - Finance Dept</div>
-                  </div>
-                </Button>
                 <Button
                   variant="ghost"
                   className="w-full justify-start text-sm h-auto p-2"
@@ -447,3 +426,64 @@ const Login = () => {
 };
 
 export default Login;
+
+
+
+{/* <Button
+  variant="ghost"
+  className="w-full justify-start text-sm h-auto p-2"
+  onClick={() => quickLogin('admin@hospital.org')}
+>
+  <div className="text-left">
+    <div className="font-medium">admin@hospital.org</div>
+    <div className="text-xs text-muted-foreground">Alex Morgan - IT Dept</div>
+  </div>
+</Button> 
+<Button
+  variant="ghost"
+  className="w-full justify-start text-sm h-auto p-2"
+  onClick={() => quickLogin('admin-finance@hospital.org')}
+>
+  <div className="text-left">
+    <div className="font-medium">admin-finance@hospital.org</div>
+    <div className="text-xs text-muted-foreground">Sarah Tech - Finance Dept</div>
+  </div>
+</Button> */}
+  
+  // // Get the redirect path from location state or default to root
+  // const from = (location.state as { from?: { pathname: string } })?.from?.pathname || '/';
+  
+  // useEffect(() => {
+  //   // If already logged in, redirect
+  //   if (user) {
+  //     navigate(from, { replace: true });
+  //   }
+  // }, [user, navigate, from]);
+
+  // const handleSubmit = async (e: React.FormEvent) => {
+  //   e.preventDefault();
+    
+  //   if (!email || !password) {
+  //     return;
+  //   }
+    
+  //   setIsSubmitting(true);
+  //   try {
+  //     const success = await login(email, password);
+      
+  //     if (success) {
+  //       // Added console log for debugging
+  //       console.log("Login successful, redirecting to:", from);
+  //       navigate(from, { replace: true });
+  //     }
+  //   } catch (error) {
+  //     console.error("Login error:", error);
+  //   } finally {
+  //     setIsSubmitting(false);
+  //   }
+  // };
+
+  // const quickLogin = (userEmail: string) => {
+  //   setEmail(userEmail);
+  //   setPassword('password');
+  // };
