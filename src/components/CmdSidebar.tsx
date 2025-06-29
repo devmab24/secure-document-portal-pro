@@ -2,7 +2,7 @@
 import { NavLink, useLocation } from "react-router-dom";
 import { 
   LayoutDashboard, File, Upload, Settings, ShieldCheck, 
-  FileText, Users, Activity, FolderHeart, FileSearch, UserRound, Stethoscope
+  FileText, Users, Activity, FolderHeart, FileSearch, UserRound, Stethoscope, FilePlus
 } from "lucide-react";
 import {
   Sidebar,
@@ -77,6 +77,15 @@ const CmdSidebar = () => {
                   <NavLink to="/dashboard/cmd/documents" className={getNavClass}>
                     <FileText className="h-5 w-5" />
                     {!collapsed && <span>All Documents</span>}
+                  </NavLink>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+
+              <SidebarMenuItem>
+                <SidebarMenuButton asChild>
+                  <NavLink to="/forms" className={getNavClass}>
+                    <FilePlus className="h-5 w-5" />
+                    {!collapsed && <span>Create Documents</span>}
                   </NavLink>
                 </SidebarMenuButton>
               </SidebarMenuItem>
