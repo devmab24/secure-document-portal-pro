@@ -23,7 +23,7 @@ const FormCreate = () => {
       <div className="flex flex-col items-center justify-center h-64 space-y-4">
         <h2 className="text-2xl font-bold">Template Not Found</h2>
         <p className="text-muted-foreground">The requested form template could not be found.</p>
-        <Button onClick={() => navigate('/forms')}>
+        <Button onClick={() => navigate('/dashboard/cmd/forms')}>
           <ArrowLeft className="h-4 w-4 mr-2" />
           Back to Forms
         </Button>
@@ -50,7 +50,7 @@ const FormCreate = () => {
     localStorage.setItem('digitalForms', JSON.stringify(existingForms));
 
     console.log('Form saved:', savedForm);
-    navigate('/forms/my-forms');
+    navigate('/dashboard/cmd/forms/my-forms');
   };
 
   const handleExportPDF = async (formData: any) => {
@@ -130,7 +130,7 @@ const FormCreate = () => {
       <div className="flex items-center gap-4">
         <Button
           variant="outline"
-          onClick={() => navigate('/forms')}
+          onClick={() => navigate('/dashboard/cmd/forms')}
           className="flex items-center gap-2"
         >
           <ArrowLeft className="h-4 w-4" />

@@ -28,7 +28,7 @@ const FormTemplates = () => {
   );
 
   const handleTemplateSelect = (template: FormTemplate) => {
-    navigate(`/forms/create/${template.id}`);
+    navigate(`/dashboard/cmd/forms/create/${template.id}`);
   };
 
   const getCategoryIcon = (category: string) => {
@@ -42,7 +42,7 @@ const FormTemplates = () => {
     return categoryData?.color || 'bg-gray-500';
   };
 
-  return (
+  return ( 
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
@@ -51,8 +51,8 @@ const FormTemplates = () => {
             Create structured digital documents instead of uploading scanned files
           </p>
         </div>
-        <Button onClick={() => navigate('/forms/my-forms')}>
-          View My Forms
+        <Button onClick={() => navigate('/dashboard/cmd/forms/my-forms')}>
+          View My Forms 
         </Button>
       </div>
 

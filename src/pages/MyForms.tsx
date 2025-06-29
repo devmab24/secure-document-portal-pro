@@ -89,7 +89,7 @@ const MyForms = () => {
         <div className="flex items-center gap-4">
           <Button
             variant="outline"
-            onClick={() => navigate('/forms')}
+            onClick={() => navigate('/dashboard/cmd/forms')}
             className="flex items-center gap-2"
           >
             <ArrowLeft className="h-4 w-4" />
@@ -103,7 +103,7 @@ const MyForms = () => {
           </div>
         </div>
         <Button
-          onClick={() => navigate('/forms')}
+          onClick={() => navigate('/dashboard/cmd/forms')}
           className="bg-hospital-600 hover:bg-hospital-700"
         >
           <Plus className="h-4 w-4 mr-2" />
@@ -134,7 +134,7 @@ const MyForms = () => {
               {searchTerm ? 'No forms match your search criteria.' : 'You haven\'t created any forms yet.'}
             </p>
             <Button
-              onClick={() => navigate('/forms')}
+              onClick={() => navigate('/dashboard/cmd/forms')}
               className="bg-hospital-600 hover:bg-hospital-700"
             >
               <Plus className="h-4 w-4 mr-2" />

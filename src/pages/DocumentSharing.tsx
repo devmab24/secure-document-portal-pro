@@ -55,7 +55,7 @@ const DocumentSharing = () => {
       <div className="flex items-center gap-3">
         <Share className="h-8 w-8 text-primary" />
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">Document Sharing</h1>
+          <h1 className="text-3xl font-bold tracking-tight">CMD Document Sharing</h1>
           <p className="text-muted-foreground">Share documents with colleagues and departments</p>
         </div>
       </div>

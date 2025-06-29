@@ -51,13 +51,13 @@ function App() {
               </Route>
               
               {/* Digital Forms Routes - Available to all authenticated users */}
-              <Route path="/forms" element={<ProtectedRoute />}>
+              {/* <Route path="/forms" element={<ProtectedRoute />}>
                 <Route index element={<FormTemplates />} />
                 <Route path="create/:templateId" element={<FormCreate />} />
                 <Route path="my-forms" element={<MyForms />} />
                 <Route path="view/:formId" element={<MyForms />} />
                 <Route path="edit/:formId" element={<FormCreate />} />
-              </Route>
+              </Route> */}
               
               {/* Document Sharing Routes - Available to all authenticated users */}
               <Route path="/documents" element={<ProtectedRoute />}>
@@ -78,6 +78,15 @@ function App() {
                 <Route path="settings/notifications" element={<Settings />} />
                 <Route path="settings/accounts" element={<Settings />} />
                 <Route path=":departmentSlug" element={<CmdDashboard />} />
+                <Route path="documents/sharing" element={<DocumentSharing />} />
+
+                {/* ✅ Correct: Forms Routes - nested under cmd/forms */}
+                <Route path="forms" element={<FormTemplates />}>
+                  <Route path="create/:templateId" element={<FormCreate />} />
+                  <Route path="my-forms" element={<MyForms />} />
+                  <Route path="view/:formId" element={<MyForms />} />
+                  <Route path="edit/:formId" element={<FormCreate />} />
+                </Route>
               </Route>
               
               {/* HOD specific routes - All under /dashboard/hod */}
