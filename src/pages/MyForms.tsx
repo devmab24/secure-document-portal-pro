@@ -184,14 +184,14 @@ const MyForms = () => {
                         <Button
                           variant="ghost"
                           size="sm"
-                          onClick={() => navigate(`/forms/view/${form.id}`)}
+                          onClick={() => navigate(`/dashboard/cmd/forms/view/${form.id}`)}
                         >
                           <Eye className="h-4 w-4" />
                         </Button>
                         <Button
                           variant="ghost"
                           size="sm"
-                          onClick={() => navigate(`/forms/edit/${form.id}`)}
+                          onClick={() => navigate(`/dashboard/cmd/forms/edit/${form.id}`)}
                         >
                           <Edit className="h-4 w-4" />
                         </Button>
