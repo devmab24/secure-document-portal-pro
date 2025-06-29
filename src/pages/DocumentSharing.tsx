@@ -10,7 +10,7 @@ import { SharedDocumentsView } from '@/components/SharedDocumentsView';
 import { useAuth } from '@/contexts/AuthContext';
 import { useAppDispatch, useAppSelector } from '@/store';
 import { fetchDocuments, shareDocument, updateShareStatus } from '@/store/slices/documentSlice';
-import { ShareStatus, Document, DocumentShare, User, Role, Department } from '@/lib/types';
+import { ShareStatus, Document, DocumentShare, User, UserRole, Department } from '@/lib/types';
 import { FileText, Share, Send, Eye, Download, ArrowUpRight, ArrowDownLeft } from 'lucide-react';
 import { format } from 'date-fns';
 
@@ -40,7 +40,7 @@ const DocumentSharing = () => {
 
   // Mock sent documents for CMD
   useEffect(() => {
-    if (user && user.role === Role.CMD) {
+    if (user && user.role === UserRole.CMD) {
       const mockSentDocuments: SentDocument[] = [
         {
           id: '1',
