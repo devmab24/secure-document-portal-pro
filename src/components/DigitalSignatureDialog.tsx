@@ -40,6 +40,7 @@ export const DigitalSignatureDialog = ({ document, onSign, loading }: DigitalSig
 
   // Check if document is already signed by this user
   const existingSignature = document.signatures?.find(sig => sig.signerId === user?.id);
+  const hasExistingSignature = Boolean(existingSignature);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -143,12 +144,12 @@ export const DigitalSignatureDialog = ({ document, onSign, loading }: DigitalSig
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
         <Button 
-          variant={existingSignature ? "outline" : "default"}
-          disabled={document.isLocked && existingSignature}
+          variant={hasExistingSignature ? "outline" : "default"}
+          disabled={document.isLocked && hasExistingSignature}
           className="flex items-center gap-2"
         >
           <PenTool className="h-4 w-4" />
-          {existingSignature ? "View Signature" : "Digital Sign"}
+          {hasExistingSignature ? "View Signature" : "Digital Sign"}
         </Button>
       </DialogTrigger>
       <DialogContent className="max-w-2xl">
@@ -215,7 +216,7 @@ export const DigitalSignatureDialog = ({ document, onSign, loading }: DigitalSig
           )}
 
           {/* Signature Actions */}
-          {!existingSignature && !document.isLocked && (
+          {!hasExistingSignature && !document.isLocked && (
             <>
               <Separator />
               

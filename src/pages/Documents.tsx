@@ -296,7 +296,10 @@ const Documents = () => {
                     <div className="flex items-center gap-2">
                       {document.name}
                       {document.isLocked && (
-                        <Shield className="h-4 w-4 text-green-600" title="Digitally Signed & Locked" />
+                        <div className="flex items-center">
+                          <Shield className="h-4 w-4 text-green-600" />
+                          <span className="sr-only">Digitally Signed & Locked</span>
+                        </div>
                       )}
                     </div>
                   </TableCell>
