@@ -31,11 +31,11 @@ const DepartmentSidebar = () => {
 
   const isActive = (path: string) => currentPath === path || currentPath.startsWith(`${path}/`);
   
-  // Custom class for active navigation link - enhanced with text-primary color
+  // Custom class for active navigation link - enhanced with primary color and border
   const getNavClass = ({ isActive }: { isActive: boolean }) =>
     isActive
-      ? "bg-sidebar-accent text-primary font-medium w-full flex items-center gap-2 p-2 rounded-md"
-      : "hover:bg-sidebar-accent/50 w-full flex items-center gap-2 p-2 rounded-md transition-colors";
+      ? "bg-primary/10 text-primary border-r-2 border-primary font-semibold w-full flex items-center gap-2 p-2 rounded-md"
+      : "hover:bg-primary/5 hover:text-primary text-muted-foreground w-full flex items-center gap-2 p-2 rounded-md transition-colors";
 
   // Department-specific icon based on department name
   const getDepartmentIcon = (department: Department) => {

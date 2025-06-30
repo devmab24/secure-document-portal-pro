@@ -27,8 +27,8 @@ const AdminSidebar = () => {
 
   const getNavClass = ({ isActive }: { isActive: boolean }) =>
     isActive
-      ? "bg-sidebar-accent text-primary font-medium w-full flex items-center gap-2 p-2 rounded-md"
-      : "hover:bg-sidebar-accent/50 w-full flex items-center gap-2 p-2 rounded-md transition-colors";
+      ? "bg-primary/10 text-primary border-r-2 border-primary font-semibold w-full flex items-center gap-2 p-2 rounded-md"
+      : "hover:bg-primary/5 hover:text-primary text-muted-foreground w-full flex items-center gap-2 p-2 rounded-md transition-colors";
 
   const isSuperAdmin = user?.role === UserRole.SUPER_ADMIN;
   const isAdmin = user?.role === UserRole.ADMIN;
