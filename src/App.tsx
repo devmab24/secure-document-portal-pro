@@ -22,9 +22,11 @@ import NotFound from "@/pages/NotFound";
 import CmdDashboard from "@/pages/CmdDashboard";
 import CmdUpload from "@/pages/cmd/CmdUpload";
 import CmdDocuments from "@/pages/cmd/CmdDocuments";
+import CmdInbox from "@/pages/cmd/CmdInbox";
 import AdminDashboard from "@/pages/admin/AdminDashboard";
 import UserManagement from "@/pages/admin/UserManagement";
 import HodDashboard from "@/pages/hod/HodDashboard";
+import HodDocumentSubmissions from "@/pages/hod/HodDocumentSubmissions";
 import SuperAdminDashboard from "@/pages/super-admin/SuperAdminDashboard";
 import StaffDashboard from "@/pages/staff/StaffDashboard";
 import Index from "./pages/Index";
@@ -62,6 +64,7 @@ function App() {
                 <Route path="departments" element={<CmdDashboard />} />
                 <Route path="uploads" element={<CmdUpload />} />
                 <Route path="documents" element={<CmdDocuments />} />
+                <Route path="inbox" element={<CmdInbox />} />
                 <Route path="approvals" element={<CmdDashboard />} />
                 <Route path="audits" element={<AuditLogs />} />
                 <Route path="settings" element={<Settings />} />
@@ -72,7 +75,7 @@ function App() {
                 <Route path=":departmentSlug" element={<CmdDashboard />} />
                 <Route path="documents/sharing" element={<DocumentSharing />} />
 
-                {/* ✅ Fixed: Forms Routes - proper nesting */}
+                {/* Forms Routes */}
                 <Route path="forms" element={<FormTemplates />} />
                 <Route path="forms/create/:templateId" element={<FormCreate />} />
                 <Route path="forms/my-forms" element={<MyForms />} />
@@ -85,6 +88,7 @@ function App() {
                 <Route index element={<HodDashboard />} />
                 <Route path="uploads" element={<Upload />} />
                 <Route path="documents" element={<Documents />} />
+                <Route path="submissions" element={<HodDocumentSubmissions />} />
                 <Route path="staff" element={<Users />} />
                 <Route path="settings" element={<Settings />} />
                 <Route path="settings/profiles" element={<Settings />} />

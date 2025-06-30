@@ -10,7 +10,8 @@ import {
   UserCog,
   Settings,
   PenTool,
-  Shield
+  Shield,
+  Send
 } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { UserRole } from "@/lib/types";
@@ -204,6 +205,32 @@ const HodDashboard = () => {
               <Link to="/dashboard/hod/settings">
                 <Settings className="h-4 w-4 mr-2" />
                 Account Settings
+              </Link>
+            </Button>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Send className="h-5 w-5" />
+              Document Submissions
+            </CardTitle>
+            <CardDescription>
+              Send documents to CMD for approval and track status
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-3">
+            <Button asChild className="w-full bg-blue-600 hover:bg-blue-700">
+              <Link to="/dashboard/hod/submissions">
+                <Send className="h-4 w-4 mr-2" />
+                Submit to CMD
+              </Link>
+            </Button>
+            <Button asChild variant="outline" className="w-full">
+              <Link to="/dashboard/hod/documents">
+                <FileText className="h-4 w-4 mr-2" />
+                View Submissions
               </Link>
             </Button>
           </CardContent>
