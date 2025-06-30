@@ -1,4 +1,3 @@
-
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 import { DocumentSubmission, DocumentSharingService } from '@/services/documentSharingService';
 
@@ -53,21 +52,29 @@ export const submitDocument = createAsyncThunk(
   }
 );
 
+export const loadSubmissionsToUser = createAsyncThunk(
+  'documentSharing/loadSubmissionsToUser',
+  async (userId: string) => {
+    await new Promise(resolve => setTimeout(resolve, 300));
+    return DocumentSharingService.getSubmissionsToUser(userId);
+  }
+);
+
 export const updateSubmissionStatus = createAsyncThunk(
   'documentSharing/updateStatus',
   async ({ 
     submissionId, 
     status, 
-    cmdFeedback, 
+    feedback, 
     digitalSignature 
   }: { 
     submissionId: string; 
     status: DocumentSubmission['status']; 
-    cmdFeedback?: string;
+    feedback?: string;
     digitalSignature?: DocumentSubmission['digitalSignature'];
   }) => {
     await new Promise(resolve => setTimeout(resolve, 800));
-    return DocumentSharingService.updateSubmissionStatus(submissionId, status, cmdFeedback, digitalSignature);
+    return DocumentSharingService.updateSubmissionStatus(submissionId, status, feedback, digitalSignature);
   }
 );
 
@@ -108,6 +115,12 @@ const documentSharingSlice = createSlice({
     builder
       .addCase(loadPendingSubmissions.fulfilled, (state, action) => {
         state.pendingSubmissions = action.payload;
+      })
+
+    // Load submissions to user
+    builder
+      .addCase(loadSubmissionsToUser.fulfilled, (state, action) => {
+        state.userSubmissions = action.payload;
       })
 
     // Submit document

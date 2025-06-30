@@ -182,9 +182,9 @@ const CmdInbox = () => {
                           <p><strong>Reviewed:</strong> {format(new Date(submission.reviewedAt), 'MMM d, yyyy at h:mm a')}</p>
                         )}
                         {submission.comments && <p><strong>Comments:</strong> {submission.comments}</p>}
-                        {submission.cmdFeedback && (
+                        {submission.feedback && (
                           <div className="mt-2 p-2 bg-muted rounded">
-                            <p><strong>Your Feedback:</strong> {submission.cmdFeedback}</p>
+                            <p><strong>Your Feedback:</strong> {submission.feedback}</p>
                           </div>
                         )}
                         {submission.digitalSignature && (

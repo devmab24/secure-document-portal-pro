@@ -310,10 +310,10 @@ export const CmdReviewDialog: React.FC<CmdReviewDialogProps> = ({ submission, on
                     {format(new Date(submission.reviewedAt), "MMM d, yyyy 'at' h:mm a")}
                   </div>
                 )}
-                {submission.cmdFeedback && (
+                {submission.feedback && (
                   <div>
                     <span className="font-medium">Feedback: </span>
-                    <p className="mt-1 text-muted-foreground">{submission.cmdFeedback}</p>
+                    <p className="mt-1 text-muted-foreground">{submission.feedback}</p>
                   </div>
                 )}
                 {submission.digitalSignature && (

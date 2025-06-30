@@ -64,6 +64,7 @@ export const SendToCmdDialog: React.FC<SendToCmdDialogProps> = ({ document, trig
         fromUserName: `${user.firstName} ${user.lastName}`,
         fromDepartment: user.department,
         toUserId: 'cmd-user-id', // In real app, get actual CMD user ID
+        submissionType: 'hod-to-cmd',
         comments: comments.trim() || undefined,
         attachments: attachmentObjects.length > 0 ? attachmentObjects : undefined
       });

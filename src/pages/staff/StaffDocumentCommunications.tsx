@@ -9,7 +9,7 @@ import { SendToHodDialog } from '@/components/SendToHodDialog';
 import { DocumentSubmission, DocumentSharingService } from '@/services/documentSharingService';
 import { useAuth } from '@/contexts/AuthContext';
 import { useAppDispatch, useAppSelector } from '@/store';
-import { loadUserSubmissions, loadSubmissionsToUser, updateSubmissionStatus } from '@/store/slices/documentSharingSlice';
+import { loadUserSubmissions, updateSubmissionStatus } from '@/store/slices/documentSharingSlice';
 import { Search, Send, Clock, CheckCircle, MessageSquare, FileText, Download, Eye } from 'lucide-react';
 import { format } from 'date-fns';
 
