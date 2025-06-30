@@ -2,7 +2,7 @@
 import { NavLink } from "react-router-dom";
 import { 
   LayoutDashboard, File, Upload, Settings, Users, 
-  FileText, FolderHeart, FormInput
+  FileText, FolderHeart, FormInput, Inbox
 } from "lucide-react";
 import {
   Sidebar,
@@ -52,6 +52,15 @@ const HodSidebar = () => {
                   <NavLink to="/forms" className={getNavClass}>
                     <FormInput className="h-5 w-5" />
                     {!collapsed && <span>Digital Forms</span>}
+                  </NavLink>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+              
+              <SidebarMenuItem>
+                <SidebarMenuButton asChild>
+                  <NavLink to="/inbox" className={getNavClass}>
+                    <Inbox className="h-5 w-5" />
+                    {!collapsed && <span>Inbox</span>}
                   </NavLink>
                 </SidebarMenuButton>
               </SidebarMenuItem>
