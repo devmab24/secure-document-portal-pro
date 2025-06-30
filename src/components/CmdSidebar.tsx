@@ -1,4 +1,3 @@
-
 import { NavLink } from "react-router-dom";
 import { 
   LayoutDashboard, File, Upload, Settings, Users, 
@@ -15,7 +14,7 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar";
-import { DepartmentSidebar } from "./DepartmentSidebar";
+import DepartmentSidebar from "./DepartmentSidebar";
 
 const CmdSidebar = () => {
   const { state } = useSidebar();
