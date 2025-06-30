@@ -9,11 +9,13 @@ export interface DocumentSubmission {
   fromUserName: string;
   fromDepartment: string;
   toUserId: string;
-  status: 'pending' | 'approved' | 'rejected' | 'revision_requested';
+  toUserName?: string;
+  submissionType: 'hod-to-cmd' | 'staff-to-hod' | 'hod-to-staff';
+  status: 'pending' | 'approved' | 'rejected' | 'revision_requested' | 'acknowledged';
   submittedAt: string;
   reviewedAt?: string;
   comments?: string;
-  cmdFeedback?: string;
+  feedback?: string;
   attachments?: {
     id: string;
     name: string;
@@ -57,7 +59,7 @@ export class DocumentSharingService {
   static updateSubmissionStatus(
     submissionId: string, 
     status: DocumentSubmission['status'], 
-    cmdFeedback?: string,
+    feedback?: string,
     digitalSignature?: DocumentSubmission['digitalSignature']
   ): DocumentSubmission | null {
     const submissions = this.getSubmissions();
@@ -66,7 +68,7 @@ export class DocumentSharingService {
     if (submission) {
       submission.status = status;
       submission.reviewedAt = new Date().toISOString();
-      if (cmdFeedback) submission.cmdFeedback = cmdFeedback;
+      if (feedback) submission.feedback = feedback;
       if (digitalSignature) submission.digitalSignature = digitalSignature;
       
       this.saveSubmissions(submissions);
@@ -80,7 +82,31 @@ export class DocumentSharingService {
     return this.getSubmissions().filter(s => s.fromUserId === userId);
   }
 
+  static getSubmissionsToUser(userId: string): DocumentSubmission[] {
+    return this.getSubmissions().filter(s => s.toUserId === userId);
+  }
+
   static getPendingSubmissions(): DocumentSubmission[] {
     return this.getSubmissions().filter(s => s.status === 'pending');
+  }
+
+  static getPendingSubmissionsForUser(userId: string): DocumentSubmission[] {
+    return this.getSubmissions().filter(s => s.toUserId === userId && s.status === 'pending');
+  }
+
+  static getSubmissionsByType(type: DocumentSubmission['submissionType']): DocumentSubmission[] {
+    return this.getSubmissions().filter(s => s.submissionType === type);
+  }
+
+  static getStaffSubmissionsForHod(hodUserId: string): DocumentSubmission[] {
+    return this.getSubmissions().filter(s => 
+      s.toUserId === hodUserId && s.submissionType === 'staff-to-hod'
+    );
+  }
+
+  static getHodSubmissionsForStaff(staffUserId: string): DocumentSubmission[] {
+    return this.getSubmissions().filter(s => 
+      s.toUserId === staffUserId && s.submissionType === 'hod-to-staff'
+    );
   }
 }

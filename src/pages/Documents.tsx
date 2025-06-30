@@ -8,6 +8,8 @@ import { Document, UserRole } from '@/lib/types';
 import { Eye, Download, Send } from 'lucide-react';
 import { format } from 'date-fns';
 import { SendToCmdDialog } from '@/components/SendToCmdDialog';
+import { SendToHodDialog } from '@/components/SendToHodDialog';
+import { SendToStaffDialog } from '@/components/SendToStaffDialog';
 
 const Documents = () => {
   const { user } = useAuth();
@@ -67,12 +69,34 @@ const Documents = () => {
                       <Download className="h-4 w-4" />
                     </Button>
                     {user?.role === UserRole.HOD && (
-                      <SendToCmdDialog 
+                      <>
+                        <SendToCmdDialog 
+                          document={document}
+                          trigger={
+                            <Button variant="outline" size="sm">
+                              <Send className="h-4 w-4 mr-1" />
+                              Send to CMD
+                            </Button>
+                          }
+                        />
+                        <SendToStaffDialog 
+                          document={document}
+                          trigger={
+                            <Button variant="outline" size="sm">
+                              <Send className="h-4 w-4 mr-1" />
+                              Send to Staff
+                            </Button>
+                          }
+                        />
+                      </>
+                    )}
+                    {user?.role === UserRole.STAFF && (
+                      <SendToHodDialog 
                         document={document}
                         trigger={
                           <Button variant="outline" size="sm">
                             <Send className="h-4 w-4 mr-1" />
-                            Send to CMD
+                            Send to HOD
                           </Button>
                         }
                       />

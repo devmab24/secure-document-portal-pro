@@ -1,4 +1,3 @@
-
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { Toaster } from "@/components/ui/toaster";
 import { ReduxProvider } from "@/providers/ReduxProvider";
@@ -34,6 +33,7 @@ import RedirectDashboard from "./Dashboard";
 import FormTemplates from "@/pages/FormTemplates";
 import FormCreate from "@/pages/FormCreate";
 import MyForms from "@/pages/MyForms";
+import StaffDocumentCommunications from "@/pages/staff/StaffDocumentCommunications";
 
 function App() {
   console.log("App rendering");
@@ -89,6 +89,7 @@ function App() {
                 <Route path="uploads" element={<Upload />} />
                 <Route path="documents" element={<Documents />} />
                 <Route path="submissions" element={<HodDocumentSubmissions />} />
+                <Route path="communications" element={<HodDocumentSubmissions />} />
                 <Route path="staff" element={<Users />} />
                 <Route path="settings" element={<Settings />} />
                 <Route path="settings/profiles" element={<Settings />} />
@@ -128,6 +129,7 @@ function App() {
                 <Route index element={<StaffDashboard />} />
                 <Route path="uploads" element={<Upload />} />
                 <Route path="documents" element={<Documents />} />
+                <Route path="communications" element={<StaffDocumentCommunications />} />
                 <Route path="settings" element={<Settings />} />
                 <Route path="settings/profiles" element={<Settings />} />
                 <Route path="settings/notifications" element={<Settings />} />
