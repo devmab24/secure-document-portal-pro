@@ -107,7 +107,7 @@ const CmdDashboard = () => {
   // Handle department selection change
   const handleDepartmentChange = (value: string) => {
     if (value === "all") {
-      navigate("/dashboard/cmd");
+      navigate("/dashboard/cmd/departments");
     } else {
       navigate(`/dashboard/cmd/${value}`);
     }
@@ -116,7 +116,7 @@ const CmdDashboard = () => {
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <h1 className="text-3xl font-bold tracking-tight">CMD Dashboard</h1>
+        <h1 className="text-3xl font-bold tracking-tight">CMD Departments Lists</h1>
         
         {/* Department selector */}
         <Select 
@@ -139,61 +139,6 @@ const CmdDashboard = () => {
           </SelectContent>
         </Select>
       </div>
-      
-      {/* Stats Overview */}
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total Documents</CardTitle>
-            <FolderHeart className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{totalDocuments}</div>
-            <p className="text-xs text-muted-foreground mt-1">
-              {departmentSlug ? "Department documents" : "Across all departments"}
-            </p>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Pending Approval</CardTitle>
-            <Upload className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{pendingApprovals}</div>
-            <p className="text-xs text-muted-foreground mt-1">
-              {pendingApprovals === 1 ? 'Document' : 'Documents'} awaiting review
-            </p>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Approved</CardTitle>
-            <FileCheck className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{approved}</div>
-            <p className="text-xs text-muted-foreground mt-1">
-              Finalized documents
-            </p>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Rejected</CardTitle>
-            <FileX className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{rejected}</div>
-            <p className="text-xs text-muted-foreground mt-1">
-              Documents needing revision
-            </p>
-          </CardContent>
-        </Card>
-      </div>
-      
-      {/* Charts section */}
-      <DepartmentCharts />
       
       {/* Departments Overview - Only shown when viewing all departments */}
       {!departmentSlug && (

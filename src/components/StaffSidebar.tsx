@@ -2,7 +2,8 @@
 import { NavLink } from "react-router-dom";
 import { 
   LayoutDashboard, File, Upload, Settings, 
-  FileText, FolderHeart, FormInput, Inbox
+  FileText, FolderHeart, FormInput, Inbox,
+  Share
 } from "lucide-react";
 import {
   Sidebar,
@@ -49,7 +50,7 @@ const StaffSidebar = () => {
               
               <SidebarMenuItem>
                 <SidebarMenuButton asChild>
-                  <NavLink to="/forms" className={getNavClass}>
+                  <NavLink to="/dashboard/staff/forms" className={getNavClass}>
                     <FormInput className="h-5 w-5" />
                     {!collapsed && <span>Digital Forms</span>}
                   </NavLink>
@@ -58,7 +59,7 @@ const StaffSidebar = () => {
               
               <SidebarMenuItem>
                 <SidebarMenuButton asChild>
-                  <NavLink to="/inbox" className={getNavClass}>
+                  <NavLink to="/dashboard/staff/inbox" className={getNavClass}>
                     <Inbox className="h-5 w-5" />
                     {!collapsed && <span>Inbox</span>}
                   </NavLink>
@@ -69,7 +70,7 @@ const StaffSidebar = () => {
                 <SidebarMenuButton asChild>
                   <NavLink to="/dashboard/staff/uploads" className={getNavClass}>
                     <Upload className="h-5 w-5" />
-                    {!collapsed && <span>Uploads</span>}
+                    {!collapsed && <span>File Upload</span>}
                   </NavLink>
                 </SidebarMenuButton>
               </SidebarMenuItem>
@@ -78,7 +79,16 @@ const StaffSidebar = () => {
                 <SidebarMenuButton asChild>
                   <NavLink to="/dashboard/staff/documents" className={getNavClass}>
                     <File className="h-5 w-5" />
-                    {!collapsed && <span>Documents</span>}
+                    {!collapsed && <span>All Documents</span>}
+                  </NavLink>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+
+               <SidebarMenuItem>
+                <SidebarMenuButton asChild>
+                  <NavLink to="/dashboard/staff/communications" className={getNavClass}>
+                    <Share className="h-5 w-5" />
+                    {!collapsed && <span>Send Document</span>}
                   </NavLink>
                 </SidebarMenuButton>
               </SidebarMenuItem>

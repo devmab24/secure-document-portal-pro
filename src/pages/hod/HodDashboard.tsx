@@ -121,32 +121,6 @@ const HodDashboard = () => {
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              <FolderHeart className="h-5 w-5" />
-              Department Management
-            </CardTitle>
-            <CardDescription>
-              Manage your department's operations and staff
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-3">
-            <Button asChild className="w-full">
-              <Link to="/dashboard/hod/department">
-                <FolderHeart className="h-4 w-4 mr-2" />
-                View Department
-              </Link>
-            </Button>
-            <Button asChild variant="outline" className="w-full">
-              <Link to="/dashboard/hod/staff">
-                <Users className="h-4 w-4 mr-2" />
-                Manage Staff
-              </Link>
-            </Button>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
               <PenTool className="h-5 w-5" />
               Digital Signing & Approvals
             </CardTitle>

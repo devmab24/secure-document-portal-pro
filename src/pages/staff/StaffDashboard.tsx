@@ -8,7 +8,8 @@ import {
   Upload,
   Activity,
   Settings,
-  File
+  File,
+  Share
 } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { UserRole } from "@/lib/types";
@@ -93,9 +94,9 @@ const StaffDashboard = () => {
           </CardHeader>
           <CardContent className="space-y-3">
             <Button asChild className="w-full">
-              <Link to="/dashboard/staff/department">
-                <FolderHeart className="h-4 w-4 mr-2" />
-                View Department
+              <Link to="/dashboard/staff/communications">
+                <Share className="h-4 w-4 mr-2" />
+                Send Document
               </Link>
             </Button>
             <Button asChild variant="outline" className="w-full">

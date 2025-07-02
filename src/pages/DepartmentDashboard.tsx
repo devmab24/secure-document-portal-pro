@@ -6,12 +6,14 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { mockDocuments } from "@/lib/mock";
 import { Department, DocumentStatus, UserRole } from "@/lib/types";
-import { Activity, FileCheck, FileX, Upload } from "lucide-react";
+import { Activity, Backpack, FileCheck, FileX, Upload } from "lucide-react";
 import { useMemo } from "react";
 import { format } from "date-fns";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { useNavigate } from "react-router-dom";
 import DepartmentCharts from "@/components/DepartmentCharts";
+import { Button } from "@/components/ui/button";
+import { Link } from "react-router-dom";
 
 const DepartmentDashboard = () => {
   const { departmentSlug } = useParams<{ departmentSlug: string }>();
@@ -94,6 +96,12 @@ const DepartmentDashboard = () => {
             <p className="mt-2 text-muted-foreground text-center">
               You do not have permission to access this department's dashboard.
             </p>
+             <Button asChild variant="outline" className="w-full bg-color-blue">
+                <Link to="/dashboard/staff">
+                  <Backpack className="h-4 w-4 mr-2" />
+                  Go Back
+                </Link>
+              </Button>
           </CardContent>
         </Card>
       </div>

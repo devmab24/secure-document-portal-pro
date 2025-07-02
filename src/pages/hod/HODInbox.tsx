@@ -10,7 +10,7 @@ import { Search, Clock, CheckCircle, XCircle, MessageSquare, FileText, Inbox, Sh
 import { format } from 'date-fns';
 import { Link } from 'react-router-dom';
 
-const CmdInbox = () => {
+const HODInbox = () => {
   const [submissions, setSubmissions] = useState<DocumentSubmission[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [filter, setFilter] = useState<'all' | 'pending' | 'approved' | 'rejected' | 'revision_requested'>('all');
@@ -73,9 +73,9 @@ const CmdInbox = () => {
       <div className="flex items-center gap-3">
         <Inbox className="h-8 w-8 text-primary" />
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">CMD Inbox</h1>
+          <h1 className="text-3xl font-bold tracking-tight">HOD Inbox</h1>
           <p className="text-muted-foreground">
-            Review document submissions from department heads
+            Review document submissions from department staff
           </p>
         </div>
       </div>
@@ -216,7 +216,7 @@ const CmdInbox = () => {
       <Card>
         <CardContent className="space-y-3">
           <Button asChild variant="outline" className="w-full bg-blue-600 hover:bg-blue-700 hover:text-white">
-            <Link to="/dashboard/cmd/documents/sharing" className='text-white'>
+            <Link to="/dashboard/hod/submissions" className='text-white'>
               <Share className="h-4 w-4 mr-2" />
               Document Sharing
             </Link>
@@ -227,4 +227,4 @@ const CmdInbox = () => {
   );
 };
 
-export default CmdInbox;
+export default HODInbox;
