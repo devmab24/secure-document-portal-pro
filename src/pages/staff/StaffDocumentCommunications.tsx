@@ -27,10 +27,14 @@ const StaffDocumentCommunications = () => {
     }
   }, [user, dispatch]);
 
-  const loadReceivedDocuments = () => {
+  const loadReceivedDocuments = async () => {
     if (user) {
-      const received = DocumentSharingService.getSubmissionsToUser(user.id);
-      setReceivedDocuments(received);
+      try {
+        const received = await DocumentSharingService.getSubmissionsToUser(user.id);
+        setReceivedDocuments(received);
+      } catch (error) {
+        console.error('Error loading received documents:', error);
+      }
     }
   };
 

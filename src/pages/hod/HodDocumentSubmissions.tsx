@@ -28,10 +28,14 @@ const HodDocumentSubmissions = () => {
     }
   }, [user, dispatch]);
 
-  const loadStaffSubmissions = () => {
+  const loadStaffSubmissions = async () => {
     if (user) {
-      const staffDocs = DocumentSharingService.getStaffSubmissionsForHod(user.id);
-      setStaffSubmissions(staffDocs);
+      try {
+        const staffDocs = await DocumentSharingService.getStaffSubmissionsForHod(user.id);
+        setStaffSubmissions(staffDocs);
+      } catch (error) {
+        console.error('Error loading staff submissions:', error);
+      }
     }
   };
 
