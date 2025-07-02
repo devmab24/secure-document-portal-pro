@@ -1,16 +1,5 @@
 
-// Mock Database Export File
-// This file provides easy access to all mock data for testing
-
-import users from './users.json';
-import departments from './departments.json';
-import formTemplates from './formTemplates.json';
-import formSubmissions from './formSubmissions.json';
-import documents from './documents.json';
-import digitalSignatures from './digitalSignatures.json';
-import auditLogs from './auditLogs.json';
-
-// Type definitions for better TypeScript support
+// Mock Database Type Definitions
 export interface MockUser {
   id: string;
   email: string;
@@ -19,9 +8,8 @@ export interface MockUser {
   role: string;
   department: string;
   avatarUrl?: string;
-  createdAt: string;
-  lastLogin?: string;
   isActive: boolean;
+  createdAt: string;
 }
 
 export interface MockDepartment {
@@ -29,71 +17,36 @@ export interface MockDepartment {
   name: string;
   code: string;
   description: string;
-  hodId: string;
-  staffCount: number;
-  location: string;
+  headOfDepartment?: string;
   isActive: boolean;
   createdAt: string;
 }
 
-export interface MockFormTemplate {
+export interface MockDocumentShare {
   id: string;
-  name: string;
-  description: string;
-  documentType: string;
-  category: string;
-  accessRoles: string[];
-  accessDepartments: string[];
-  fields: any[];
-  isActive: boolean;
-  createdAt: string;
-  createdBy: string;
-}
-
-export interface MockFormSubmission {
-  id: string;
-  templateId: string;
-  templateName: string;
-  submittedBy: string;
-  submittedByName: string;
-  submittedByRole: string;
-  submittedByDepartment: string;
-  submittedAt: string;
+  documentId: string;
+  fromUserId: string;
+  toUserId?: string;
+  toDepartment?: string;
   status: string;
-  formData: any;
-  assignedTo?: string;
-  currentApprover?: string;
-  approvalChain: string[];
-  priority: string;
-  lastModified: string;
-  approvedAt?: string;
-  approvedBy?: string;
+  message?: string;
+  sharedAt: string;
+  receivedAt?: string;
+  seenAt?: string;
+  acknowledgedAt?: string;
 }
 
-export interface MockDocument {
+export interface MockDocumentVersion {
   id: string;
+  documentId: string;
+  version: number;
   name: string;
-  type: string;
-  department: string;
-  uploadedBy: string;
-  uploadedByName: string;
-  uploadedAt: string;
+  content: any;
+  modifiedBy: string;
   modifiedAt: string;
-  status: string;
+  changeDescription?: string;
   fileUrl?: string;
   fileSize?: number;
-  fileType?: string;
-  description?: string;
-  tags?: string[];
-  priority?: string;
-  assignedTo?: string[];
-  currentApprover?: string;
-  approvalChain?: string[];
-  version: number;
-  isDigitalForm?: boolean;
-  requiresSignature?: boolean;
-  approvedAt?: string;
-  approvedBy?: string;
 }
 
 export interface MockDigitalSignature {
@@ -106,9 +59,89 @@ export interface MockDigitalSignature {
   signedAt: string;
   ipAddress?: string;
   userAgent?: string;
-  signatureType: string;
+  signatureType: 'approval' | 'rejection' | 'acknowledgment';
   comments?: string;
   isValid: boolean;
+}
+
+export interface MockComment {
+  id: string;
+  documentId: string;
+  userId: string;
+  text: string;
+  createdAt: string;
+}
+
+export interface MockDocument {
+  id: string;
+  name: string;
+  type: string; // This will be mapped to DocumentType enum
+  department: string; // This will be mapped to Department enum  
+  uploadedBy: string;
+  uploadedByName?: string;
+  uploadedAt: string; // ISO date string
+  modifiedAt: string; // ISO date string
+  status: string; // This will be mapped to DocumentStatus enum
+  fileUrl?: string;
+  fileSize?: number;
+  fileType?: string;
+  description?: string;
+  tags?: string[];
+  priority?: 'low' | 'medium' | 'high' | 'urgent';
+  assignedTo?: string[];
+  currentApprover?: string;
+  approvalChain?: string[];
+  version: number;
+  comments?: MockComment[];
+  shares?: MockDocumentShare[];
+  versions?: MockDocumentVersion[];
+  isDigitalForm?: boolean;
+  formData?: any;
+  templateId?: string;
+  signatures?: MockDigitalSignature[];
+  isLocked?: boolean;
+  requiresSignature?: boolean;
+  approvedAt?: string;
+  approvedBy?: string;
+}
+
+export interface MockFormField {
+  id: string;
+  type: 'text' | 'textarea' | 'select' | 'date' | 'number' | 'richtext' | 'checkbox';
+  label: string;
+  placeholder?: string;
+  required?: boolean;
+  options?: string[];
+  description?: string;
+}
+
+export interface MockFormTemplate {
+  id: string;
+  name: string;
+  description: string;
+  documentType: string;
+  department?: string;
+  fields: MockFormField[];
+  category: 'clinical' | 'administrative' | 'financial' | 'operational';
+  accessRoles: string[];
+  accessDepartments?: string[];
+  isActive: boolean;
+  createdBy: string;
+  createdAt: string;
+}
+
+export interface MockFormSubmission {
+  id: string;
+  templateId: string;
+  submittedBy: string;
+  submittedByName: string;
+  assignedTo?: string;
+  status: 'draft' | 'submitted' | 'under_review' | 'approved' | 'rejected';
+  formData: any;
+  submittedAt: string;
+  lastModified: string;
+  approvedAt?: string;
+  feedback?: string;
 }
 
 export interface MockAuditLog {
@@ -116,82 +149,8 @@ export interface MockAuditLog {
   documentId: string;
   userId: string;
   userName: string;
-  userRole: string;
-  userDepartment: string;
-  action: string;
+  action: 'create' | 'view' | 'update' | 'delete' | 'download' | 'approve' | 'reject' | 'share';
   timestamp: string;
   details?: string;
   ipAddress?: string;
-  userAgent?: string;
 }
-
-// Export all mock data
-export const mockDatabase = {
-  users: users as MockUser[],
-  departments: departments as MockDepartment[],
-  formTemplates: formTemplates as MockFormTemplate[],
-  formSubmissions: formSubmissions as MockFormSubmission[],
-  documents: documents as MockDocument[],
-  digitalSignatures: digitalSignatures as MockDigitalSignature[],
-  auditLogs: auditLogs as MockAuditLog[]
-};
-
-// Helper functions for common queries
-export const getUserById = (id: string): MockUser | undefined => {
-  return mockDatabase.users.find(user => user.id === id);
-};
-
-export const getUsersByRole = (role: string): MockUser[] => {
-  return mockDatabase.users.filter(user => user.role === role);
-};
-
-export const getUsersByDepartment = (department: string): MockUser[] => {
-  return mockDatabase.users.filter(user => user.department === department);
-};
-
-export const getDepartmentById = (id: string): MockDepartment | undefined => {
-  return mockDatabase.departments.find(dept => dept.id === id);
-};
-
-export const getFormTemplatesByRole = (role: string): MockFormTemplate[] => {
-  return mockDatabase.formTemplates.filter(template => 
-    template.accessRoles.includes(role)
-  );
-};
-
-export const getFormSubmissionsByUser = (userId: string): MockFormSubmission[] => {
-  return mockDatabase.formSubmissions.filter(submission => 
-    submission.submittedBy === userId
-  );
-};
-
-export const getDocumentsByDepartment = (department: string): MockDocument[] => {
-  return mockDatabase.documents.filter(doc => doc.department === department);
-};
-
-export const getAuditLogsByDocument = (documentId: string): MockAuditLog[] => {
-  return mockDatabase.auditLogs.filter(log => log.documentId === documentId);
-};
-
-export const getAuditLogsByUser = (userId: string): MockAuditLog[] => {
-  return mockDatabase.auditLogs.filter(log => log.userId === userId);
-};
-
-// Statistics helpers
-export const getStats = () => {
-  return {
-    totalUsers: mockDatabase.users.length,
-    activeUsers: mockDatabase.users.filter(user => user.isActive).length,
-    totalDepartments: mockDatabase.departments.length,
-    totalFormTemplates: mockDatabase.formTemplates.length,
-    totalFormSubmissions: mockDatabase.formSubmissions.length,
-    totalDocuments: mockDatabase.documents.length,
-    pendingApprovals: mockDatabase.formSubmissions.filter(sub => 
-      sub.status === 'submitted' || sub.status === 'under_review'
-    ).length,
-    totalSignatures: mockDatabase.digitalSignatures.length,
-    totalAuditLogs: mockDatabase.auditLogs.length
-  };
-};
-
-export default mockDatabase;

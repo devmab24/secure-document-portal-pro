@@ -332,11 +332,23 @@ const documentSlice = createSlice({
         state.shareLoading = false;
         state.shares.push(action.payload);
         
-        // Add share to the document
+        // Add share to the document if it has shares property
         const document = state.documents.find(doc => doc.id === action.payload.documentId);
         if (document) {
           if (!document.shares) document.shares = [];
-          document.shares.push(action.payload);
+          document.shares.push({
+            id: action.payload.id,
+            documentId: action.payload.documentId,
+            fromUserId: action.payload.fromUserId,
+            toUserId: action.payload.toUserId,
+            toDepartment: action.payload.toDepartment,
+            status: action.payload.status,
+            message: action.payload.message,
+            sharedAt: action.payload.sharedAt.toISOString(),
+            receivedAt: action.payload.receivedAt?.toISOString(),
+            seenAt: action.payload.seenAt?.toISOString(),
+            acknowledgedAt: action.payload.acknowledgedAt?.toISOString()
+          });
         }
       })
       .addCase(shareDocument.rejected, (state, action) => {
@@ -371,9 +383,20 @@ const documentSlice = createSlice({
         const document = state.documents.find(doc => doc.id === version.documentId);
         if (document) {
           if (!document.versions) document.versions = [];
-          document.versions.push(version);
+          document.versions.push({
+            id: version.id,
+            documentId: version.documentId,
+            version: version.version,
+            name: version.name,
+            content: version.content,
+            modifiedBy: version.modifiedBy,
+            modifiedAt: version.modifiedAt.toISOString(),
+            changeDescription: version.changeDescription,
+            fileUrl: version.fileUrl,
+            fileSize: version.fileSize
+          });
           document.version = version.version;
-          document.modifiedAt = version.modifiedAt;
+          document.modifiedAt = version.modifiedAt.toISOString();
         }
       })
       .addCase(createDocumentVersion.rejected, (state, action) => {
@@ -391,8 +414,8 @@ const documentSlice = createSlice({
           if (version) {
             // Restore document to this version
             document.version = version.version;
-            document.modifiedAt = new Date();
-            if (version.content) {
+            document.modifiedAt = new Date().toISOString();
+            if (version.content && document.formData !== undefined) {
               document.formData = version.content;
             }
           }
@@ -411,29 +434,59 @@ const documentSlice = createSlice({
         const document = state.documents.find(doc => doc.id === documentId);
         if (document) {
           if (!document.signatures) document.signatures = [];
-          document.signatures.push(signature);
+          document.signatures.push({
+            id: signature.id,
+            documentId: signature.documentId,
+            signerId: signature.signerId,
+            signerName: signature.signerName,
+            signerRole: signature.signerRole,
+            signatureData: signature.signatureData,
+            signedAt: signature.signedAt.toISOString(),
+            ipAddress: signature.ipAddress,
+            userAgent: signature.userAgent,
+            signatureType: signature.signatureType,
+            comments: signature.comments,
+            isValid: signature.isValid
+          });
           
           // Update document status based on signature type
           if (signature.signatureType === 'approval') {
             document.status = DocumentStatus.APPROVED;
-            document.isLocked = true; // Lock document after approval
+            if (document.isLocked !== undefined) {
+              document.isLocked = true; // Lock document after approval
+            }
           } else if (signature.signatureType === 'rejection') {
             document.status = DocumentStatus.REJECTED;
           }
           
-          document.modifiedAt = new Date();
+          document.modifiedAt = new Date().toISOString();
         }
         
         if (state.selectedDocument?.id === documentId) {
           if (!state.selectedDocument.signatures) state.selectedDocument.signatures = [];
-          state.selectedDocument.signatures.push(signature);
+          state.selectedDocument.signatures.push({
+            id: signature.id,
+            documentId: signature.documentId,
+            signerId: signature.signerId,
+            signerName: signature.signerName,
+            signerRole: signature.signerRole,
+            signatureData: signature.signatureData,
+            signedAt: signature.signedAt.toISOString(),
+            ipAddress: signature.ipAddress,
+            userAgent: signature.userAgent,
+            signatureType: signature.signatureType,
+            comments: signature.comments,
+            isValid: signature.isValid
+          });
           if (signature.signatureType === 'approval') {
             state.selectedDocument.status = DocumentStatus.APPROVED;
-            state.selectedDocument.isLocked = true;
+            if (state.selectedDocument.isLocked !== undefined) {
+              state.selectedDocument.isLocked = true;
+            }
           } else if (signature.signatureType === 'rejection') {
             state.selectedDocument.status = DocumentStatus.REJECTED;
           }
-          state.selectedDocument.modifiedAt = new Date();
+          state.selectedDocument.modifiedAt = new Date().toISOString();
         }
       })
       .addCase(addDigitalSignature.rejected, (state, action) => {

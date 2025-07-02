@@ -1,4 +1,3 @@
-
 import { useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
@@ -13,13 +12,27 @@ import { Badge } from "@/components/ui/badge";
 import RecentDocumentsTable from "@/components/RecentDocumentsTable";
 import DepartmentCharts from "@/components/DepartmentCharts";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import type { MockDocument } from "../../mock-db/index";
+
+// Helper function to convert MockDocument to Document
+const convertMockDocumentToDocument = (mockDoc: MockDocument) => ({
+  ...mockDoc,
+  uploadedAt: new Date(mockDoc.uploadedAt),
+  modifiedAt: new Date(mockDoc.modifiedAt),
+  type: mockDoc.type as any, // Type assertion for enum
+  department: mockDoc.department as any, // Type assertion for enum
+  status: mockDoc.status as any, // Type assertion for enum
+});
 
 const CmdDashboard = () => {
   const { departmentSlug } = useParams();
   const { user } = useAuth();
   const navigate = useNavigate();
   const { stats, loading, loadStats, selectDepartment } = useDashboard();
-  const { documents, loadDocuments } = useDocuments();
+  const { documents: rawDocuments, loadDocuments } = useDocuments();
+  
+  // Convert MockDocument[] to Document[]
+  const documents = rawDocuments.map(convertMockDocumentToDocument);
   
   // Check if user has CMD access
   useEffect(() => {
