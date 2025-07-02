@@ -12,17 +12,7 @@ import { Badge } from "@/components/ui/badge";
 import RecentDocumentsTable from "@/components/RecentDocumentsTable";
 import DepartmentCharts from "@/components/DepartmentCharts";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import type { MockDocument } from "../../mock-db/index";
-
-// Helper function to convert MockDocument to Document
-const convertMockDocumentToDocument = (mockDoc: MockDocument) => ({
-  ...mockDoc,
-  uploadedAt: new Date(mockDoc.uploadedAt),
-  modifiedAt: new Date(mockDoc.modifiedAt),
-  type: mockDoc.type as any, // Type assertion for enum
-  department: mockDoc.department as any, // Type assertion for enum
-  status: mockDoc.status as any, // Type assertion for enum
-});
+import { convertMockDocumentToDocument } from "@/lib/utils/documentConverter";
 
 const CmdDashboard = () => {
   const { departmentSlug } = useParams();

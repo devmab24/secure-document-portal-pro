@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -10,12 +11,16 @@ import { format } from 'date-fns';
 import { SendToCmdDialog } from '@/components/SendToCmdDialog';
 import { SendToHodDialog } from '@/components/SendToHodDialog';
 import { SendToStaffDialog } from '@/components/SendToStaffDialog';
+import { convertMockDocumentToDocument } from '@/lib/utils/documentConverter';
 
 const Documents = () => {
   const { user } = useAuth();
   const dispatch = useAppDispatch();
-  const { documents, loading } = useAppSelector(state => state.documents);
+  const { documents: rawDocuments, loading } = useAppSelector(state => state.documents);
   const [selectedDocument, setSelectedDocument] = useState<Document | null>(null);
+
+  // Convert MockDocument[] to Document[]
+  const documents = rawDocuments.map(convertMockDocumentToDocument);
 
   useEffect(() => {
     if (user) {
@@ -54,7 +59,7 @@ const Documents = () => {
                       {document.type} • {document.department}
                     </p>
                     <p className="text-sm text-muted-foreground">
-                      Uploaded: {format(new Date(document.uploadedAt), 'MMM d, yyyy')}
+                      Uploaded: {format(document.uploadedAt, 'MMM d, yyyy')}
                     </p>
                   </div>
                   <div className="flex items-center gap-2">

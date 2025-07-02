@@ -1,4 +1,5 @@
-import { MockFormSubmission } from '../../../mock-db/index';
+
+import { MockFormSubmission } from 'mock-db/index';
 
 const BASE_URL = '/mock-db';
 
@@ -66,7 +67,7 @@ export class FormSubmissionsAPI {
     
     const updatedSubmission = {
       ...submission,
-      status,
+      status: status as MockFormSubmission['status'],
       lastModified: new Date().toISOString(),
       ...(status === 'approved' && { approvedAt: new Date().toISOString() }),
       ...(feedback && { feedback })
