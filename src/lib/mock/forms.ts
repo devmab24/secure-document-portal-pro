@@ -308,7 +308,7 @@ export const mockFormTemplates: FormTemplateWithAccess[] = [
     category: 'clinical',
     access: {
       roles: [UserRole.HOD, UserRole.STAFF],
-      departments: [Department.RADIOLOGY, Department.DENTAL, Department.EYE_CLINIC, Department.AE, Department.ANTENATAL]
+      departments: [Department.RADIOLOGY, Department.DENTAL, Department.EYE_CLINIC, Department.A_AND_E, Department.ANTENATAL]
     },
     fields: [
       {

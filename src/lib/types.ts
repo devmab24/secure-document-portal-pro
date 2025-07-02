@@ -1,3 +1,4 @@
+
 // User Roles Enum
 export enum UserRole {
   CMD = "CMD",         // Chief Medical Director
@@ -40,6 +41,10 @@ export enum DocumentType {
   FORM = "Form",
   MEMO = "Memo",
   CONTRACT = "Contract",
+  DIRECTIVE = "Directive",
+  REQUEST = "Request",
+  EVALUATION = "Evaluation",
+  APPLICATION = "Application",
   OTHER = "Other"
 }
 
@@ -49,6 +54,28 @@ export enum ShareStatus {
   RECEIVED = "Received",
   SEEN = "Seen",
   ACKNOWLEDGED = "Acknowledged"
+}
+
+// Form Field Interface
+export interface FormField {
+  id: string;
+  type: 'text' | 'textarea' | 'select' | 'date' | 'number' | 'richtext' | 'checkbox';
+  label: string;
+  placeholder?: string;
+  required?: boolean;
+  options?: string[];
+  description?: string;
+}
+
+// Form Template Interface
+export interface FormTemplate {
+  id: string;
+  name: string;
+  description: string;
+  documentType: DocumentType;
+  department?: Department;
+  fields: FormField[];
+  category: 'clinical' | 'administrative' | 'financial' | 'operational';
 }
 
 // Document Share Interface
