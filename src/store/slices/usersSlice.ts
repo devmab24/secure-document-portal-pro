@@ -1,6 +1,6 @@
 
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
-import { MockUser } from '../../mock-db';
+import { MockUser } from '@/lib/types';
 import { UsersAPI, apiCall } from '../../services/api';
 
 // Async thunks using the API layer
