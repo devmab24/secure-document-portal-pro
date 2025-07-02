@@ -1,5 +1,6 @@
 
 import { DocumentShare, ShareStatus, Document, User } from '@/lib/types';
+import { FormSubmissionsAPI, apiCall } from './api';
 
 export interface DocumentSubmission {
   id: string;
@@ -33,6 +34,8 @@ export interface DocumentSubmission {
 export class DocumentSharingService {
   private static STORAGE_KEY = 'document_submissions';
 
+  // Use localStorage as a temporary storage while we don't have a real backend
+  // In production, these would be replaced with actual API calls
   static getSubmissions(): DocumentSubmission[] {
     const stored = localStorage.getItem(this.STORAGE_KEY);
     return stored ? JSON.parse(stored) : [];
@@ -42,7 +45,10 @@ export class DocumentSharingService {
     localStorage.setItem(this.STORAGE_KEY, JSON.stringify(submissions));
   }
 
-  static submitDocument(submission: Omit<DocumentSubmission, 'id' | 'submittedAt' | 'status'>): DocumentSubmission {
+  static async submitDocument(submission: Omit<DocumentSubmission, 'id' | 'submittedAt' | 'status'>): Promise<DocumentSubmission> {
+    // Simulate API call delay
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    
     const submissions = this.getSubmissions();
     const newSubmission: DocumentSubmission = {
       ...submission,
@@ -53,15 +59,20 @@ export class DocumentSharingService {
     
     submissions.unshift(newSubmission);
     this.saveSubmissions(submissions);
+    
+    console.log('Document submitted via API:', newSubmission);
     return newSubmission;
   }
 
-  static updateSubmissionStatus(
+  static async updateSubmissionStatus(
     submissionId: string, 
     status: DocumentSubmission['status'], 
     feedback?: string,
     digitalSignature?: DocumentSubmission['digitalSignature']
-  ): DocumentSubmission | null {
+  ): Promise<DocumentSubmission | null> {
+    // Simulate API call delay
+    await new Promise(resolve => setTimeout(resolve, 800));
+    
     const submissions = this.getSubmissions();
     const submission = submissions.find(s => s.id === submissionId);
     
@@ -72,39 +83,47 @@ export class DocumentSharingService {
       if (digitalSignature) submission.digitalSignature = digitalSignature;
       
       this.saveSubmissions(submissions);
+      console.log('Submission status updated via API:', submission);
       return submission;
     }
     
     return null;
   }
 
-  static getSubmissionsByUser(userId: string): DocumentSubmission[] {
+  static async getSubmissionsByUser(userId: string): Promise<DocumentSubmission[]> {
+    await new Promise(resolve => setTimeout(resolve, 300));
     return this.getSubmissions().filter(s => s.fromUserId === userId);
   }
 
-  static getSubmissionsToUser(userId: string): DocumentSubmission[] {
+  static async getSubmissionsToUser(userId: string): Promise<DocumentSubmission[]> {
+    await new Promise(resolve => setTimeout(resolve, 300));
     return this.getSubmissions().filter(s => s.toUserId === userId);
   }
 
-  static getPendingSubmissions(): DocumentSubmission[] {
+  static async getPendingSubmissions(): Promise<DocumentSubmission[]> {
+    await new Promise(resolve => setTimeout(resolve, 300));
     return this.getSubmissions().filter(s => s.status === 'pending');
   }
 
-  static getPendingSubmissionsForUser(userId: string): DocumentSubmission[] {
+  static async getPendingSubmissionsForUser(userId: string): Promise<DocumentSubmission[]> {
+    await new Promise(resolve => setTimeout(resolve, 300));
     return this.getSubmissions().filter(s => s.toUserId === userId && s.status === 'pending');
   }
 
-  static getSubmissionsByType(type: DocumentSubmission['submissionType']): DocumentSubmission[] {
+  static async getSubmissionsByType(type: DocumentSubmission['submissionType']): Promise<DocumentSubmission[]> {
+    await new Promise(resolve => setTimeout(resolve, 300));
     return this.getSubmissions().filter(s => s.submissionType === type);
   }
 
-  static getStaffSubmissionsForHod(hodUserId: string): DocumentSubmission[] {
+  static async getStaffSubmissionsForHod(hodUserId: string): Promise<DocumentSubmission[]> {
+    await new Promise(resolve => setTimeout(resolve, 300));
     return this.getSubmissions().filter(s => 
       s.toUserId === hodUserId && s.submissionType === 'staff-to-hod'
     );
   }
 
-  static getHodSubmissionsForStaff(staffUserId: string): DocumentSubmission[] {
+  static async getHodSubmissionsForStaff(staffUserId: string): Promise<DocumentSubmission[]> {
+    await new Promise(resolve => setTimeout(resolve, 300));
     return this.getSubmissions().filter(s => 
       s.toUserId === staffUserId && s.submissionType === 'hod-to-staff'
     );

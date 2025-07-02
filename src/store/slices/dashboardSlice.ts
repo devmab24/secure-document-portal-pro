@@ -1,34 +1,30 @@
 
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
-import { Department, DocumentStatus } from '@/lib/types';
-import { mockDocuments } from '@/lib/mock-data';
+import { DocumentsAPI, apiCall } from '../../services/api';
 
 export const fetchDashboardStats = createAsyncThunk(
   'dashboard/fetchStats',
-  async (department?: Department) => {
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 300));
-    
-    const docs = department 
-      ? mockDocuments.filter(doc => doc.department === department)
-      : mockDocuments;
+  async (department?: string) => {
+    const documents = await apiCall(
+      DocumentsAPI.getDocuments(department ? { department } : undefined),
+      'Failed to fetch dashboard statistics'
+    );
     
     const stats = {
-      totalDocuments: docs.length,
-      pendingApprovals: docs.filter(doc => 
-        doc.status === DocumentStatus.SUBMITTED || 
-        doc.status === DocumentStatus.UNDER_REVIEW
+      totalDocuments: documents.length,
+      pendingApprovals: documents.filter(doc => 
+        doc.status === 'SUBMITTED' || doc.status === 'UNDER_REVIEW'
       ).length,
-      approved: docs.filter(doc => doc.status === DocumentStatus.APPROVED).length,
-      rejected: docs.filter(doc => doc.status === DocumentStatus.REJECTED).length,
-      byDepartment: Object.values(Department).reduce((acc, dept) => {
-        acc[dept] = docs.filter(doc => doc.department === dept).length;
+      approved: documents.filter(doc => doc.status === 'APPROVED').length,
+      rejected: documents.filter(doc => doc.status === 'REJECTED').length,
+      byDepartment: documents.reduce((acc, doc) => {
+        acc[doc.department] = (acc[doc.department] || 0) + 1;
         return acc;
-      }, {} as Record<Department, number>),
-      byStatus: Object.values(DocumentStatus).reduce((acc, status) => {
-        acc[status] = docs.filter(doc => doc.status === status).length;
+      }, {} as Record<string, number>),
+      byStatus: documents.reduce((acc, doc) => {
+        acc[doc.status] = (acc[doc.status] || 0) + 1;
         return acc;
-      }, {} as Record<DocumentStatus, number>)
+      }, {} as Record<string, number>)
     };
     
     return stats;
@@ -41,12 +37,12 @@ interface DashboardState {
     pendingApprovals: number;
     approved: number;
     rejected: number;
-    byDepartment: Record<Department, number>;
-    byStatus: Record<DocumentStatus, number>;
+    byDepartment: Record<string, number>;
+    byStatus: Record<string, number>;
   } | null;
   loading: boolean;
   error: string | null;
-  selectedDepartment: Department | null;
+  selectedDepartment: string | null;
 }
 
 const initialState: DashboardState = {
@@ -60,7 +56,7 @@ const dashboardSlice = createSlice({
   name: 'dashboard',
   initialState,
   reducers: {
-    setSelectedDepartment: (state, action: PayloadAction<Department | null>) => {
+    setSelectedDepartment: (state, action: PayloadAction<string | null>) => {
       state.selectedDepartment = action.payload;
     },
     clearError: (state) => {
