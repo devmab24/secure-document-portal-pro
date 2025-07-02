@@ -32,6 +32,5 @@ export const convertMockDocumentToDocument = (mockDoc: MockDocument): Document =
     ...signature,
     signedAt: new Date(signature.signedAt),
     signerRole: signature.signerRole as UserRole
-  })) || [],
-  approvedAt: mockDoc.approvedAt ? new Date(mockDoc.approvedAt) : undefined
+  })) || []
 });
