@@ -1,5 +1,5 @@
 
-import { MockDepartment } from '../../mock-db/index';
+import { MockDepartment } from '../../mock-db';
 
 const BASE_URL = '/mock-db';
 

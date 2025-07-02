@@ -1,5 +1,5 @@
 
-import { MockFormTemplate } from '../../mock-db/index';
+import { MockFormTemplate } from '../../mock-db';
 
 const BASE_URL = '/mock-db';
 
