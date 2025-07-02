@@ -21,8 +21,8 @@ import {
   Eye, 
   Edit, 
   Trash2,
-  Download,
-  Plus
+  Plus,
+  Shield
 } from 'lucide-react';
 import { format } from 'date-fns';
 import { useToast } from '@/components/ui/use-toast';
@@ -33,6 +33,8 @@ interface SavedForm {
   templateName: string;
   data: any;
   createdBy: string;
+  createdByRole?: string;
+  createdByDepartment?: string;
   createdAt: string;
   status: 'draft' | 'submitted' | 'approved';
 }
@@ -43,6 +45,14 @@ const MyForms = () => {
   const { toast } = useToast();
   const [searchTerm, setSearchTerm] = useState('');
   const [savedForms, setSavedForms] = useState<SavedForm[]>([]);
+
+  const getBackRoute = () => {
+    const baseRoute = user?.role === 'CMD' ? '/dashboard/cmd' : 
+                     user?.role === 'HOD' ? '/dashboard/hod' : 
+                     user?.role === 'STAFF' ? '/dashboard/staff' : 
+                     '/dashboard';
+    return `${baseRoute}/forms`;
+  };
 
   useEffect(() => {
     // Load saved forms from localStorage (in production, this would be an API call)
@@ -83,27 +93,42 @@ const MyForms = () => {
     }
   };
 
+  if (!user) {
+    return (
+      <div className="flex flex-col items-center justify-center h-64 space-y-4">
+        <Shield className="h-12 w-12 text-muted-foreground" />
+        <h2 className="text-2xl font-bold">Access Denied</h2>
+        <p className="text-muted-foreground">Please log in to view your forms.</p>
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-4">
           <Button
             variant="outline"
-            onClick={() => navigate('/dashboard/cmd/forms')}
+            onClick={() => navigate(getBackRoute())}
             className="flex items-center gap-2"
           >
             <ArrowLeft className="h-4 w-4" />
             Back to Templates
           </Button>
           <div>
-            <h1 className="text-3xl font-bold tracking-tight">My Forms</h1>
+            <div className="flex items-center gap-2 mb-1">
+              <h1 className="text-3xl font-bold tracking-tight">My Forms</h1>
+              <Badge variant="outline">
+                {user.role}
+              </Badge>
+            </div>
             <p className="text-muted-foreground">
               View and manage your saved digital forms
             </p>
           </div>
         </div>
         <Button
-          onClick={() => navigate('/dashboard/cmd/forms')}
+          onClick={() => navigate(getBackRoute())}
           className="bg-hospital-600 hover:bg-hospital-700"
         >
           <Plus className="h-4 w-4 mr-2" />
@@ -134,7 +159,7 @@ const MyForms = () => {
               {searchTerm ? 'No forms match your search criteria.' : 'You haven\'t created any forms yet.'}
             </p>
             <Button
-              onClick={() => navigate('/dashboard/cmd/forms')}
+              onClick={() => navigate(getBackRoute())}
               className="bg-hospital-600 hover:bg-hospital-700"
             >
               <Plus className="h-4 w-4 mr-2" />
@@ -184,14 +209,14 @@ const MyForms = () => {
                         <Button
                           variant="ghost"
                           size="sm"
-                          onClick={() => navigate(`/dashboard/cmd/forms/view/${form.id}`)}
+                          onClick={() => navigate(`${getBackRoute()}/view/${form.id}`)}
                         >
                           <Eye className="h-4 w-4" />
                         </Button>
                         <Button
                           variant="ghost"
                           size="sm"
-                          onClick={() => navigate(`/dashboard/cmd/forms/edit/${form.id}`)}
+                          onClick={() => navigate(`${getBackRoute()}/edit/${form.id}`)}
                         >
                           <Edit className="h-4 w-4" />
                         </Button>

@@ -2,11 +2,12 @@
 import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
-import { getTemplateById } from '@/lib/form-templates';
+import { FormsService } from '@/services/formsService';
 import { DynamicFormBuilder } from '@/components/DynamicFormBuilder';
 import { Button } from '@/components/ui/button';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, Shield } from 'lucide-react';
 import { useToast } from '@/components/ui/use-toast';
+import { Badge } from '@/components/ui/badge';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
 
@@ -16,14 +17,43 @@ const FormCreate = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
   
-  const template = templateId ? getTemplateById(templateId) : null;
+  const template = templateId && user ? FormsService.getFormById(templateId, user) : null;
+
+  const getBackRoute = () => {
+    const baseRoute = user?.role === 'CMD' ? '/dashboard/cmd' : 
+                     user?.role === 'HOD' ? '/dashboard/hod' : 
+                     user?.role === 'STAFF' ? '/dashboard/staff' : 
+                     '/dashboard';
+    return `${baseRoute}/forms`;
+  };
+
+  const getMyFormsRoute = () => {
+    const baseRoute = user?.role === 'CMD' ? '/dashboard/cmd' : 
+                     user?.role === 'HOD' ? '/dashboard/hod' : 
+                     user?.role === 'STAFF' ? '/dashboard/staff' : 
+                     '/dashboard';
+    return `${baseRoute}/forms/my-forms`;
+  };
+
+  if (!user) {
+    return (
+      <div className="flex flex-col items-center justify-center h-64 space-y-4">
+        <Shield className="h-12 w-12 text-muted-foreground" />
+        <h2 className="text-2xl font-bold">Access Denied</h2>
+        <p className="text-muted-foreground">Please log in to access forms.</p>
+      </div>
+    );
+  }
 
   if (!template) {
     return (
       <div className="flex flex-col items-center justify-center h-64 space-y-4">
-        <h2 className="text-2xl font-bold">Template Not Found</h2>
-        <p className="text-muted-foreground">The requested form template could not be found.</p>
-        <Button onClick={() => navigate('/dashboard/cmd/forms')}>
+        <Shield className="h-12 w-12 text-muted-foreground" />
+        <h2 className="text-2xl font-bold">Form Not Available</h2>
+        <p className="text-muted-foreground">
+          The requested form template is not available for your role or could not be found.
+        </p>
+        <Button onClick={() => navigate(getBackRoute())}>
           <ArrowLeft className="h-4 w-4 mr-2" />
           Back to Forms
         </Button>
@@ -40,6 +70,8 @@ const FormCreate = () => {
       templateName: template.name,
       data: formData,
       createdBy: user?.id,
+      createdByRole: user?.role,
+      createdByDepartment: user?.department,
       createdAt: new Date().toISOString(),
       status: 'draft'
     };
@@ -50,7 +82,7 @@ const FormCreate = () => {
     localStorage.setItem('digitalForms', JSON.stringify(existingForms));
 
     console.log('Form saved:', savedForm);
-    navigate('/dashboard/cmd/forms/my-forms');
+    navigate(getMyFormsRoute());
   };
 
   const handleExportPDF = async (formData: any) => {
@@ -69,6 +101,7 @@ const FormCreate = () => {
         <div style="margin-bottom: 30px; border-bottom: 2px solid #333; padding-bottom: 20px;">
           <h1 style="color: #333; margin: 0; font-size: 24px;">${template.name}</h1>
           <p style="color: #666; margin: 5px 0 0 0; font-size: 14px;">Generated on ${new Date().toLocaleDateString()}</p>
+          <p style="color: #666; margin: 5px 0 0 0; font-size: 12px;">Created by: ${user.firstName} ${user.lastName} (${user.role})</p>
         </div>
       `;
 
@@ -130,14 +163,19 @@ const FormCreate = () => {
       <div className="flex items-center gap-4">
         <Button
           variant="outline"
-          onClick={() => navigate('/dashboard/cmd/forms')}
+          onClick={() => navigate(getBackRoute())}
           className="flex items-center gap-2"
         >
           <ArrowLeft className="h-4 w-4" />
           Back to Forms
         </Button>
-        <div>
-          <h1 className="text-2xl font-bold">Create {template.name}</h1>
+        <div className="flex-1">
+          <div className="flex items-center gap-2 mb-2">
+            <h1 className="text-2xl font-bold">Create {template.name}</h1>
+            <Badge variant="outline" className="ml-2">
+              {user.role} Form
+            </Badge>
+          </div>
           <p className="text-muted-foreground">{template.description}</p>
         </div>
       </div>
