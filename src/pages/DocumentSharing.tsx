@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -13,6 +12,7 @@ import { fetchDocuments, shareDocument, updateShareStatus } from '@/store/slices
 import { ShareStatus, Document, DocumentShare, User, UserRole, Department } from '@/lib/types';
 import { FileText, Share, Send, Eye, Download, ArrowUpRight } from 'lucide-react';
 import { format } from 'date-fns';
+import { convertMockDocumentToDocument } from '@/lib/utils/documentConverter';
 
 interface SentDocument {
   id: string;
@@ -29,8 +29,11 @@ interface SentDocument {
 const DocumentSharing = () => {
   const { user } = useAuth();
   const dispatch = useAppDispatch();
-  const { documents, shares, loading, shareLoading } = useAppSelector(state => state.documents);
+  const { documents: rawDocuments, shares, loading, shareLoading } = useAppSelector(state => state.documents);
   const [sentDocuments, setSentDocuments] = useState<SentDocument[]>([]);
+
+  // Convert MockDocument[] to Document[]
+  const documents = rawDocuments.map(convertMockDocumentToDocument);
 
   // Mock users for demonstration
   const mockUsers: User[] = [
