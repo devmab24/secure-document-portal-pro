@@ -49,6 +49,78 @@
     "isActive": true
   },
   {
+    "id": "user-hod-eye",
+    "email": "eyeclinic-hod@hospital.org",
+    "firstName": "Emily",
+    "lastName": "Patel",
+    "role": "HOD",
+    "department": "Eye Clinic",
+    "avatarUrl": "https://i.pravatar.cc/150?img=9",
+    "createdAt": "2024-02-01T10:00:00Z",
+    "lastLogin": "2025-07-01T13:30:00Z",
+    "isActive": true
+  },
+  {
+    "id": "user-hod-antenatal",
+    "email": "antenatal-hod@hospital.org",
+    "firstName": "Grace",
+    "lastName": "Thompson",
+    "role": "HOD",
+    "department": "Antenatal",
+    "avatarUrl": "https://i.pravatar.cc/150?img=11",
+    "createdAt": "2024-02-01T10:00:00Z",
+    "lastLogin": "2025-07-01T11:45:00Z",
+    "isActive": true
+  },
+  {
+    "id": "user-hod-emergency",
+    "email": "ae-hod@hospital.org",
+    "firstName": "Marcus",
+    "lastName": "Williams",
+    "role": "HOD",
+    "department": "Accident & Emergency",
+    "avatarUrl": "https://i.pravatar.cc/150?img=12",
+    "createdAt": "2024-02-01T10:00:00Z",
+    "lastLogin": "2025-07-02T06:00:00Z",
+    "isActive": true
+  },
+  {
+    "id": "user-hod-physio",
+    "email": "physio-hod@hospital.org",
+    "firstName": "Sophia",
+    "lastName": "Lee",
+    "role": "HOD",
+    "department": "Physiotherapy",
+    "avatarUrl": "https://i.pravatar.cc/150?img=17",
+    "createdAt": "2024-02-01T10:00:00Z",
+    "lastLogin": "2025-07-01T12:30:00Z",
+    "isActive": true
+  },
+  {
+    "id": "user-hod-pharmacy",
+    "email": "pharmacy-hod@hospital.org",
+    "firstName": "Victoria",
+    "lastName": "Adekunle",
+    "role": "HOD",
+    "department": "Pharmacy",
+    "avatarUrl": "https://i.pravatar.cc/150?img=13",
+    "createdAt": "2024-02-01T10:00:00Z",
+    "lastLogin": "2025-07-01T15:15:00Z",
+    "isActive": true
+  },
+  {
+    "id": "user-hod-hr",
+    "email": "hr-hod@hospital.org",
+    "firstName": "Jennifer",
+    "lastName": "Clarke",
+    "role": "HOD",
+    "department": "Human Resources",
+    "avatarUrl": "https://i.pravatar.cc/150?img=21",
+    "createdAt": "2024-02-01T10:00:00Z",
+    "lastLogin": "2025-07-01T14:00:00Z",
+    "isActive": true
+  },
+  {
     "id": "user-staff-radiology-1",
     "email": "radiology-tech@hospital.org",
     "firstName": "Lisa",
@@ -61,6 +133,18 @@
     "isActive": true
   },
   {
+    "id": "user-staff-radiology-2",
+    "email": "radiology-nurse@hospital.org",
+    "firstName": "Mark",
+    "lastName": "Rodriguez",
+    "role": "STAFF",
+    "department": "Radiology",
+    "avatarUrl": "https://i.pravatar.cc/150?img=22",
+    "createdAt": "2024-03-20T12:00:00Z",
+    "lastLogin": "2025-07-01T16:30:00Z",
+    "isActive": true
+  },
+  {
     "id": "user-staff-dental-1",
     "email": "dental-assistant@hospital.org",
     "firstName": "Kevin",
@@ -70,6 +154,42 @@
     "avatarUrl": "https://i.pravatar.cc/150?img=14",
     "createdAt": "2024-03-20T12:00:00Z",
     "lastLogin": "2025-07-01T15:30:00Z",
+    "isActive": true
+  },
+  {
+    "id": "user-staff-dental-2",
+    "email": "dental-hygienist@hospital.org",
+    "firstName": "Maria",
+    "lastName": "Santos",
+    "role": "STAFF",
+    "department": "Dental",
+    "avatarUrl": "https://i.pravatar.cc/150?img=23",
+    "createdAt": "2024-03-25T13:00:00Z",
+    "lastLogin": "2025-07-01T14:45:00Z",
+    "isActive": true
+  },
+  {
+    "id": "user-staff-eye-1",
+    "email": "optometrist@hospital.org",
+    "firstName": "Priya",
+    "lastName": "Sharma",
+    "role": "STAFF",
+    "department": "Eye Clinic",
+    "avatarUrl": "https://i.pravatar.cc/150?img=15",
+    "createdAt": "2024-04-01T14:00:00Z",
+    "lastLogin": "2025-07-01T13:15:00Z",
+    "isActive": true
+  },
+  {
+    "id": "user-staff-emergency-1",
+    "email": "emergency-nurse@hospital.org",
+    "firstName": "Amanda",
+    "lastName": "Foster",
+    "role": "STAFF",
+    "department": "Accident & Emergency",
+    "avatarUrl": "https://i.pravatar.cc/150?img=25",
+    "createdAt": "2024-04-05T15:00:00Z",
+    "lastLogin": "2025-07-02T05:30:00Z",
     "isActive": true
   },
   {
