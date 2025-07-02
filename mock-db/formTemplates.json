@@ -1,0 +1,189 @@
+
+[
+  {
+    "id": "hospital-policy",
+    "name": "Hospital Policy Document",
+    "description": "Create and manage hospital-wide policies",
+    "documentType": "POLICY",
+    "category": "administrative",
+    "accessRoles": ["CMD"],
+    "accessDepartments": [],
+    "fields": [
+      {
+        "id": "policy-title",
+        "type": "text",
+        "label": "Policy Title",
+        "required": true
+      },
+      {
+        "id": "policy-number",
+        "type": "text",
+        "label": "Policy Number",
+        "required": true
+      },
+      {
+        "id": "effective-date",
+        "type": "date",
+        "label": "Effective Date",
+        "required": true
+      },
+      {
+        "id": "policy-content",
+        "type": "richtext",
+        "label": "Policy Content",
+        "required": true
+      }
+    ],
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00Z",
+    "createdBy": "user-cmd-1"
+  },
+  {
+    "id": "patient-referral",
+    "name": "Patient Referral Letter",
+    "description": "Digital form for patient referrals between departments",
+    "documentType": "FORM",
+    "category": "clinical",
+    "accessRoles": ["HOD", "STAFF"],
+    "accessDepartments": ["Radiology", "Dental", "Eye Clinic", "Accident & Emergency", "Antenatal"],
+    "fields": [
+      {
+        "id": "patient-name",
+        "type": "text",
+        "label": "Patient Name",
+        "placeholder": "Enter patient full name",
+        "required": true
+      },
+      {
+        "id": "patient-id",
+        "type": "text",
+        "label": "Patient ID/Hospital Number",
+        "placeholder": "Enter patient ID",
+        "required": true
+      },
+      {
+        "id": "patient-age",
+        "type": "number",
+        "label": "Age",
+        "placeholder": "Enter age",
+        "required": true
+      },
+      {
+        "id": "patient-gender",
+        "type": "select",
+        "label": "Gender",
+        "options": ["Male", "Female", "Other"],
+        "required": true
+      },
+      {
+        "id": "chief-complaint",
+        "type": "richtext",
+        "label": "Chief Complaint",
+        "placeholder": "Describe the patient's main complaint",
+        "required": true
+      }
+    ],
+    "isActive": true,
+    "createdAt": "2024-01-15T00:00:00Z",
+    "createdBy": "user-cmd-1"
+  },
+  {
+    "id": "leave-application",
+    "name": "Leave Application",
+    "description": "Apply for leave from work",
+    "documentType": "APPLICATION",
+    "category": "administrative",
+    "accessRoles": ["STAFF", "HOD"],
+    "accessDepartments": [],
+    "fields": [
+      {
+        "id": "applicant-name",
+        "type": "text",
+        "label": "Applicant Name",
+        "required": true
+      },
+      {
+        "id": "employee-id",
+        "type": "text",
+        "label": "Employee ID",
+        "required": true
+      },
+      {
+        "id": "leave-type",
+        "type": "select",
+        "label": "Type of Leave",
+        "options": ["Annual Leave", "Sick Leave", "Maternity Leave", "Emergency Leave", "Study Leave"],
+        "required": true
+      },
+      {
+        "id": "start-date",
+        "type": "date",
+        "label": "Start Date",
+        "required": true
+      },
+      {
+        "id": "end-date",
+        "type": "date",
+        "label": "End Date",
+        "required": true
+      },
+      {
+        "id": "reason",
+        "type": "textarea",
+        "label": "Reason for Leave",
+        "required": true
+      }
+    ],
+    "isActive": true,
+    "createdAt": "2024-02-01T00:00:00Z",
+    "createdBy": "user-hod-hr"
+  },
+  {
+    "id": "incident-report",
+    "name": "Incident Report",
+    "description": "Report workplace incidents and safety concerns",
+    "documentType": "REPORT",
+    "category": "operational",
+    "accessRoles": ["STAFF", "HOD", "ADMIN"],
+    "accessDepartments": [],
+    "fields": [
+      {
+        "id": "incident-date",
+        "type": "date",
+        "label": "Incident Date",
+        "required": true
+      },
+      {
+        "id": "incident-time",
+        "type": "text",
+        "label": "Time of Incident",
+        "placeholder": "HH:MM",
+        "required": true
+      },
+      {
+        "id": "location",
+        "type": "text",
+        "label": "Location",
+        "placeholder": "Where did the incident occur?",
+        "required": true
+      },
+      {
+        "id": "incident-type",
+        "type": "select",
+        "label": "Type of Incident",
+        "options": ["Patient Fall", "Medication Error", "Equipment Failure", "Workplace Injury", "Security Issue", "Other"],
+        "required": true
+      },
+      {
+        "id": "incident-description",
+        "type": "richtext",
+        "label": "Incident Description",
+        "placeholder": "Provide detailed description of what happened",
+        "required": true
+      }
+    ],
+    "isActive": true,
+    "createdAt": "2024-02-15T00:00:00Z",
+    "createdBy": "user-super-admin-1"
+  }
+]

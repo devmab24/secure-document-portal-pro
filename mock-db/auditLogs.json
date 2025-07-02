@@ -1,0 +1,81 @@
+
+[
+  {
+    "id": "audit-001",
+    "documentId": "doc-001",
+    "userId": "user-hod-radiology",
+    "userName": "Sarah Johnson",
+    "userRole": "HOD",
+    "userDepartment": "Radiology",
+    "action": "create",
+    "timestamp": "2025-06-30T09:00:00Z",
+    "details": "Monthly Radiology Report created and submitted for CMD review",
+    "ipAddress": "192.168.1.102",
+    "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
+  },
+  {
+    "id": "audit-002",
+    "documentId": "doc-002",
+    "userId": "user-cmd-1",
+    "userName": "James Wilson",
+    "userRole": "CMD",
+    "userDepartment": "Administration",
+    "action": "approve",
+    "timestamp": "2025-06-29T14:20:00Z",
+    "details": "Hospital Safety Policy Update approved with digital signature",
+    "ipAddress": "192.168.1.100",
+    "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
+  },
+  {
+    "id": "audit-003",
+    "documentId": "form-sub-001",
+    "userId": "user-staff-radiology-1",
+    "userName": "Lisa Garcia",
+    "userRole": "STAFF",
+    "userDepartment": "Radiology",
+    "action": "create",
+    "timestamp": "2025-06-15T10:30:00Z",
+    "details": "Patient Referral Letter submitted for approval",
+    "ipAddress": "192.168.1.110",
+    "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
+  },
+  {
+    "id": "audit-004",
+    "documentId": "form-sub-002",
+    "userId": "user-hod-dental",
+    "userName": "Michael Chen",
+    "userRole": "HOD",
+    "userDepartment": "Dental",
+    "action": "approve",
+    "timestamp": "2025-06-22T09:00:00Z",
+    "details": "Leave Application approved for Kevin Zhao",
+    "ipAddress": "192.168.1.105",
+    "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
+  },
+  {
+    "id": "audit-005",
+    "documentId": "form-sub-003",
+    "userId": "user-staff-radiology-1",
+    "userName": "Lisa Garcia",
+    "userRole": "STAFF",
+    "userDepartment": "Radiology",
+    "action": "create",
+    "timestamp": "2025-06-25T16:45:00Z",
+    "details": "Incident Report submitted regarding equipment failure",
+    "ipAddress": "192.168.1.110",
+    "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
+  },
+  {
+    "id": "audit-006",
+    "documentId": "doc-001",
+    "userId": "user-cmd-1",
+    "userName": "James Wilson",
+    "userRole": "CMD",
+    "userDepartment": "Administration",
+    "action": "view",
+    "timestamp": "2025-07-01T08:15:00Z",
+    "details": "Viewed Monthly Radiology Report for review",
+    "ipAddress": "192.168.1.100",
+    "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
+  }
+]

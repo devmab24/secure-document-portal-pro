@@ -1,0 +1,124 @@
+
+[
+  {
+    "id": "dept-radiology",
+    "name": "Radiology",
+    "code": "RAD",
+    "description": "Medical imaging and diagnostic services",
+    "hodId": "user-hod-radiology",
+    "staffCount": 12,
+    "location": "Ground Floor, East Wing",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00Z"
+  },
+  {
+    "id": "dept-dental",
+    "name": "Dental",
+    "code": "DEN",
+    "description": "Dental care and oral health services",
+    "hodId": "user-hod-dental",
+    "staffCount": 8,
+    "location": "First Floor, West Wing",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00Z"
+  },
+  {
+    "id": "dept-eye-clinic",
+    "name": "Eye Clinic",
+    "code": "EYE",
+    "description": "Ophthalmology and eye care services",
+    "hodId": "user-hod-eye",
+    "staffCount": 6,
+    "location": "Second Floor, North Wing",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00Z"
+  },
+  {
+    "id": "dept-antenatal",
+    "name": "Antenatal",
+    "code": "ANT",
+    "description": "Prenatal care and maternal health services",
+    "hodId": "user-hod-antenatal",
+    "staffCount": 15,
+    "location": "Third Floor, South Wing",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00Z"
+  },
+  {
+    "id": "dept-emergency",
+    "name": "Accident & Emergency",
+    "code": "A&E",
+    "description": "Emergency medical services and trauma care",
+    "hodId": "user-hod-emergency",
+    "staffCount": 20,
+    "location": "Ground Floor, Main Entrance",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00Z"
+  },
+  {
+    "id": "dept-physiotherapy",
+    "name": "Physiotherapy",
+    "code": "PHY",
+    "description": "Physical therapy and rehabilitation services",
+    "hodId": "user-hod-physio",
+    "staffCount": 10,
+    "location": "Ground Floor, West Wing",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00Z"
+  },
+  {
+    "id": "dept-pharmacy",
+    "name": "Pharmacy",
+    "code": "PHA",
+    "description": "Pharmaceutical services and medication management",
+    "hodId": "user-hod-pharmacy",
+    "staffCount": 7,
+    "location": "Ground Floor, Central",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00Z"
+  },
+  {
+    "id": "dept-hr",
+    "name": "Human Resources",
+    "code": "HR",
+    "description": "Human resources and staff management",
+    "hodId": "user-hod-hr",
+    "staffCount": 5,
+    "location": "Fourth Floor, Admin Block",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00Z"
+  },
+  {
+    "id": "dept-finance",
+    "name": "Finance",
+    "code": "FIN",
+    "description": "Financial management and accounting services",
+    "hodId": "user-hod-finance",
+    "staffCount": 8,
+    "location": "Fourth Floor, Admin Block",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00Z"
+  },
+  {
+    "id": "dept-it",
+    "name": "Information Technology",
+    "code": "IT",
+    "description": "IT services and system administration",
+    "hodId": "user-hod-it",
+    "staffCount": 6,
+    "location": "Fifth Floor, Admin Block",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00Z"
+  },
+  {
+    "id": "dept-admin",
+    "name": "Administration",
+    "code": "ADM",
+    "description": "General administration and management",
+    "hodId": "user-hod-admin",
+    "staffCount": 12,
+    "location": "Fourth Floor, Admin Block",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00Z"
+  }
+]

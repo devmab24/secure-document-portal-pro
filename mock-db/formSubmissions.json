@@ -1,0 +1,75 @@
+
+[
+  {
+    "id": "form-sub-001",
+    "templateId": "patient-referral",
+    "templateName": "Patient Referral Letter",
+    "submittedBy": "user-staff-radiology-1",
+    "submittedByName": "Lisa Garcia",
+    "submittedByRole": "STAFF",
+    "submittedByDepartment": "Radiology",
+    "submittedAt": "2025-06-15T10:30:00Z",
+    "status": "submitted",
+    "formData": {
+      "patient-name": "John Smith",
+      "patient-id": "HSP-2025-001234",
+      "patient-age": 45,
+      "patient-gender": "Male",
+      "chief-complaint": "Persistent headaches and vision problems"
+    },
+    "assignedTo": "user-hod-radiology",
+    "currentApprover": "user-hod-radiology",
+    "approvalChain": ["user-hod-radiology", "user-cmd-1"],
+    "priority": "medium",
+    "lastModified": "2025-06-15T10:30:00Z"
+  },
+  {
+    "id": "form-sub-002",
+    "templateId": "leave-application",
+    "templateName": "Leave Application",
+    "submittedBy": "user-staff-dental-1",
+    "submittedByName": "Kevin Zhao",
+    "submittedByRole": "STAFF",
+    "submittedByDepartment": "Dental",
+    "submittedAt": "2025-06-20T14:15:00Z",
+    "status": "approved",
+    "formData": {
+      "applicant-name": "Kevin Zhao",
+      "employee-id": "EMP-2024-0156",
+      "leave-type": "Annual Leave",
+      "start-date": "2025-07-15",
+      "end-date": "2025-07-22",
+      "reason": "Family vacation and personal time"
+    },
+    "assignedTo": "user-hod-dental",
+    "currentApprover": null,
+    "approvalChain": ["user-hod-dental"],
+    "priority": "low",
+    "lastModified": "2025-06-22T09:00:00Z",
+    "approvedAt": "2025-06-22T09:00:00Z",
+    "approvedBy": "user-hod-dental"
+  },
+  {
+    "id": "form-sub-003",
+    "templateId": "incident-report",
+    "templateName": "Incident Report",
+    "submittedBy": "user-staff-radiology-1",
+    "submittedByName": "Lisa Garcia",
+    "submittedByRole": "STAFF",
+    "submittedByDepartment": "Radiology",
+    "submittedAt": "2025-06-25T16:45:00Z",
+    "status": "under_review",
+    "formData": {
+      "incident-date": "2025-06-25",
+      "incident-time": "15:30",
+      "location": "Radiology Department - Room 203",
+      "incident-type": "Equipment Failure",
+      "incident-description": "X-ray machine malfunctioned during patient examination, causing unexpected shutdown and requiring patient rescheduling."
+    },
+    "assignedTo": "user-hod-radiology",
+    "currentApprover": "user-hod-radiology",
+    "approvalChain": ["user-hod-radiology", "user-admin-1"],
+    "priority": "high",
+    "lastModified": "2025-06-25T16:45:00Z"
+  }
+]

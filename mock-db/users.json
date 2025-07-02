@@ -1,0 +1,87 @@
+
+[
+  {
+    "id": "user-cmd-1",
+    "email": "cmd@hospital.org",
+    "firstName": "James",
+    "lastName": "Wilson",
+    "role": "CMD",
+    "department": "Administration",
+    "avatarUrl": "https://i.pravatar.cc/150?img=1",
+    "createdAt": "2024-01-15T08:00:00Z",
+    "lastLogin": "2025-07-02T07:30:00Z",
+    "isActive": true
+  },
+  {
+    "id": "user-super-admin-1",
+    "email": "superadmin@hospital.org",
+    "firstName": "Robert",
+    "lastName": "Martinez",
+    "role": "SUPER_ADMIN",
+    "department": "Information Technology",
+    "avatarUrl": "https://i.pravatar.cc/150?img=31",
+    "createdAt": "2024-01-10T09:00:00Z",
+    "lastLogin": "2025-07-01T16:45:00Z",
+    "isActive": true
+  },
+  {
+    "id": "user-hod-radiology",
+    "email": "radiology-hod@hospital.org",
+    "firstName": "Sarah",
+    "lastName": "Johnson",
+    "role": "HOD",
+    "department": "Radiology",
+    "avatarUrl": "https://i.pravatar.cc/150?img=2",
+    "createdAt": "2024-02-01T10:00:00Z",
+    "lastLogin": "2025-07-02T08:15:00Z",
+    "isActive": true
+  },
+  {
+    "id": "user-hod-dental",
+    "email": "dental-hod@hospital.org",
+    "firstName": "Michael",
+    "lastName": "Chen",
+    "role": "HOD",
+    "department": "Dental",
+    "avatarUrl": "https://i.pravatar.cc/150?img=3",
+    "createdAt": "2024-02-01T10:00:00Z",
+    "lastLogin": "2025-07-01T14:20:00Z",
+    "isActive": true
+  },
+  {
+    "id": "user-staff-radiology-1",
+    "email": "radiology-tech@hospital.org",
+    "firstName": "Lisa",
+    "lastName": "Garcia",
+    "role": "STAFF",
+    "department": "Radiology",
+    "avatarUrl": "https://i.pravatar.cc/150?img=4",
+    "createdAt": "2024-03-15T11:00:00Z",
+    "lastLogin": "2025-07-02T09:00:00Z",
+    "isActive": true
+  },
+  {
+    "id": "user-staff-dental-1",
+    "email": "dental-assistant@hospital.org",
+    "firstName": "Kevin",
+    "lastName": "Zhao",
+    "role": "STAFF",
+    "department": "Dental",
+    "avatarUrl": "https://i.pravatar.cc/150?img=14",
+    "createdAt": "2024-03-20T12:00:00Z",
+    "lastLogin": "2025-07-01T15:30:00Z",
+    "isActive": true
+  },
+  {
+    "id": "user-admin-1",
+    "email": "admin@hospital.org",
+    "firstName": "Alex",
+    "lastName": "Morgan",
+    "role": "ADMIN",
+    "department": "Information Technology",
+    "avatarUrl": "https://i.pravatar.cc/150?img=8",
+    "createdAt": "2024-01-20T13:00:00Z",
+    "lastLogin": "2025-07-02T10:00:00Z",
+    "isActive": true
+  }
+]
