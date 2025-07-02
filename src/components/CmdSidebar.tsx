@@ -2,7 +2,7 @@ import { NavLink } from "react-router-dom";
 import { 
   LayoutDashboard, File, Upload, Settings, Users, 
   FileText, FolderHeart, FormInput, Share,
-  Activity, FileSearch, UserRound, Stethoscope
+  Activity, FileSearch, UserRound, Stethoscope, TestTube
 } from "lucide-react";
 import {
   Sidebar,
@@ -68,6 +68,15 @@ const CmdSidebar = () => {
                   <NavLink to="/dashboard/cmd" className={getNavClass}>
                     <LayoutDashboard className="h-5 w-5" />
                     {!collapsed && <span>Dashboard</span>}
+                  </NavLink>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+              
+              <SidebarMenuItem>
+                <SidebarMenuButton asChild>
+                  <NavLink to="/dashboard/cmd/core-testing" className={getNavClass}>
+                    <TestTube className="h-5 w-5" />
+                    {!collapsed && <span>Core Testing</span>}
                   </NavLink>
                 </SidebarMenuButton>
               </SidebarMenuItem>
