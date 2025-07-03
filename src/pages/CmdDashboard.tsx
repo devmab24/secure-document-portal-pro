@@ -13,7 +13,6 @@ import RecentDocumentsTable from "@/components/RecentDocumentsTable";
 import DepartmentCharts from "@/components/DepartmentCharts";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { convertMockDocumentToDocument } from "@/lib/utils/documentConverter";
-import { RoleSwitcher } from "@/components/RoleSwitcher";
 
 const CmdDashboard = () => {
   const { departmentSlug } = useParams();
@@ -289,7 +288,6 @@ const CmdDashboard = () => {
           </Card>
         </TabsContent>
       </Tabs>
-      <RoleSwitcher />
     </div>
   );
 };
