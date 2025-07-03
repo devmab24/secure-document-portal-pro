@@ -1,5 +1,6 @@
+
 import React from 'react';
-import { AppHeader } from './AppHeader';
+import AppHeader from './AppHeader';
 import { useAuth } from '@/contexts/AuthContext';
 import { RoleSwitcher } from './RoleSwitcher';
 
@@ -7,7 +8,7 @@ interface AppLayoutProps {
   children: React.ReactNode;
 }
 
-export const AppLayout = ({ children }: AppLayoutProps) => {
+const AppLayout = ({ children }: AppLayoutProps) => {
   const { user } = useAuth();
 
   if (!user) {
@@ -22,3 +23,5 @@ export const AppLayout = ({ children }: AppLayoutProps) => {
     </div>
   );
 };
+
+export default AppLayout;

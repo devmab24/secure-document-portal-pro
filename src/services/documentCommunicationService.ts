@@ -53,7 +53,7 @@ class DocumentCommunicationService {
         documentId: 'doc-001',
         fromUserId: 'user-cmd-1',
         fromUserName: 'Dr. CMD Admin',
-        fromDepartment: Department.ADMINISTRATION,
+        fromDepartment: Department.ADMIN,
         toUserId: 'user-hod-radiology',
         toUserName: 'Dr. Sarah Johnson',
         toDepartment: Department.RADIOLOGY,
