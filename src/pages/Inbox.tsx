@@ -1,8 +1,8 @@
 
-import InboxView from '@/components/InboxView';
+import { EnhancedInboxView } from '@/components/EnhancedInboxView';
 
 const Inbox = () => {
-  return <InboxView />;
+  return <EnhancedInboxView />;
 };
 
 export default Inbox;
