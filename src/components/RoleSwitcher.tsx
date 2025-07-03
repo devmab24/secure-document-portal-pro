@@ -13,7 +13,7 @@ import { useToast } from '@/hooks/use-toast';
 export const RoleSwitcher: React.FC = () => {
   const { user, login } = useAuth();
   const { toast } = useToast();
-  const [isExpanded, setIsExpanded] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(true); // Start expanded for visibility
   const [selectedRole, setSelectedRole] = useState<string>('');
 
   const availableRoles = [
@@ -45,6 +45,7 @@ export const RoleSwitcher: React.FC = () => {
         description: `Successfully switched to ${selectedRole} role as ${targetUser.firstName} ${targetUser.lastName}`,
       });
       setIsExpanded(false);
+      setSelectedRole(''); // Reset selection
     } else {
       toast({
         title: "Error",
@@ -58,17 +59,18 @@ export const RoleSwitcher: React.FC = () => {
 
   return (
     <div className="fixed bottom-4 right-4 z-50">
-      <Card className="shadow-lg border-2 border-orange-200 bg-orange-50">
+      <Card className="shadow-xl border-2 border-orange-300 bg-orange-50 min-w-[280px]">
         <CardHeader className="pb-2">
           <div className="flex items-center justify-between">
-            <CardTitle className="text-sm flex items-center gap-2">
+            <CardTitle className="text-sm flex items-center gap-2 text-orange-800">
               <Settings className="h-4 w-4" />
-              Dev Tools
+              Dev Role Switcher
             </CardTitle>
             <Button
               variant="ghost"
               size="sm"
               onClick={() => setIsExpanded(!isExpanded)}
+              className="text-orange-700 hover:text-orange-900"
             >
               {isExpanded ? <ChevronDown className="h-4 w-4" /> : <ChevronUp className="h-4 w-4" />}
             </Button>
@@ -79,17 +81,17 @@ export const RoleSwitcher: React.FC = () => {
           <CardContent className="pt-0">
             <div className="space-y-3">
               <div className="flex items-center gap-2">
-                <User className="h-4 w-4" />
-                <span className="text-sm font-medium">Current:</span>
+                <User className="h-4 w-4 text-orange-700" />
+                <span className="text-sm font-medium text-orange-800">Current:</span>
                 <Badge className={availableRoles.find(r => r.role === user.role)?.color}>
                   {user.role}
                 </Badge>
               </div>
               
               <div className="space-y-2">
-                <label className="text-sm font-medium">Switch to:</label>
+                <label className="text-sm font-medium text-orange-800">Switch to:</label>
                 <Select value={selectedRole} onValueChange={setSelectedRole}>
-                  <SelectTrigger className="w-full">
+                  <SelectTrigger className="w-full border-orange-200 focus:border-orange-400">
                     <SelectValue placeholder="Select role" />
                   </SelectTrigger>
                   <SelectContent>
@@ -109,11 +111,15 @@ export const RoleSwitcher: React.FC = () => {
               <Button 
                 onClick={handleRoleSwitch}
                 disabled={!selectedRole || selectedRole === user.role}
-                className="w-full"
+                className="w-full bg-orange-600 hover:bg-orange-700 text-white"
                 size="sm"
               >
                 Switch Role
               </Button>
+
+              <div className="text-xs text-orange-600 bg-orange-100 p-2 rounded">
+                💡 This tool helps you test different user roles quickly during development.
+              </div>
             </div>
           </CardContent>
         )}
