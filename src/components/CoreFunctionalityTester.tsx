@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -6,6 +5,7 @@ import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 import { MockDataService } from '@/services/mockDataService';
 import { useToast } from '@/hooks/use-toast';
+import { UserRole, Department } from '@/lib/types';
 import { 
   TestTube, 
   CheckCircle, 
@@ -71,13 +71,13 @@ export const CoreFunctionalityTester: React.FC = () => {
     await runTest('User Authentication', async () => {
       const user = await MockDataService.authenticateUser('cmd@hospital.org', 'password');
       if (!user) throw new Error('Authentication failed');
-      if (user.role !== 'CMD') throw new Error('Role validation failed');
+      if (user.role !== UserRole.CMD) throw new Error('Role validation failed');
     });
 
     // Test 2: Role-based Access Control
     await runTest('Role-based Access Control', async () => {
-      const isCmd = await MockDataService.validateUserRole('user-cmd-1', 'CMD');
-      const isHod = await MockDataService.validateUserRole('user-hod-radiology', 'HOD');
+      const isCmd = await MockDataService.validateUserRole('user-cmd-1', UserRole.CMD);
+      const isHod = await MockDataService.validateUserRole('user-hod-radiology', UserRole.HOD);
       if (!isCmd || !isHod) throw new Error('Role validation failed');
     });
 
@@ -87,6 +87,7 @@ export const CoreFunctionalityTester: React.FC = () => {
         name: 'Test Upload Document',
         type: 'REPORT',
         department: 'Radiology',
+        uploadedBy: 'user-hod-radiology',
         description: 'Test document upload functionality',
         status: 'DRAFT',
         fileUrl: '/test-upload.pdf',
@@ -151,9 +152,9 @@ export const CoreFunctionalityTester: React.FC = () => {
 
     // Test 8: Department User Retrieval
     await runTest('Department User Retrieval', async () => {
-      const radiologyUsers = await MockDataService.getUsersByDepartment('Radiology');
-      const hod = await MockDataService.getHodForDepartment('Radiology');
-      const staff = await MockDataService.getStaffForDepartment('Radiology');
+      const radiologyUsers = await MockDataService.getUsersByDepartment(Department.RADIOLOGY);
+      const hod = await MockDataService.getHodForDepartment(Department.RADIOLOGY);
+      const staff = await MockDataService.getStaffForDepartment(Department.RADIOLOGY);
       
       if (radiologyUsers.length === 0 || !hod || staff.length === 0) {
         throw new Error('Department user retrieval failed');

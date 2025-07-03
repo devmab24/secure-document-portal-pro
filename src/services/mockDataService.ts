@@ -1,330 +1,277 @@
 
-import { MockDocument, MockUser, MockFormSubmission } from '../../mock-db/index';
-import { DocumentsAPI } from './api/documents';
-import { UsersAPI } from './api/users';
-import { FormSubmissionsAPI } from './api/formSubmissions';
-import { DocumentSharingService, DocumentSubmission } from './documentSharingService';
-import { UserRole, Department, DocumentStatus } from '@/lib/types';
+import type { MockDocument, MockUser, MockDocumentShare, MockFormSubmission } from "mock-db/index";
+import { UserRole, Department, DocumentType, DocumentStatus, ShareStatus } from "@/lib/types";
 
+// Mock Database Service
 export class MockDataService {
-  // Document Exchange Operations
-  static async sendDocumentFromCmdToHod(
-    documentId: string, 
-    fromUserId: string, 
-    toUserId: string, 
-    message?: string
-  ): Promise<DocumentSubmission> {
-    const document = await DocumentsAPI.getDocumentById(documentId);
-    const fromUser = await UsersAPI.getUserById(fromUserId);
-    const toUser = await UsersAPI.getUserById(toUserId);
-    
-    if (!document || !fromUser || !toUser) {
-      throw new Error('Invalid document or user IDs');
-    }
-    
-    if (fromUser.role !== 'CMD') {
-      throw new Error('Only CMD can send documents to HODs');
-    }
-    
-    if (toUser.role !== 'HOD') {
-      throw new Error('Can only send to HOD users');
-    }
-    
-    return DocumentSharingService.submitDocument({
-      documentId,
-      title: document.name,
-      fromUserId,
-      fromUserName: `${fromUser.firstName} ${fromUser.lastName}`,
-      fromDepartment: fromUser.department,
-      toUserId,
-      toUserName: `${toUser.firstName} ${toUser.lastName}`,
-      submissionType: 'hod-to-cmd',
-      comments: message
-    });
-  }
   
-  static async sendDocumentFromHodToStaff(
-    documentId: string, 
-    fromUserId: string, 
-    toUserId: string, 
-    message?: string
-  ): Promise<DocumentSubmission> {
-    const document = await DocumentsAPI.getDocumentById(documentId);
-    const fromUser = await UsersAPI.getUserById(fromUserId);
-    const toUser = await UsersAPI.getUserById(toUserId);
-    
-    if (!document || !fromUser || !toUser) {
-      throw new Error('Invalid document or user IDs');
-    }
-    
-    if (fromUser.role !== 'HOD') {
-      throw new Error('Only HOD can send documents to staff');
-    }
-    
-    if (toUser.role !== 'STAFF') {
-      throw new Error('Can only send to staff users');
-    }
-    
-    // Ensure both users are in the same department
-    if (fromUser.department !== toUser.department) {
-      throw new Error('HOD can only send documents to staff in their department');
-    }
-    
-    return DocumentSharingService.submitDocument({
-      documentId,
-      title: document.name,
-      fromUserId,
-      fromUserName: `${fromUser.firstName} ${fromUser.lastName}`,
-      fromDepartment: fromUser.department,
-      toUserId,
-      toUserName: `${toUser.firstName} ${toUser.lastName}`,
-      submissionType: 'hod-to-staff',
-      comments: message
-    });
-  }
-  
-  static async sendDocumentFromStaffToHod(
-    documentId: string, 
-    fromUserId: string, 
-    toUserId: string, 
-    message?: string
-  ): Promise<DocumentSubmission> {
-    const document = await DocumentsAPI.getDocumentById(documentId);
-    const fromUser = await UsersAPI.getUserById(fromUserId);
-    const toUser = await UsersAPI.getUserById(toUserId);
-    
-    if (!document || !fromUser || !toUser) {
-      throw new Error('Invalid document or user IDs');
-    }
-    
-    if (fromUser.role !== 'STAFF') {
-      throw new Error('Only staff can send documents to HOD');
-    }
-    
-    if (toUser.role !== 'HOD') {
-      throw new Error('Can only send to HOD users');
-    }
-    
-    // Ensure both users are in the same department
-    if (fromUser.department !== toUser.department) {
-      throw new Error('Staff can only send documents to HOD in their department');
-    }
-    
-    return DocumentSharingService.submitDocument({
-      documentId,
-      title: document.name,
-      fromUserId,
-      fromUserName: `${fromUser.firstName} ${fromUser.lastName}`,
-      fromDepartment: fromUser.department,
-      toUserId,
-      toUserName: `${toUser.firstName} ${toUser.lastName}`,
-      submissionType: 'staff-to-hod',
-      comments: message
-    });
-  }
-  
-  // Document Acknowledgment Operations
-  static async acknowledgeDocument(
-    submissionId: string, 
-    userId: string, 
-    feedback?: string
-  ): Promise<DocumentSubmission | null> {
-    const user = await UsersAPI.getUserById(userId);
-    if (!user) {
-      throw new Error('Invalid user ID');
-    }
-    
-    return DocumentSharingService.updateSubmissionStatus(
-      submissionId, 
-      'acknowledged', 
-      feedback
-    );
-  }
-  
-  // Approval Workflows - CMD Only
-  static async approveDocument(
-    documentId: string, 
-    approverId: string, 
-    feedback?: string
-  ): Promise<MockDocument> {
-    const approver = await UsersAPI.getUserById(approverId);
-    if (!approver) {
-      throw new Error('Invalid approver ID');
-    }
-    
-    if (approver.role !== 'CMD') {
-      throw new Error('Only CMD can approve documents');
-    }
-    
-    return DocumentsAPI.updateDocumentStatus(documentId, 'APPROVED', feedback);
-  }
-  
-  static async rejectDocument(
-    documentId: string, 
-    approverId: string, 
-    feedback?: string
-  ): Promise<MockDocument> {
-    const approver = await UsersAPI.getUserById(approverId);
-    if (!approver) {
-      throw new Error('Invalid approver ID');
-    }
-    
-    if (approver.role !== 'CMD') {
-      throw new Error('Only CMD can reject documents');
-    }
-    
-    return DocumentsAPI.updateDocumentStatus(documentId, 'REJECTED', feedback);
-  }
-  
-  // User Authentication & Role Validation
+  // User Authentication
   static async authenticateUser(email: string, password: string): Promise<MockUser | null> {
-    const users = await UsersAPI.getUsers();
-    const user = users.find(u => u.email === email);
+    // Simulate API delay
+    await new Promise(resolve => setTimeout(resolve, 100));
     
-    if (user && password === 'password') { // Mock password validation
-      console.log(`Authentication successful for ${email} with role ${user.role}`);
-      return user;
-    }
+    // Mock users for testing
+    const mockUsers: MockUser[] = [
+      {
+        id: 'user-cmd-1',
+        email: 'cmd@hospital.org',
+        firstName: 'Chief Medical',
+        lastName: 'Director',
+        role: UserRole.CMD,
+        department: Department.ADMIN,
+        isActive: true,
+        createdAt: new Date().toISOString()
+      },
+      {
+        id: 'user-hod-radiology',
+        email: 'hod.radiology@hospital.org',
+        firstName: 'Dr. Sarah',
+        lastName: 'Johnson',
+        role: UserRole.HOD,
+        department: Department.RADIOLOGY,
+        isActive: true,
+        createdAt: new Date().toISOString()
+      },
+      {
+        id: 'user-staff-radiology-1',
+        email: 'staff.radiology@hospital.org',
+        firstName: 'Dr. Mike',
+        lastName: 'Wilson',
+        role: UserRole.STAFF,
+        department: Department.RADIOLOGY,
+        isActive: true,
+        createdAt: new Date().toISOString()
+      }
+    ];
+
+    return mockUsers.find(user => user.email === email) || null;
+  }
+
+  // Role Validation
+  static async validateUserRole(userId: string, expectedRole: UserRole): Promise<boolean> {
+    await new Promise(resolve => setTimeout(resolve, 50));
     
-    console.log(`Authentication failed for ${email}`);
-    return null;
+    const roleMap: Record<string, UserRole> = {
+      'user-cmd-1': UserRole.CMD,
+      'user-hod-radiology': UserRole.HOD,
+      'user-staff-radiology-1': UserRole.STAFF
+    };
+
+    return roleMap[userId] === expectedRole;
   }
-  
-  static async validateUserRole(userId: string, requiredRole: UserRole): Promise<boolean> {
-    const user = await UsersAPI.getUserById(userId);
-    if (!user) return false;
-    
-    return user.role === requiredRole;
-  }
-  
-  static async getUsersByDepartment(department: Department): Promise<MockUser[]> {
-    return UsersAPI.getUsersByDepartment(department);
-  }
-  
-  static async getHodForDepartment(department: Department): Promise<MockUser | null> {
-    const users = await UsersAPI.getUsersByDepartment(department);
-    return users.find(u => u.role === 'HOD') || null;
-  }
-  
-  static async getStaffForDepartment(department: Department): Promise<MockUser[]> {
-    const users = await UsersAPI.getUsersByDepartment(department);
-    return users.filter(u => u.role === 'STAFF');
-  }
-  
-  // Document Upload & Management
+
+  // Document Upload
   static async uploadDocument(
     documentData: Omit<MockDocument, 'id' | 'uploadedAt' | 'modifiedAt' | 'version'>,
     uploaderId: string
   ): Promise<MockDocument> {
-    const uploader = await UsersAPI.getUserById(uploaderId);
-    if (!uploader) {
-      throw new Error('Invalid uploader ID');
-    }
+    await new Promise(resolve => setTimeout(resolve, 200));
     
-    const enrichedDocumentData = {
+    const newDocument: MockDocument = {
       ...documentData,
-      uploadedBy: uploaderId,
-      uploadedByName: `${uploader.firstName} ${uploader.lastName}`,
-      status: 'DRAFT'
+      id: `doc-${Date.now()}`,
+      uploadedAt: new Date().toISOString(),
+      modifiedAt: new Date().toISOString(),
+      version: 1,
+      uploadedBy: uploaderId
     };
-    
-    return DocumentsAPI.createDocument(enrichedDocumentData);
+
+    return newDocument;
   }
-  
+
+  // Document Exchange: CMD to HOD
+  static async sendDocumentFromCmdToHod(
+    documentId: string,
+    cmdUserId: string,
+    hodUserId: string,
+    message?: string
+  ): Promise<MockDocumentShare> {
+    await new Promise(resolve => setTimeout(resolve, 150));
+    
+    // Validate CMD role
+    const isCmd = await this.validateUserRole(cmdUserId, UserRole.CMD);
+    if (!isCmd) {
+      throw new Error('Only CMD can send documents to HODs');
+    }
+
+    const share: MockDocumentShare = {
+      id: `share-${Date.now()}`,
+      documentId,
+      fromUserId: cmdUserId,
+      toUserId: hodUserId,
+      status: ShareStatus.SENT,
+      message,
+      sharedAt: new Date().toISOString()
+    };
+
+    return share;
+  }
+
+  // Document Exchange: Staff to HOD
+  static async sendDocumentFromStaffToHod(
+    documentId: string,
+    staffUserId: string,
+    hodUserId: string,
+    message?: string
+  ): Promise<MockDocumentShare> {
+    await new Promise(resolve => setTimeout(resolve, 150));
+    
+    const share: MockDocumentShare = {
+      id: `share-${Date.now()}`,
+      documentId,
+      fromUserId: staffUserId,
+      toUserId: hodUserId,
+      status: ShareStatus.SENT,
+      message,
+      sharedAt: new Date().toISOString()
+    };
+
+    return share;
+  }
+
+  // Document Acknowledgment
+  static async acknowledgeDocument(
+    shareId: string,
+    userId: string,
+    acknowledgmentMessage?: string
+  ): Promise<void> {
+    await new Promise(resolve => setTimeout(resolve, 100));
+    
+    console.log(`Document share ${shareId} acknowledged by ${userId}: ${acknowledgmentMessage}`);
+  }
+
+  // CMD Approval
+  static async approveDocument(
+    documentId: string,
+    cmdUserId: string,
+    approvalMessage?: string
+  ): Promise<void> {
+    await new Promise(resolve => setTimeout(resolve, 150));
+    
+    // Validate CMD role
+    const isCmd = await this.validateUserRole(cmdUserId, UserRole.CMD);
+    if (!isCmd) {
+      throw new Error('Only CMD can approve documents');
+    }
+
+    console.log(`Document ${documentId} approved by CMD ${cmdUserId}: ${approvalMessage}`);
+  }
+
+  // Department Users
+  static async getUsersByDepartment(department: Department): Promise<MockUser[]> {
+    await new Promise(resolve => setTimeout(resolve, 100));
+    
+    const allUsers: MockUser[] = [
+      {
+        id: 'user-hod-radiology',
+        email: 'hod.radiology@hospital.org',
+        firstName: 'Dr. Sarah',
+        lastName: 'Johnson',
+        role: UserRole.HOD,
+        department: Department.RADIOLOGY,
+        isActive: true,
+        createdAt: new Date().toISOString()
+      },
+      {
+        id: 'user-staff-radiology-1',
+        email: 'staff1.radiology@hospital.org',
+        firstName: 'Dr. Mike',
+        lastName: 'Wilson',
+        role: UserRole.STAFF,
+        department: Department.RADIOLOGY,
+        isActive: true,
+        createdAt: new Date().toISOString()
+      },
+      {
+        id: 'user-staff-radiology-2',
+        email: 'staff2.radiology@hospital.org',
+        firstName: 'Dr. Lisa',
+        lastName: 'Brown',
+        role: UserRole.STAFF,
+        department: Department.RADIOLOGY,
+        isActive: true,
+        createdAt: new Date().toISOString()
+      }
+    ];
+
+    return allUsers.filter(user => user.department === department);
+  }
+
+  static async getHodForDepartment(department: Department): Promise<MockUser | null> {
+    const users = await this.getUsersByDepartment(department);
+    return users.find(user => user.role === UserRole.HOD) || null;
+  }
+
+  static async getStaffForDepartment(department: Department): Promise<MockUser[]> {
+    const users = await this.getUsersByDepartment(department);
+    return users.filter(user => user.role === UserRole.STAFF);
+  }
+
   // Dashboard Data
-  static async getDashboardDataForUser(userId: string): Promise<{
-    totalDocuments: number;
-    pendingApprovals: number;
-    recentUploads: MockDocument[];
-    pendingSubmissions: DocumentSubmission[];
-    departmentStats?: Record<string, number>;
-  }> {
-    const user = await UsersAPI.getUserById(userId);
-    if (!user) {
-      throw new Error('Invalid user ID');
-    }
+  static async getDashboardDataForUser(userId: string) {
+    await new Promise(resolve => setTimeout(resolve, 200));
     
-    let documents: MockDocument[] = [];
-    let pendingSubmissions: DocumentSubmission[] = [];
-    
-    if (user.role === 'CMD') {
-      // CMD can see all documents
-      documents = await DocumentsAPI.getDocuments();
-      pendingSubmissions = await DocumentSharingService.getPendingSubmissions();
-    } else if (user.role === 'HOD') {
-      // HOD can see department documents and submissions to them
-      documents = await DocumentsAPI.getDocuments({ department: user.department });
-      pendingSubmissions = await DocumentSharingService.getPendingSubmissionsForUser(userId);
-    } else {
-      // Staff can see their own documents and submissions to them
-      documents = await DocumentsAPI.getDocuments({ userId });
-      pendingSubmissions = await DocumentSharingService.getPendingSubmissionsForUser(userId);
-    }
-    
-    const pendingApprovals = documents.filter(doc => 
-      doc.status === 'SUBMITTED' || doc.status === 'UNDER_REVIEW'
-    ).length;
-    
-    const recentUploads = documents
-      .sort((a, b) => new Date(b.uploadedAt).getTime() - new Date(a.uploadedAt).getTime())
-      .slice(0, 5);
-    
-    let departmentStats: Record<string, number> | undefined;
-    if (user.role === 'CMD') {
-      departmentStats = documents.reduce((acc, doc) => {
-        acc[doc.department] = (acc[doc.department] || 0) + 1;
-        return acc;
-      }, {} as Record<string, number>);
-    }
-    
-    return {
-      totalDocuments: documents.length,
-      pendingApprovals,
-      recentUploads,
-      pendingSubmissions,
-      departmentStats
+    // Mock dashboard data based on user role
+    const mockData = {
+      totalDocuments: 25,
+      pendingApprovals: 5,
+      recentUploads: 8,
+      departmentStats: {
+        [Department.RADIOLOGY]: 12,
+        [Department.DENTAL]: 8,
+        [Department.EYE_CLINIC]: 3,
+        [Department.ANTENATAL]: 2
+      },
+      pendingSubmissions: [
+        {
+          id: 'sub-001',
+          documentId: 'doc-001',
+          submittedBy: 'user-staff-radiology-1',
+          status: 'submitted' as const,
+          submittedAt: new Date().toISOString()
+        }
+      ]
     };
+
+    return mockData;
   }
-  
-  // Test Data Creation
+
+  // Create Test Scenario
   static async createTestScenario(): Promise<void> {
-    console.log('Creating test scenario with mock data...');
+    await new Promise(resolve => setTimeout(resolve, 300));
     
-    // Test document upload
+    // Create a test document
     const testDoc = await this.uploadDocument({
-      name: 'Test Monthly Report',
+      name: 'Test Scenario Document',
       type: 'REPORT',
       department: 'Radiology',
-      description: 'Test document for validation',
-      status: 'SUBMITTED',
-      fileUrl: '/test-document.pdf',
+      uploadedBy: 'user-hod-radiology',
+      description: 'Document created for testing complete workflow',
+      status: 'DRAFT',
+      fileUrl: '/test-scenario.pdf',
       fileSize: 1024000,
       fileType: 'application/pdf',
-      tags: ['test', 'monthly', 'report'],
+      tags: ['test', 'scenario'],
       priority: 'medium',
       requiresSignature: true,
       isDigitalForm: false
     }, 'user-hod-radiology');
-    
-    console.log('Test document created:', testDoc.name);
-    
-    // Test document sharing
-    const submission = await this.sendDocumentFromHodToStaff(
+
+    // Send from HOD to CMD for approval
+    await this.sendDocumentFromCmdToHod(
       testDoc.id,
+      'user-cmd-1',
       'user-hod-radiology',
-      'user-staff-radiology-1',
-      'Please review this monthly report'
+      'Test scenario document flow'
     );
-    
-    console.log('Test document shared:', submission.title);
-    
-    // Test acknowledgment
-    await this.acknowledgeDocument(
-      submission.id,
-      'user-staff-radiology-1',
-      'Report reviewed and acknowledged'
+
+    // Approve the document
+    await this.approveDocument(
+      testDoc.id,
+      'user-cmd-1',
+      'Approved for test scenario completion'
     );
-    
-    console.log('Test scenario completed successfully!');
+
+    console.log('Test scenario completed successfully');
   }
 }
