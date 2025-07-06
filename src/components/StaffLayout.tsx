@@ -3,7 +3,6 @@ import React from 'react';
 import AppHeader from './AppHeader';
 import StaffSidebar from './StaffSidebar';
 import { useAuth } from '@/contexts/AuthContext';
-import { RoleSwitcher } from './RoleSwitcher';
 import { SidebarProvider } from '@/components/ui/sidebar';
 import { TooltipProvider } from '@/components/ui/tooltip';
 
@@ -27,7 +26,6 @@ const StaffLayout = ({ children }: StaffLayoutProps) => {
             <AppHeader />
             <main className="flex-1 p-6">{children}</main>
           </div>
-          <RoleSwitcher />
         </div>
       </SidebarProvider>
     </TooltipProvider>
