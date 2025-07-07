@@ -1,8 +1,7 @@
-
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { User, Session } from "@supabase/supabase-js";
 import { supabase } from "@/integrations/supabase/client";
-import { UserRole } from "@/lib/types";
+import { UserRole, Department } from "@/lib/types";
 
 interface AuthUser {
   id: string;
@@ -10,7 +9,8 @@ interface AuthUser {
   firstName: string;
   lastName: string;
   role: UserRole;
-  department: string;
+  department: Department;
+  avatarUrl?: string;
 }
 
 interface AuthContextType {
@@ -60,7 +60,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
                   firstName: profile.first_name,
                   lastName: profile.last_name,
                   role: profile.role as UserRole,
-                  department: profile.department
+                  department: profile.department as Department,
+                  avatarUrl: undefined
                 });
               }
             } catch (error) {
