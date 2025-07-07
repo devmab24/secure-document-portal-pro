@@ -482,7 +482,7 @@ export type Database = {
           id: string
           is_active: boolean | null
           last_name: string
-          password_hash: string
+          password_hash: string | null
           role: string
           updated_at: string | null
         }
@@ -494,7 +494,7 @@ export type Database = {
           id?: string
           is_active?: boolean | null
           last_name: string
-          password_hash: string
+          password_hash?: string | null
           role: string
           updated_at?: string | null
         }
@@ -506,7 +506,7 @@ export type Database = {
           id?: string
           is_active?: boolean | null
           last_name?: string
-          password_hash?: string
+          password_hash?: string | null
           role?: string
           updated_at?: string | null
         }
