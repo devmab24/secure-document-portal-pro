@@ -87,18 +87,47 @@ ON CONFLICT (id) DO NOTHING;
 CREATE OR REPLACE FUNCTION public.handle_new_user()
 RETURNS trigger AS $$
 BEGIN
-  INSERT INTO public.users (id, first_name, last_name, email, role, department)
-  VALUES (
+  RAISE NOTICE 'Creating user profile for ID: %, Email: %, Role: %, Dept: %',
     new.id,
-    COALESCE(new.raw_user_meta_data->>'first_name', ''),
-    COALESCE(new.raw_user_meta_data->>'last_name', ''),
     new.email,
-    COALESCE(new.raw_user_meta_data->>'role', 'STAFF'),
-    COALESCE(new.raw_user_meta_data->>'department', 'Administration')
-  );
+    new.raw_user_meta_data->>'role',
+    new.raw_user_meta_data->>'department';
+
+  BEGIN
+    INSERT INTO public.users (id, first_name, last_name, email, role, department)
+    VALUES (
+      new.id,
+      COALESCE(new.raw_user_meta_data->>'first_name', 'UNKNOWN'),
+      COALESCE(new.raw_user_meta_data->>'last_name', 'UNKNOWN'),
+      new.email,
+      COALESCE(new.raw_user_meta_data->>'role', 'STAFF'),
+      COALESCE(new.raw_user_meta_data->>'department', 'Administration')
+    );
+  EXCEPTION
+    WHEN OTHERS THEN
+      RAISE NOTICE 'User creation failed: %', SQLERRM;
+      RETURN new;
+  END;
+
   RETURN new;
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
+
+-- CREATE OR REPLACE FUNCTION public.handle_new_user()
+-- RETURNS trigger AS $$
+-- BEGIN
+--   INSERT INTO public.users (id, first_name, last_name, email, role, department)
+--   VALUES (
+--     new.id,
+--     COALESCE(new.raw_user_meta_data->>'first_name', ''),
+--     COALESCE(new.raw_user_meta_data->>'last_name', ''),
+--     new.email,
+--     COALESCE(new.raw_user_meta_data->>'role', 'STAFF'),
+--     COALESCE(new.raw_user_meta_data->>'department', 'Administration')
+--   );
+--   RETURN new;
+-- END;
+-- $$ LANGUAGE plpgsql SECURITY DEFINER;
 
 -- Create trigger for new user registration
 DROP TRIGGER IF EXISTS on_auth_user_created ON auth.users;

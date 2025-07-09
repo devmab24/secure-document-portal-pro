@@ -76,14 +76,14 @@ const Auth = () => {
     if (!email || !password || !firstName || !lastName) return;
 
     // Validate organizational email
-    if (!email.endsWith('@fmcjalingo.org')) {
-      toast({
-        title: "Invalid Email",
-        description: "Please use your organizational email (@fmcjalingo.org)",
-        variant: "destructive"
-      });
-      return;
-    }
+    // if (!email.endsWith('@fmcjalingo.org')) {
+    //   toast({
+    //     title: "Invalid Email",
+    //     description: "Please use your organizational email (@fmcjalingo.org)",
+    //     variant: "destructive"
+    //   });
+    //   return;
+    // }
 
     setIsSubmitting(true);
     try {
