@@ -478,36 +478,36 @@ export type Database = {
           created_at: string | null
           department: string | null
           email: string
-          first_name: string
+          first_name: string | null
           id: string
           is_active: boolean | null
-          last_name: string
+          last_name: string | null
           password_hash: string | null
-          role: string
+          role: string | null
           updated_at: string | null
         }
         Insert: {
           created_at?: string | null
           department?: string | null
           email: string
-          first_name: string
+          first_name?: string | null
           id?: string
           is_active?: boolean | null
-          last_name: string
+          last_name?: string | null
           password_hash?: string | null
-          role: string
+          role?: string | null
           updated_at?: string | null
         }
         Update: {
           created_at?: string | null
           department?: string | null
           email?: string
-          first_name?: string
+          first_name?: string | null
           id?: string
           is_active?: boolean | null
-          last_name?: string
+          last_name?: string | null
           password_hash?: string | null
-          role?: string
+          role?: string | null
           updated_at?: string | null
         }
         Relationships: [

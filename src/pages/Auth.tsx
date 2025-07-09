@@ -32,10 +32,30 @@ const Auth = () => {
     'Eye Clinic', 'Accident & Emergency', 'Pharmacy', 'Physiotherapy', 'Antenatal'
   ];
 
+  // Helper function to get dashboard route based on user role
+  const getDashboardRoute = (userRole: UserRole) => {
+    switch (userRole) {
+      case UserRole.CMD:
+        return '/dashboard/cmd';
+      case UserRole.HOD:
+        return '/dashboard/hod';
+      case UserRole.ADMIN:
+        return '/dashboard/admin';
+      case UserRole.SUPER_ADMIN:
+        return '/dashboard/super-admin';
+      case UserRole.STAFF:
+        return '/dashboard/staff';
+      default:
+        return '/dashboard';
+    }
+  };
+
   useEffect(() => {
     if (user && !isSubmitting) {
-      console.log("Already logged in, redirecting to:", from);
-      navigate(from, { replace: true });
+      console.log("Already logged in, redirecting user with role:", user.role);
+      // If user came from a protected route, go there, otherwise go to their dashboard
+      const redirectTo = from !== '/' ? from : getDashboardRoute(user.role);
+      navigate(redirectTo, { replace: true });
     }
   }, [user, isSubmitting, navigate, from]);
 
@@ -51,7 +71,7 @@ const Auth = () => {
           title: "Login Successful",
           description: "Welcome back!",
         });
-        navigate(from, { replace: true });
+        // Note: The redirect will happen automatically in useEffect when user state updates
       } else {
         toast({
           title: "Login Failed",
