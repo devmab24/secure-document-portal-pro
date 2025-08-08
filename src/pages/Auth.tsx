@@ -51,13 +51,13 @@ const Auth = () => {
   };
 
   useEffect(() => {
-    if (user && !isSubmitting) {
-      console.log("Already logged in, redirecting user with role:", user.role);
+    if (user) {
+      console.log("User authenticated, redirecting user with role:", user.role);
       // If user came from a protected route, go there, otherwise go to their dashboard
       const redirectTo = from !== '/' ? from : getDashboardRoute(user.role);
       navigate(redirectTo, { replace: true });
     }
-  }, [user, isSubmitting, navigate, from]);
+  }, [user, navigate, from]);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
