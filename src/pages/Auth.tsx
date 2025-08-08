@@ -95,7 +95,8 @@ const Auth = () => {
     e.preventDefault();
     if (!email || !password || !firstName || !lastName) return;
 
-    // Validate organizational email
+    // Temporarily commented out organizational email validation for development
+    // Allow Gmail addresses for testing
     // if (!email.endsWith('@fmcjalingo.org')) {
     //   toast({
     //     title: "Invalid Email",
@@ -139,7 +140,9 @@ const Auth = () => {
   };
 
   const quickLogin = (userEmail: string) => {
-    setEmail(userEmail);
+    // Update quick login to use Gmail addresses for testing
+    const gmailEmail = userEmail.replace('@fmcjalingo.org', '@gmail.com');
+    setEmail(gmailEmail);
     setPassword('password123');
   };
 
@@ -168,7 +171,7 @@ const Auth = () => {
                     <Label htmlFor="login-email">Email</Label>
                     <Input
                       id="login-email"
-                      placeholder="name@fmcjalingo.org"
+                      placeholder="name@gmail.com"
                       type="email"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
@@ -230,7 +233,7 @@ const Auth = () => {
                     <Label htmlFor="signup-email">Email</Label>
                     <Input
                       id="signup-email"
-                      placeholder="name@fmcjalingo.org"
+                      placeholder="name@gmail.com"
                       type="email"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
@@ -301,6 +304,7 @@ const Auth = () => {
             <CardTitle className="text-lg">Test Users (Development)</CardTitle>
             <CardDescription>
               Click any email to auto-fill login form. Password: <strong>password123</strong>
+              <br /><small className="text-muted-foreground">Note: Using @gmail.com for testing</small>
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4 max-h-96 overflow-y-auto">
@@ -312,7 +316,7 @@ const Auth = () => {
                 onClick={() => quickLogin('cmd@fmcjalingo.org')}
               >
                 <div className="text-left">
-                  <div className="font-medium">cmd@fmcjalingo.org</div>
+                  <div className="font-medium">cmd@gmail.com</div>
                   <div className="text-xs text-muted-foreground">James Wilson</div>
                 </div>
               </Button>
@@ -326,7 +330,7 @@ const Auth = () => {
                 onClick={() => quickLogin('superadmin@fmcjalingo.org')}
               >
                 <div className="text-left">
-                  <div className="font-medium">superadmin@fmcjalingo.org</div>
+                  <div className="font-medium">superadmin@gmail.com</div>
                   <div className="text-xs text-muted-foreground">Robert Martinez</div>
                 </div>
               </Button>
@@ -340,7 +344,7 @@ const Auth = () => {
                 onClick={() => quickLogin('admin@fmcjalingo.org')}
               >
                 <div className="text-left">
-                  <div className="font-medium">admin@fmcjalingo.org</div>
+                  <div className="font-medium">admin@gmail.com</div>
                   <div className="text-xs text-muted-foreground">Michael Director</div>
                 </div>
               </Button>
@@ -355,7 +359,7 @@ const Auth = () => {
                   onClick={() => quickLogin('radiology.hod@fmcjalingo.org')}
                 >
                   <div className="text-left">
-                    <div className="font-medium">radiology.hod@fmcjalingo.org</div>
+                    <div className="font-medium">radiology.hod@gmail.com</div>
                     <div className="text-xs text-muted-foreground">Sarah Johnson - Radiology</div>
                   </div>
                 </Button>
@@ -365,7 +369,7 @@ const Auth = () => {
                   onClick={() => quickLogin('dental.hod@fmcjalingo.org')}
                 >
                   <div className="text-left">
-                    <div className="font-medium">dental.hod@fmcjalingo.org</div>
+                    <div className="font-medium">dental.hod@gmail.com</div>
                     <div className="text-xs text-muted-foreground">Michael Chen - Dental</div>
                   </div>
                 </Button>
@@ -381,7 +385,7 @@ const Auth = () => {
                   onClick={() => quickLogin('radiology.staff@fmcjalingo.org')}
                 >
                   <div className="text-left">
-                    <div className="font-medium">radiology.staff@fmcjalingo.org</div>
+                    <div className="font-medium">radiology.staff@gmail.com</div>
                     <div className="text-xs text-muted-foreground">Lisa Garcia - Radiology</div>
                   </div>
                 </Button>
@@ -391,7 +395,7 @@ const Auth = () => {
                   onClick={() => quickLogin('dental.staff@fmcjalingo.org')}
                 >
                   <div className="text-left">
-                    <div className="font-medium">dental.staff@fmcjalingo.org</div>
+                    <div className="font-medium">dental.staff@gmail.com</div>
                     <div className="text-xs text-muted-foreground">Kevin Zhao - Dental</div>
                   </div>
                 </Button>
