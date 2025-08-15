@@ -1,4 +1,5 @@
 
+
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { User, Session } from "@supabase/supabase-js";
 import { supabase } from "@/integrations/supabase/client";
@@ -76,8 +77,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         
         if (session?.user) {
           // Fetch user profile with proper error handling
-          const userProfile = await fetchUserProfile(session.user.id);
-          setUser(userProfile);
+          try {
+            const userProfile = await fetchUserProfile(session.user.id);
+            console.log("Setting user profile:", userProfile);
+            setUser(userProfile);
+          } catch (error) {
+            console.error("Error setting user profile:", error);
+            setUser(null);
+          }
         } else {
           setUser(null);
         }
@@ -203,3 +210,4 @@ export const useAuth = () => {
   }
   return context;
 };
+
