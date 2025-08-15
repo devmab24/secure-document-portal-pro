@@ -55,6 +55,7 @@ const Auth = () => {
       console.log("User authenticated, redirecting user with role:", user.role);
       // If user came from a protected route, go there, otherwise go to their dashboard
       const redirectTo = from !== '/' ? from : getDashboardRoute(user.role);
+      console.log("Redirecting to:", redirectTo);
       navigate(redirectTo, { replace: true });
     }
   }, [user, navigate, from]);
@@ -94,17 +95,6 @@ const Auth = () => {
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!email || !password || !firstName || !lastName) return;
-
-    // Temporarily commented out organizational email validation for development
-    // Allow Gmail addresses for testing
-    // if (!email.endsWith('@fmcjalingo.org')) {
-    //   toast({
-    //     title: "Invalid Email",
-    //     description: "Please use your organizational email (@fmcjalingo.org)",
-    //     variant: "destructive"
-    //   });
-    //   return;
-    // }
 
     setIsSubmitting(true);
     try {
