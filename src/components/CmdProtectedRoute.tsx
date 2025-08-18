@@ -22,7 +22,7 @@ const CmdProtectedRoute = () => {
   // Redirect to login if not authenticated
   if (!user) {
     console.log("User not authenticated, redirecting to login from", location.pathname);
-    return <Navigate to="/login" state={{ from: location }} replace />;
+    return <Navigate to="/auth" state={{ from: location }} replace />;
   }
 
   // Check if user has CMD or SUPER_ADMIN role
