@@ -11,6 +11,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { UserRole } from '@/lib/types';
 import { useEffect } from 'react';
 import { useToast } from '@/hooks/use-toast';
+import SeedAuthUsers from '@/components/SeedAuthUsers';
 
 const Auth = () => {
   const [email, setEmail] = useState('');
@@ -130,9 +131,8 @@ const Auth = () => {
   };
 
   const quickLogin = (userEmail: string) => {
-    // Update quick login to use Gmail addresses for testing
-    const gmailEmail = userEmail.replace('@fmcjalingo.org', '@gmail.com');
-    setEmail(gmailEmail);
+    // Use the provided test email directly
+    setEmail(userEmail);
     setPassword('password123');
   };
 
@@ -294,8 +294,11 @@ const Auth = () => {
             <CardTitle className="text-lg">Test Users (Development)</CardTitle>
             <CardDescription>
               Click any email to auto-fill login form. Password: <strong>password123</strong>
-              <br /><small className="text-muted-foreground">Note: Using @gmail.com for testing</small>
+              <br /><small className="text-muted-foreground">Note: Using @test.com for testing</small>
             </CardDescription>
+            <div className="mt-2">
+              <SeedAuthUsers />
+            </div>
           </CardHeader>
           <CardContent className="space-y-4 max-h-96 overflow-y-auto">
             <div>
@@ -303,10 +306,10 @@ const Auth = () => {
               <Button
                 variant="ghost"
                 className="w-full justify-start text-sm h-auto p-2"
-                onClick={() => quickLogin('cmd@fmcjalingo.org')}
+                onClick={() => quickLogin('cmd@test.com')}
               >
                 <div className="text-left">
-                  <div className="font-medium">cmd@gmail.com</div>
+                  <div className="font-medium">cmd@test.com</div>
                   <div className="text-xs text-muted-foreground">James Wilson</div>
                 </div>
               </Button>
@@ -317,10 +320,10 @@ const Auth = () => {
               <Button
                 variant="ghost"
                 className="w-full justify-start text-sm h-auto p-2"
-                onClick={() => quickLogin('superadmin@fmcjalingo.org')}
+                onClick={() => quickLogin('superadmin@test.com')}
               >
                 <div className="text-left">
-                  <div className="font-medium">superadmin@gmail.com</div>
+                  <div className="font-medium">superadmin@test.com</div>
                   <div className="text-xs text-muted-foreground">Robert Martinez</div>
                 </div>
               </Button>
@@ -331,10 +334,10 @@ const Auth = () => {
               <Button
                 variant="ghost"
                 className="w-full justify-start text-sm h-auto p-2"
-                onClick={() => quickLogin('admin@fmcjalingo.org')}
+                onClick={() => quickLogin('admin@test.com')}
               >
                 <div className="text-left">
-                  <div className="font-medium">admin@gmail.com</div>
+                  <div className="font-medium">admin@test.com</div>
                   <div className="text-xs text-muted-foreground">Michael Director</div>
                 </div>
               </Button>
@@ -346,20 +349,20 @@ const Auth = () => {
                 <Button
                   variant="ghost"
                   className="w-full justify-start text-sm h-auto p-2"
-                  onClick={() => quickLogin('radiology.hod@fmcjalingo.org')}
+                  onClick={() => quickLogin('hod.radiology@test.com')}
                 >
                   <div className="text-left">
-                    <div className="font-medium">radiology.hod@gmail.com</div>
+                    <div className="font-medium">hod.radiology@test.com</div>
                     <div className="text-xs text-muted-foreground">Sarah Johnson - Radiology</div>
                   </div>
                 </Button>
                 <Button
                   variant="ghost"
                   className="w-full justify-start text-sm h-auto p-2"
-                  onClick={() => quickLogin('dental.hod@fmcjalingo.org')}
+                  onClick={() => quickLogin('hod.dental@test.com')}
                 >
                   <div className="text-left">
-                    <div className="font-medium">dental.hod@gmail.com</div>
+                    <div className="font-medium">hod.dental@test.com</div>
                     <div className="text-xs text-muted-foreground">Michael Chen - Dental</div>
                   </div>
                 </Button>
@@ -372,20 +375,20 @@ const Auth = () => {
                 <Button
                   variant="ghost"
                   className="w-full justify-start text-sm h-auto p-2"
-                  onClick={() => quickLogin('radiology.staff@fmcjalingo.org')}
+                  onClick={() => quickLogin('staff.radiology@test.com')}
                 >
                   <div className="text-left">
-                    <div className="font-medium">radiology.staff@gmail.com</div>
+                    <div className="font-medium">staff.radiology@test.com</div>
                     <div className="text-xs text-muted-foreground">Lisa Garcia - Radiology</div>
                   </div>
                 </Button>
                 <Button
                   variant="ghost"
                   className="w-full justify-start text-sm h-auto p-2"
-                  onClick={() => quickLogin('dental.staff@fmcjalingo.org')}
+                  onClick={() => quickLogin('staff.dental@test.com')}
                 >
                   <div className="text-left">
-                    <div className="font-medium">dental.staff@gmail.com</div>
+                    <div className="font-medium">staff.dental@test.com</div>
                     <div className="text-xs text-muted-foreground">Kevin Zhao - Dental</div>
                   </div>
                 </Button>
