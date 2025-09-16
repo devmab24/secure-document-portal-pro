@@ -3,7 +3,7 @@ import { useLocation } from "react-router-dom";
 import { NavLink } from "react-router-dom";
 import { 
   File, Upload, LayoutDashboard, Settings, Users, 
-  FileText, Home, ShieldCheck, Shield, UserCog
+  FileText, Home, ShieldCheck, Shield, UserCog, MessageSquare
 } from "lucide-react";
 import {
   Sidebar,
@@ -194,6 +194,15 @@ const AppSidebar = () => {
                     <NavLink to="/department/staff" className={getNavClass}>
                       <Users className="h-5 w-5" />
                       {!collapsed && <span>Department Staff</span>}
+                    </NavLink>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+                
+                <SidebarMenuItem>
+                  <SidebarMenuButton asChild>
+                    <NavLink to="/inter-department" className={getNavClass}>
+                      <MessageSquare className="h-5 w-5" />
+                      {!collapsed && <span>Inter-Department Messages</span>}
                     </NavLink>
                   </SidebarMenuButton>
                 </SidebarMenuItem>

@@ -56,6 +56,7 @@ const Settings = lazy(() => import("./pages/Settings"));
 const Users = lazy(() => import("./pages/Users"));
 const DocumentSharing = lazy(() => import("./pages/DocumentSharing"));
 const DocumentView = lazy(() => import("./pages/DocumentView"));
+const InterDepartmentCommunication = lazy(() => import("./pages/InterDepartmentCommunication"));
 const AuditLogs = lazy(() => import("./pages/AuditLogs"));
 const CoreTesting = lazy(() => import("./pages/CoreTesting"));
 
@@ -91,6 +92,7 @@ const App = () => (
                     <Route path="/settings" element={<Settings />} />
                     <Route path="/users" element={<Users />} />
                     <Route path="/sharing" element={<DocumentSharing />} />
+                    <Route path="/inter-department" element={<InterDepartmentCommunication />} />
                     <Route path="/documents/:id" element={<DocumentView />} />
                     <Route path="/audit" element={<AuditLogs />} />
                     <Route path="/core-testing" element={<CoreTesting />} />
