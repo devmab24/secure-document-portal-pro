@@ -80,6 +80,7 @@ const App = () => (
                   {/* Public Routes */}
                   <Route path="/" element={<Index />} />
                   <Route path="/login" element={<Login />} />
+                  <Route path="/auth" element={<Login />} />
 
                   {/* Super Admin specific routes - All under /dashboard/super-admin */}
                   <Route path="/dashboard/super-admin" element={<SuperAdminProtectedRoute />}>
