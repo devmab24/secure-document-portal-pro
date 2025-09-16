@@ -473,6 +473,145 @@ export type Database = {
           },
         ]
       }
+      inter_department_messages: {
+        Row: {
+          acknowledged_at: string | null
+          created_at: string
+          document_id: string | null
+          from_user_id: string
+          id: string
+          message_content: string | null
+          message_type: string | null
+          metadata: Json | null
+          priority: string | null
+          read_at: string | null
+          requires_response: boolean | null
+          response_deadline: string | null
+          status: string | null
+          subject: string
+          to_department: string | null
+          to_user_id: string | null
+          updated_at: string
+        }
+        Insert: {
+          acknowledged_at?: string | null
+          created_at?: string
+          document_id?: string | null
+          from_user_id: string
+          id?: string
+          message_content?: string | null
+          message_type?: string | null
+          metadata?: Json | null
+          priority?: string | null
+          read_at?: string | null
+          requires_response?: boolean | null
+          response_deadline?: string | null
+          status?: string | null
+          subject: string
+          to_department?: string | null
+          to_user_id?: string | null
+          updated_at?: string
+        }
+        Update: {
+          acknowledged_at?: string | null
+          created_at?: string
+          document_id?: string | null
+          from_user_id?: string
+          id?: string
+          message_content?: string | null
+          message_type?: string | null
+          metadata?: Json | null
+          priority?: string | null
+          read_at?: string | null
+          requires_response?: boolean | null
+          response_deadline?: string | null
+          status?: string | null
+          subject?: string
+          to_department?: string | null
+          to_user_id?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      message_attachments: {
+        Row: {
+          attachment_name: string
+          attachment_size: number | null
+          attachment_type: string | null
+          attachment_url: string
+          created_at: string
+          id: string
+          message_id: string
+        }
+        Insert: {
+          attachment_name: string
+          attachment_size?: number | null
+          attachment_type?: string | null
+          attachment_url: string
+          created_at?: string
+          id?: string
+          message_id: string
+        }
+        Update: {
+          attachment_name?: string
+          attachment_size?: number | null
+          attachment_type?: string | null
+          attachment_url?: string
+          created_at?: string
+          id?: string
+          message_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "message_attachments_message_id_fkey"
+            columns: ["message_id"]
+            isOneToOne: false
+            referencedRelation: "inter_department_messages"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      message_recipients: {
+        Row: {
+          acknowledged_at: string | null
+          created_at: string
+          id: string
+          message_id: string
+          read_at: string | null
+          recipient_department: string | null
+          recipient_user_id: string
+          status: string | null
+        }
+        Insert: {
+          acknowledged_at?: string | null
+          created_at?: string
+          id?: string
+          message_id: string
+          read_at?: string | null
+          recipient_department?: string | null
+          recipient_user_id: string
+          status?: string | null
+        }
+        Update: {
+          acknowledged_at?: string | null
+          created_at?: string
+          id?: string
+          message_id?: string
+          read_at?: string | null
+          recipient_department?: string | null
+          recipient_user_id?: string
+          status?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "message_recipients_message_id_fkey"
+            columns: ["message_id"]
+            isOneToOne: false
+            referencedRelation: "inter_department_messages"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       users: {
         Row: {
           created_at: string | null
