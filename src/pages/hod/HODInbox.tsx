@@ -218,7 +218,7 @@ const HODInbox = () => {
           <Button asChild variant="outline" className="w-full bg-blue-600 hover:bg-blue-700 hover:text-white">
             <Link to="/dashboard/hod/submissions" className='text-white'>
               <Share className="h-4 w-4 mr-2" />
-              Document Sharing
+              Send a Document
             </Link>
           </Button>
         </CardContent>

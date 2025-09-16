@@ -12,6 +12,8 @@ import { useAppDispatch, useAppSelector } from '@/store';
 import { loadUserSubmissions, updateSubmissionStatus } from '@/store/slices/documentSharingSlice';
 import { Search, Send, Clock, CheckCircle, XCircle, MessageSquare, FileText, Users } from 'lucide-react';
 import { format } from 'date-fns';
+import { NavLink } from "react-router-dom";
+import { SendToHodDialog } from '@/components/SendToHodDialog';
 
 const HodDocumentSubmissions = () => {
   const { user } = useAuth();
@@ -102,16 +104,22 @@ const HodDocumentSubmissions = () => {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">Document Communications</h1>
+          <h1 className="text-3xl font-bold tracking-tight">Documents submisions</h1>
           <p className="text-muted-foreground">
             Manage document communications with CMD and staff
           </p>
         </div>
         <div className="flex gap-2">
           <SendToCmdDialog trigger={
-            <Button className="bg-hospital-600 hover:bg-hospital-700">
+            <Button variant='outline'>
               <Send className="h-4 w-4 mr-2" />
               Send to CMD
+            </Button>
+          } />
+          <SendToHodDialog trigger={
+            <Button variant="outline">
+              <Send className="h-4 w-4 mr-2" />
+              Send to HOD
             </Button>
           } />
           <SendToStaffDialog trigger={
@@ -137,6 +145,7 @@ const HodDocumentSubmissions = () => {
       <Tabs defaultValue="to-cmd" className="w-full">
         <TabsList>
           <TabsTrigger value="to-cmd">To CMD ({filteredSubmissions.length})</TabsTrigger>
+          <TabsTrigger value="from-hod">From HODs ({filteredSubmissions.length})</TabsTrigger>
           <TabsTrigger value="from-staff">From Staff ({filteredStaffSubmissions.length})</TabsTrigger>
         </TabsList>
 

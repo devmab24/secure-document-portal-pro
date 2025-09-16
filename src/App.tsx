@@ -58,7 +58,7 @@ const DocumentSharing = lazy(() => import("./pages/DocumentSharing"));
 const DocumentView = lazy(() => import("./pages/DocumentView"));
 const InterDepartmentCommunication = lazy(() => import("./pages/InterDepartmentCommunication"));
 const AuditLogs = lazy(() => import("./pages/AuditLogs"));
-const CoreTesting = lazy(() => import("./pages/CoreTesting"));
+// const CoreTesting = lazy(() => import("./pages/CoreTesting"));
 
 const queryClient = new QueryClient();
 
@@ -93,9 +93,9 @@ const App = () => (
                     <Route path="/users" element={<Users />} />
                     <Route path="/sharing" element={<DocumentSharing />} />
                     <Route path="/inter-department" element={<InterDepartmentCommunication />} />
-                    <Route path="/documents/:id" element={<DocumentView />} />
+                    <Route path="/documents/:id" element={<DocumentView />} /> 
                     <Route path="/audit" element={<AuditLogs />} />
-                    <Route path="/core-testing" element={<CoreTesting />} />
+                    {/* <Route path="/core-testing" element={<CoreTesting />} /> */}
                   </Route>
 
                   {/* Super Admin Routes */}
@@ -120,7 +120,13 @@ const App = () => (
                   {/* HOD Routes */}
                   <Route path="/dashboard/hod" element={<HodProtectedRoute />}>
                     <Route index element={<HodDashboard />} />
+                    <Route path="staffs" element={<Users />} />
+                    <Route path="forms" element={<FormTemplates />} />
+                    <Route path="documents" element={<Documents />} />
+                    <Route path="upload" element={<Upload />} />
                     <Route path="inbox" element={<HODInbox />} />
+                    <Route path="settings" element={<Settings />} />
+                    <Route path="inter-department" element={<InterDepartmentCommunication />} />
                     <Route path="submissions" element={<HodDocumentSubmissions />} />
                   </Route>
 

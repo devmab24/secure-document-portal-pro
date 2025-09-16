@@ -47,16 +47,7 @@ const HodSidebar = () => {
                   </NavLink>
                 </SidebarMenuButton>
               </SidebarMenuItem>
-              
-              <SidebarMenuItem>
-                <SidebarMenuButton asChild>
-                  <NavLink to="/dashboard/hod/forms" className={getNavClass}>
-                    <FormInput className="h-5 w-5" />
-                    {!collapsed && <span>Digital Forms</span>}
-                  </NavLink>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-              
+
               <SidebarMenuItem>
                 <SidebarMenuButton asChild>
                   <NavLink to="/dashboard/hod/inbox" className={getNavClass}>
@@ -68,18 +59,36 @@ const HodSidebar = () => {
 
               <SidebarMenuItem>
                 <SidebarMenuButton asChild>
-                  <NavLink to="/dashboard/hod/submissions" className={getNavClass}>
-                    <Share className="h-5 w-5" />
-                    {!collapsed && <span>Document Sharing</span>}
+                  <NavLink to="/dashboard/hod/inter-department" className={getNavClass}>
+                    <LayoutDashboard className="h-5 w-5" />
+                    {!collapsed && <span>Communications</span>}
+                  </NavLink>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+              
+              <SidebarMenuItem>
+                <SidebarMenuButton asChild>
+                  <NavLink to="/dashboard/hod/forms" className={getNavClass}>
+                    <FormInput className="h-5 w-5" />
+                    {!collapsed && <span>Digital Forms</span>}
                   </NavLink>
                 </SidebarMenuButton>
               </SidebarMenuItem>
 
               <SidebarMenuItem>
                 <SidebarMenuButton asChild>
-                  <NavLink to="/dashboard/hod/uploads" className={getNavClass}>
+                  <NavLink to="/dashboard/hod/submissions" className={getNavClass}>
+                    <Share className="h-5 w-5" />
+                    {!collapsed && <span>Send Document</span>}
+                  </NavLink>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+
+              <SidebarMenuItem>
+                <SidebarMenuButton asChild>
+                  <NavLink to="/dashboard/hod/upload" className={getNavClass}>
                     <Upload className="h-5 w-5" />
-                    {!collapsed && <span>Document Uploads</span>}
+                    {!collapsed && <span>Upload new Document</span>}
                   </NavLink>
                 </SidebarMenuButton>
               </SidebarMenuItem>
@@ -95,7 +104,7 @@ const HodSidebar = () => {
               
               <SidebarMenuItem>
                 <SidebarMenuButton asChild>
-                  <NavLink to="/dashboard/hod/staff" className={getNavClass}>
+                  <NavLink to="/dashboard/hod/staffs" className={getNavClass}>
                     <Users className="h-5 w-5" />
                     {!collapsed && <span>Dept. Staffs</span>}
                   </NavLink>
