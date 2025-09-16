@@ -42,7 +42,7 @@ const AdminSidebar = () => {
         {/* Admin Main Navigation */}
         <SidebarGroup>
           <SidebarGroupLabel className={collapsed ? "sr-only" : ""}>
-            Admin Dashboard
+            Technical Officer
           </SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
@@ -50,16 +50,16 @@ const AdminSidebar = () => {
                 <SidebarMenuButton asChild>
                   <NavLink to="/dashboard/admin" className={getNavClass}>
                     <Shield className="h-5 w-5" />
-                    {!collapsed && <span>Admin Overview</span>}
+                    {!collapsed && <span>Overview</span>}
                   </NavLink>
-                </SidebarMenuButton>
+                </SidebarMenuButton> 
               </SidebarMenuItem>
               
               <SidebarMenuItem>
                 <SidebarMenuButton asChild>
-                  <NavLink to="/inbox" className={getNavClass}>
+                  <NavLink to="/dashboard/admin/inbox" className={getNavClass}>
                     <Inbox className="h-5 w-5" />
-                    {!collapsed && <span>Inbox</span>}
+                    {!collapsed && <span>My Inbox</span>}
                   </NavLink>
                 </SidebarMenuButton>
               </SidebarMenuItem>
@@ -145,15 +145,15 @@ const AdminSidebar = () => {
         {isAdmin && !isSuperAdmin && (
           <SidebarGroup>
             <SidebarGroupLabel className={collapsed ? "sr-only" : ""}>
-              Administrative Unit
+              Manage Staffs
             </SidebarGroupLabel>
             <SidebarGroupContent>
               <SidebarMenu>
                 <SidebarMenuItem>
                   <SidebarMenuButton asChild>
-                    <NavLink to="/dashboard/admin/department" className={getNavClass}>
+                    <NavLink to="/dashboard/admin/staff-lists" className={getNavClass}>
                       <FolderHeart className="h-5 w-5" />
-                      {!collapsed && <span>Administration</span>}
+                      {!collapsed && <span>Staffs</span>}
                     </NavLink>
                   </SidebarMenuButton>
                 </SidebarMenuItem>

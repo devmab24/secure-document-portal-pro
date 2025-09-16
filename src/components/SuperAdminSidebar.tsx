@@ -47,23 +47,23 @@ const SuperAdminSidebar = () => {
                 </SidebarMenuButton>
               </SidebarMenuItem>
               
-              <SidebarMenuItem>
+              {/* <SidebarMenuItem>
                 <SidebarMenuButton asChild>
                   <NavLink to="/dashboard/super-admin/systems" className={getNavClass}>
                     <Database className="h-5 w-5" />
                     {!collapsed && <span>Systems</span>}
                   </NavLink>
                 </SidebarMenuButton>
-              </SidebarMenuItem>
+              </SidebarMenuItem> */}
               
-              <SidebarMenuItem>
+              {/* <SidebarMenuItem>
                 <SidebarMenuButton asChild>
                   <NavLink to="/dashboard/super-admin/reports" className={getNavClass}>
                     <FileText className="h-5 w-5" />
                     {!collapsed && <span>Reports</span>}
                   </NavLink>
                 </SidebarMenuButton>
-              </SidebarMenuItem>
+              </SidebarMenuItem> */}
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
@@ -78,20 +78,21 @@ const SuperAdminSidebar = () => {
               <SidebarMenuItem>
                 <SidebarMenuButton asChild>
                   <NavLink to="/dashboard/super-admin/users/management" className={getNavClass}>
-                    <UserCog className="h-5 w-5" />
-                    {!collapsed && <span>User Management</span>}
+                    {/* <UserCog className="h-5 w-5" /> */}
+                    <Users className="h-5 w-5" />
+                    {!collapsed && <span>All Users</span>}
                   </NavLink>
                 </SidebarMenuButton>
               </SidebarMenuItem>
               
-              <SidebarMenuItem>
+              {/* <SidebarMenuItem>
                 <SidebarMenuButton asChild>
                   <NavLink to="/dashboard/super-admin/users/roles" className={getNavClass}>
                     <Users className="h-5 w-5" />
                     {!collapsed && <span>Role Management</span>}
                   </NavLink>
                 </SidebarMenuButton>
-              </SidebarMenuItem>
+              </SidebarMenuItem> */}
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>

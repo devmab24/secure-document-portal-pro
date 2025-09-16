@@ -29,6 +29,7 @@ const SuperAdminDashboard = lazy(() => import("./pages/super-admin/SuperAdminDas
 // Admin Pages  
 const AdminDashboard = lazy(() => import("./pages/admin/AdminDashboard"));
 const UserManagement = lazy(() => import("./pages/admin/UserManagement"));
+const DepartmentDashboard = lazy(() =>  import("./pages/DepartmentDashboard"));
 
 // CMD Pages
 const CmdDashboard = lazy(() => import("./pages/CmdDashboard"));
@@ -78,36 +79,35 @@ const App = () => (
                 <Routes>
                   {/* Public Routes */}
                   <Route path="/" element={<Index />} />
-                  {/* <Route path="/auth" element={<Login />} /> */}
                   <Route path="/login" element={<Login />} />
-                  
-                  {/* Protected Routes */}
-                  <Route element={<ProtectedRoute />}>
-                    <Route path="/dashboard" element={<Dashboard />} />
-                    <Route path="/documents" element={<Documents />} />
-                    <Route path="/upload" element={<Upload />} />
-                    <Route path="/forms" element={<FormTemplates />} />
-                    <Route path="/my-forms" element={<MyForms />} />
-                    <Route path="/forms/create" element={<FormCreate />} />
-                    <Route path="/inbox" element={<Inbox />} />
-                    <Route path="/settings" element={<Settings />} />
-                    <Route path="/users" element={<Users />} />
-                    <Route path="/sharing" element={<DocumentSharing />} />
-                    <Route path="/inter-department" element={<InterDepartmentCommunication />} />
-                    <Route path="/documents/:id" element={<DocumentView />} /> 
-                    <Route path="/audit" element={<AuditLogs />} />
-                    {/* <Route path="/core-testing" element={<CoreTesting />} /> */}
-                  </Route>
 
-                  {/* Super Admin Routes */}
+                  {/* Super Admin specific routes - All under /dashboard/super-admin */}
                   <Route path="/dashboard/super-admin" element={<SuperAdminProtectedRoute />}>
                     <Route index element={<SuperAdminDashboard />} />
+                    <Route path="systems" element={<SuperAdminDashboard />} />
+                    <Route path="reports" element={<SuperAdminDashboard />} />
+                    <Route path="users/management" element={<UserManagement />} />
+                    <Route path="users/roles" element={<UserManagement />} />
+                    <Route path="audits" element={<AuditLogs />} />
+                    <Route path="settings" element={<Settings />} />
+                    <Route path="settings/profiles" element={<Settings />} />
+                    <Route path="settings/notifications" element={<Settings />} />
+                    <Route path="settings/accounts" element={<Settings />} />
                   </Route>
 
-                  {/* Admin Routes */}
+                  {/* Admin specific routes - All under /dashboard/admin */}
                   <Route path="/dashboard/admin" element={<AdminProtectedRoute />}>
                     <Route index element={<AdminDashboard />} />
-                    <Route path="users" element={<UserManagement />} />
+                    <Route path="inbox" element={<Inbox />} />
+                    {/* <Route path="department" element={<DepartmentDashboard />} /> */}
+                    <Route path="staff-lists" element={<Users />} />
+                    <Route path="uploads" element={<Upload />} />
+                    <Route path="documents" element={<Documents />} />
+                    <Route path="approvals" element={<DepartmentDashboard />} />
+                    <Route path="settings" element={<Settings />} />
+                    <Route path="settings/profiles" element={<Settings />} />
+                    <Route path="settings/notifications" element={<Settings />} />
+                    <Route path="settings/accounts" element={<Settings />} />
                   </Route>
 
                   {/* CMD specific routes - All under /dashboard/cmd */}
@@ -139,24 +139,45 @@ const App = () => (
                   <Route path="/dashboard/hod" element={<HodProtectedRoute />}>
                     <Route index element={<HodDashboard />} />
                     <Route path="staffs" element={<Users />} />
-                    <Route path="forms" element={<FormTemplates />} />
                     <Route path="documents" element={<Documents />} />
                     <Route path="upload" element={<Upload />} />
-                    <Route path="inbox" element={<HODInbox />} />
-                    <Route path="settings" element={<Settings />} />
+                    <Route path="inbox" element={<HODInbox />} />                    
                     <Route path="inter-department" element={<InterDepartmentCommunication />} />
                     <Route path="submissions" element={<HodDocumentSubmissions />} />
+                  
+                    {/*Settings routes*/}
+                    <Route path="settings" element={<Settings />} />
+                    <Route path="settings/profiles" element={<Settings />} />
+                    <Route path="settings/notifications" element={<Settings />} />
+                    <Route path="settings/accounts" element={<Settings />} />
+
+                    {/* Forms Routes */}
+                    <Route path="forms" element={<FormTemplates />} />
+                    <Route path="forms/create/:templateId" element={<FormCreate />} />
+                    <Route path="forms/my-forms" element={<MyForms />} />
+                    <Route path="forms/view/:formId" element={<MyForms />} />
+                    <Route path="forms/edit/:formId" element={<FormCreate />} />
                   </Route>
 
-                  {/* Staff Routes */}
+                  {/* Staff specific routes - All under /dashboard/staff */}
                   <Route path="/dashboard/staff" element={<StaffProtectedRoute />}>
                     <Route index element={<StaffDashboard />} />
-                    <Route path="inbox" element={<StaffInbox />} />
-                    <Route path="communications" element={<StaffDocumentCommunications />} />
-                    <Route path="forms" element={<FormTemplates />} />
                     <Route path="uploads" element={<Upload />} />
                     <Route path="documents" element={<Documents />} />
+                    <Route path="communications" element={<StaffDocumentCommunications />} />
                     <Route path="settings" element={<Settings />} />
+                    <Route path="settings/profiles" element={<Settings />} />
+                    <Route path="settings/notifications" element={<Settings />} />
+                    <Route path="settings/accounts" element={<Settings />} />
+                    <Route path="inbox" element={<StaffInbox />} />
+                    <Route path="approvals" element={<DepartmentDashboard />} />
+
+                    {/* Forms Routes */}
+                    <Route path="forms" element={<FormTemplates />} />
+                    <Route path="forms/create/:templateId" element={<FormCreate />} />
+                    <Route path="forms/my-forms" element={<MyForms />} />
+                    <Route path="forms/view/:formId" element={<MyForms />} />
+                    <Route path="forms/edit/:formId" element={<FormCreate />} />
                   </Route>
 
                   {/* Catch all route */}

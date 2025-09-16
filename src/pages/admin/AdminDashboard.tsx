@@ -27,7 +27,7 @@ const AdminDashboard = () => {
         <div className="flex items-center gap-3">
           <Shield className="h-8 w-8 text-primary" />
           <div>
-            <h1 className="text-3xl font-bold tracking-tight">Admin Dashboard</h1>
+            <h1 className="text-3xl font-bold tracking-tight">Technical Staff Dashboard</h1>
             <div className="flex items-center gap-2">
               <p className="text-muted-foreground">Administrative control panel</p>
               <Badge variant={isSuperAdmin ? "destructive" : "secondary"}>

@@ -11,7 +11,7 @@ interface SuperAdminLayoutProps {
 }
 
 const SuperAdminLayout = ({ children }: SuperAdminLayoutProps) => {
-  const { user } = useAuth();
+  const { user } = useAuth(); 
 
   if (!user) {
     return <div>Loading...</div>;
@@ -20,7 +20,7 @@ const SuperAdminLayout = ({ children }: SuperAdminLayoutProps) => {
   return (
     <TooltipProvider>
       <SidebarProvider>
-        <div className="min-h-screen bg-background flex">
+        <div className="w-full min-h-screen bg-background flex p-4">
           <SuperAdminSidebar />
           <div className="flex-1 flex flex-col">
             <AppHeader />

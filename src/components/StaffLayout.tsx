@@ -20,7 +20,7 @@ const StaffLayout = ({ children }: StaffLayoutProps) => {
   return (
     <TooltipProvider>
       <SidebarProvider>
-        <div className="min-h-screen bg-background flex">
+        <div className="flex-1 min-h-screen bg-background flex">
           <StaffSidebar />
           <div className="flex-1 flex flex-col">
             <AppHeader />

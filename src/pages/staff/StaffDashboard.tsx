@@ -19,7 +19,7 @@ const StaffDashboard = () => {
   const { user } = useAuth();
 
   return (
-    <div className="space-y-6">
+    <div className="w-full space-y-6">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
           <FolderHeart className="h-8 w-8 text-primary" />
