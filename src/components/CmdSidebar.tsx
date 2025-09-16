@@ -72,14 +72,14 @@ const CmdSidebar = () => {
                 </SidebarMenuButton>
               </SidebarMenuItem>
               
-              <SidebarMenuItem>
+              {/* <SidebarMenuItem>
                 <SidebarMenuButton asChild>
                   <NavLink to="/dashboard/cmd/core-testing" className={getNavClass}>
                     <TestTube className="h-5 w-5" />
                     {!collapsed && <span>Core Testing</span>}
                   </NavLink>
                 </SidebarMenuButton>
-              </SidebarMenuItem>
+              </SidebarMenuItem> */}
               
               <SidebarMenuItem>
                 <SidebarMenuButton asChild>
@@ -103,7 +103,7 @@ const CmdSidebar = () => {
                 <SidebarMenuButton asChild>
                   <NavLink to="/dashboard/cmd/inbox" className={getNavClass}>
                     <FileText className="h-5 w-5" />
-                    {!collapsed && <span>Inbox</span>}
+                    {!collapsed && <span>My Inbox</span>}
                   </NavLink>
                 </SidebarMenuButton>
               </SidebarMenuItem>
@@ -112,7 +112,7 @@ const CmdSidebar = () => {
                 <SidebarMenuButton asChild>
                   <NavLink to="/dashboard/cmd/documents/sharing" className={getNavClass}>
                     <Share className="h-5 w-5" />
-                    {!collapsed && <span>Document Sharing</span>}
+                    {!collapsed && <span>Send Document</span>}
                   </NavLink>
                 </SidebarMenuButton>
               </SidebarMenuItem>
@@ -121,7 +121,7 @@ const CmdSidebar = () => {
                 <SidebarMenuButton asChild>
                   <NavLink to="/dashboard/cmd/uploads" className={getNavClass}>
                     <Upload className="h-5 w-5" />
-                    {!collapsed && <span>Upload File</span>}
+                    {!collapsed && <span>Upload Document</span>}
                   </NavLink>
                 </SidebarMenuButton>
               </SidebarMenuItem>
@@ -130,7 +130,7 @@ const CmdSidebar = () => {
                 <SidebarMenuButton asChild>
                   <NavLink to="/dashboard/cmd/staff-lists" className={getNavClass}>
                     <Users className="h-5 w-5" />
-                    {!collapsed && <span>Staffs</span>}
+                    {!collapsed && <span>All Staffs</span>}
                   </NavLink>
                 </SidebarMenuButton>
               </SidebarMenuItem>

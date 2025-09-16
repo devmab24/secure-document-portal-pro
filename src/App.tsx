@@ -15,6 +15,7 @@ import AdminProtectedRoute from "@/components/AdminProtectedRoute";
 import CmdProtectedRoute from "@/components/CmdProtectedRoute";
 import HodProtectedRoute from "@/components/HodProtectedRoute";
 import StaffProtectedRoute from "@/components/StaffProtectedRoute";
+import CmdDepartmentsList from "./components/CmdDepartmentsList";
 
 // Lazy load components
 const Index = lazy(() => import("./pages/Index"));
@@ -109,12 +110,29 @@ const App = () => (
                     <Route path="users" element={<UserManagement />} />
                   </Route>
 
-                  {/* CMD Routes */}
+                  {/* CMD specific routes - All under /dashboard/cmd */}
                   <Route path="/dashboard/cmd" element={<CmdProtectedRoute />}>
                     <Route index element={<CmdDashboard />} />
+                    <Route path="departments" element={<CmdDepartmentsList />} />
+                    <Route path="uploads" element={<CmdUpload />} />
                     <Route path="documents" element={<CmdDocuments />} />
                     <Route path="inbox" element={<CmdInbox />} />
-                    <Route path="upload" element={<CmdUpload />} />
+                    <Route path="approvals" element={<CmdDashboard />} />
+                    <Route path="audits" element={<AuditLogs />} />
+                    <Route path="settings" element={<Settings />} />
+                    <Route path="staff-lists" element={<Users />} />
+                    <Route path="settings/profiles" element={<Settings />} />
+                    <Route path="settings/notifications" element={<Settings />} />
+                    <Route path="settings/accounts" element={<Settings />} />
+                    <Route path=":departmentSlug" element={<CmdDepartmentsList />} />
+                    <Route path="documents/sharing" element={<DocumentSharing />} />
+
+                    {/* Forms Routes */}
+                    <Route path="forms" element={<FormTemplates />} />
+                    <Route path="forms/create/:templateId" element={<FormCreate />} />
+                    <Route path="forms/my-forms" element={<MyForms />} />
+                    <Route path="forms/view/:formId" element={<MyForms />} />
+                    <Route path="forms/edit/:formId" element={<FormCreate />} />
                   </Route>
 
                   {/* HOD Routes */}
