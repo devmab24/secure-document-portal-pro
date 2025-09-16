@@ -20,7 +20,7 @@ export enum Department {
   HR = "Human Resources",
   FINANCE = "Finance",
   IT = "Information Technology",
-  ADMIN = "Administration"
+  ADMIN = "Administration",
 }
 
 // Document Status Enum

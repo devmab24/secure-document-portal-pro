@@ -18,7 +18,7 @@ import StaffProtectedRoute from "@/components/StaffProtectedRoute";
 
 // Lazy load components
 const Index = lazy(() => import("./pages/Index"));
-const Auth = lazy(() => import("./pages/Auth"));
+const Login = lazy(() => import("./pages/Login"));
 const Dashboard = lazy(() => import("./pages/Dashboard"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 
@@ -77,8 +77,8 @@ const App = () => (
                 <Routes>
                   {/* Public Routes */}
                   <Route path="/" element={<Index />} />
-                  <Route path="/auth" element={<Auth />} />
-                  <Route path="/login" element={<Auth />} />
+                  {/* <Route path="/auth" element={<Login />} /> */}
+                  <Route path="/login" element={<Login />} />
                   
                   {/* Protected Routes */}
                   <Route element={<ProtectedRoute />}>

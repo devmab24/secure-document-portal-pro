@@ -35,13 +35,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const fetchUserProfile = async (userId: string) => {
     try {
-      console.log("Fetching profile for user:", userId);
-      
+      // console.log("Fetching profile for user:", userId);
+      // Try database first
       const { data: profile, error } = await supabase
         .from('users')
         .select('*')
         .eq('id', userId)
-        .single();
+        .maybeSingle();
 
       if (error) {
         console.error("Error fetching user profile:", error);
@@ -49,7 +49,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       }
 
       if (profile) {
-        console.log("Profile fetched successfully:", profile);
+        // console.log("Profile fetched successfully:", profile);
         return {
           id: profile.id,
           email: profile.email,
@@ -58,6 +58,20 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
           role: profile.role as UserRole,
           department: profile.department as Department,
           avatarUrl: undefined
+        };
+      }
+
+      // Fallback to auth.user().user_metadata
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user) {
+        const meta = user.user_metadata;
+        return {
+          id: user.id,
+          email: user.email!,
+          firstName: meta.first_name || "",
+          lastName: meta.last_name || "",
+          role: (meta.role as UserRole) || UserRole.STAFF,
+          department: (meta.department as Department) ||"" as Department,
         };
       }
     } catch (error) {

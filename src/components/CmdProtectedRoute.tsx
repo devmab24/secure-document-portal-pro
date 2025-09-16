@@ -21,18 +21,19 @@ const CmdProtectedRoute = () => {
 
   // Redirect to login if not authenticated
   if (!user) {
-    console.log("User not authenticated, redirecting to login from", location.pathname);
-    return <Navigate to="/auth" state={{ from: location }} replace />;
+    console.log("No user found in context. Redirecting to login.");
+    return <Navigate to="/login" state={{ from: location }} replace />;
   }
 
   // Check if user has CMD or SUPER_ADMIN role
   if (user.role !== UserRole.CMD && user.role !== UserRole.SUPER_ADMIN) {
-    console.log("Access denied: User", user.email, "with role", user.role, "cannot access CMD routes");
+    console.log("Access denied. User role:", user.role);
     return <Navigate to="/" replace />;
   }
 
   // If authenticated and has proper role, render the protected route inside the CMD layout
-  console.log("CMD access granted for", user.email, "with role", user.role);
+  // console.log("CMD access granted for", user.email, "with role", user.role);
+  console.log("Access granted");
   return (
     <CmdLayout>
       <Outlet />
