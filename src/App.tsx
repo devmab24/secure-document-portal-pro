@@ -59,6 +59,7 @@ const Users = lazy(() => import("./pages/Users"));
 const DocumentSharing = lazy(() => import("./pages/DocumentSharing"));
 const DocumentView = lazy(() => import("./pages/DocumentView"));
 const InterDepartmentCommunication = lazy(() => import("./pages/InterDepartmentCommunication"));
+const DocumentCommunication = lazy(() => import("./pages/DocumentCommunication"));
 const AuditLogs = lazy(() => import("./pages/AuditLogs"));
 // const CoreTesting = lazy(() => import("./pages/CoreTesting"));
 
@@ -127,6 +128,7 @@ const App = () => (
                     <Route path="settings/accounts" element={<Settings />} />
                     <Route path=":departmentSlug" element={<CmdDepartmentsList />} />
                     <Route path="documents/sharing" element={<DocumentSharing />} />
+                    <Route path="document-communication" element={<DocumentCommunication />} />
 
                     {/* Forms Routes */}
                     <Route path="forms" element={<FormTemplates />} />
@@ -144,6 +146,7 @@ const App = () => (
                     <Route path="upload" element={<Upload />} />
                     <Route path="inbox" element={<HODInbox />} />                    
                     <Route path="inter-department" element={<InterDepartmentCommunication />} />
+                    <Route path="document-communication" element={<DocumentCommunication />} />
                     <Route path="submissions" element={<HodDocumentSubmissions />} />
                   
                     {/*Settings routes*/}
@@ -166,6 +169,7 @@ const App = () => (
                     <Route path="uploads" element={<Upload />} />
                     <Route path="documents" element={<Documents />} />
                     <Route path="communications" element={<StaffDocumentCommunications />} />
+                    <Route path="document-communication" element={<DocumentCommunication />} />
                     <Route path="settings" element={<Settings />} />
                     <Route path="settings/profiles" element={<Settings />} />
                     <Route path="settings/notifications" element={<Settings />} />
