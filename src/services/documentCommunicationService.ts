@@ -1,5 +1,5 @@
 
-import { MockDocument, MockUser } from 'mock-db/index';
+import { MockDocument, MockUser } from '../../mock-db/index';
 import { UserRole, Department } from '@/lib/types';
 import { mockUsers } from '@/lib/mock/users';
 

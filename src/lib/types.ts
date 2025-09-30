@@ -21,6 +21,8 @@ export enum Department {
   FINANCE = "Finance",
   IT = "Information Technology",
   ADMIN = "Administration",
+  REGISTRY = "Registry",
+  DIRECTOR_OF_ADMIN = "Director of Administration",
 }
 
 // Document Status Enum
@@ -30,7 +32,10 @@ export enum DocumentStatus {
   UNDER_REVIEW = "Under Review",
   APPROVED = "Approved",
   REJECTED = "Rejected",
-  ARCHIVED = "Archived"
+  ARCHIVED = "Archived",
+  ACTIVE = "Active",
+  PENDING_DISPOSAL = "Pending Disposal",
+  DISPOSED = "Disposed"
 }
 
 // Document Types
@@ -45,6 +50,13 @@ export enum DocumentType {
   REQUEST = "Request",
   EVALUATION = "Evaluation",
   APPLICATION = "Application",
+  PATIENT_RECORD = "Patient Record",
+  DISCHARGE_SUMMARY = "Discharge Summary",
+  REFERRAL_LETTER = "Referral Letter",
+  INCOMING_CORRESPONDENCE = "Incoming Correspondence",
+  BOARD_CORRESPONDENCE = "Board Correspondence",
+  ADMIN_POLICY = "Administrative Policy",
+  COMPLIANCE_RECORD = "Compliance Record",
   OTHER = "Other"
 }
 
@@ -163,6 +175,24 @@ export interface Document {
   signatures?: DigitalSignature[]; // Digital signatures
   isLocked?: boolean; // Whether document is locked after signing
   requiresSignature?: boolean; // Whether document requires digital signature
+  
+  // Registry-specific fields
+  registrationNumber?: string;
+  patientName?: string;
+  healthcareProfessional?: string;
+  
+  // Both departments
+  referenceNumber?: string;
+  intendedRecipient?: string;
+  documentCategory?: string;
+  retentionScheduleDate?: Date;
+  disposalStatus?: string;
+  
+  // Director of Admin-specific fields
+  confidentialityLevel?: 'standard' | 'confidential' | 'restricted' | 'board-only';
+  boardRestricted?: boolean;
+  approvalRequired?: boolean;
+  policyVersion?: string;
 }
 
 // Comment Interface

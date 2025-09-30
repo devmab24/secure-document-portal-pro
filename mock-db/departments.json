@@ -120,5 +120,27 @@
     "location": "Fourth Floor, Admin Block",
     "isActive": true,
     "createdAt": "2024-01-01T00:00:00Z"
+  },
+  {
+    "id": "dept-registry",
+    "name": "Registry",
+    "code": "REG",
+    "description": "Patient records management and general administrative correspondence",
+    "hodId": "user-hod-registry",
+    "staffCount": 10,
+    "location": "Ground Floor, Main Block",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00Z"
+  },
+  {
+    "id": "dept-director-admin",
+    "name": "Director of Administration",
+    "code": "DOA",
+    "description": "High-level administrative oversight and board management",
+    "hodId": "user-hod-director-admin",
+    "staffCount": 4,
+    "location": "Fifth Floor, Executive Block",
+    "isActive": true,
+    "createdAt": "2024-01-01T00:00:00Z"
   }
 ]

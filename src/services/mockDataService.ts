@@ -1,5 +1,5 @@
 
-import type { MockDocument, MockUser, MockDocumentShare, MockFormSubmission } from "mock-db/index";
+import type { MockDocument, MockUser, MockDocumentShare, MockFormSubmission } from "../../mock-db/index";
 import { UserRole, Department, DocumentType, DocumentStatus, ShareStatus } from "@/lib/types";
 
 // Mock Database Service

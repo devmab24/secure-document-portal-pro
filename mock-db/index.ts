@@ -103,6 +103,24 @@ export interface MockDocument {
   requiresSignature?: boolean;
   approvedAt?: string;
   approvedBy?: string;
+  
+  // Registry-specific fields
+  registrationNumber?: string;
+  patientName?: string;
+  healthcareProfessional?: string;
+  
+  // Both departments
+  referenceNumber?: string;
+  intendedRecipient?: string;
+  documentCategory?: string;
+  retentionScheduleDate?: string;
+  disposalStatus?: string;
+  
+  // Director of Admin-specific fields
+  confidentialityLevel?: 'standard' | 'confidential' | 'restricted' | 'board-only';
+  boardRestricted?: boolean;
+  approvalRequired?: boolean;
+  policyVersion?: string;
 }
 
 export interface MockFormField {

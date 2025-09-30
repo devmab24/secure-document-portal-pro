@@ -13,6 +13,17 @@ const Index = () => {
   useEffect(() => {
     if (!isLoading && user) {
       // Redirect authenticated users to their appropriate dashboard
+      // First check department-specific routes
+      if (user.department === 'Registry') {
+        navigate('/dashboard/registry');
+        return;
+      }
+      if (user.department === 'Director of Administration') {
+        navigate('/dashboard/director-admin');
+        return;
+      }
+      
+      // Then check role-based routes
       switch (user.role) {
         case 'SUPER_ADMIN':
           navigate('/dashboard/super-admin');

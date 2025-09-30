@@ -1,5 +1,5 @@
 
-import type { MockDocument } from "mock-db/index";
+import type { MockDocument } from "../../../mock-db/index";
 import type { Document } from "@/lib/types";
 import { Department, UserRole, DocumentType, DocumentStatus, ShareStatus } from "@/lib/types";
 
@@ -11,6 +11,7 @@ export const convertMockDocumentToDocument = (mockDoc: MockDocument): Document =
   type: mockDoc.type as DocumentType,
   department: mockDoc.department as Department,
   status: mockDoc.status as DocumentStatus,
+  retentionScheduleDate: mockDoc.retentionScheduleDate ? new Date(mockDoc.retentionScheduleDate) : undefined,
   comments: mockDoc.comments?.map(comment => ({
     ...comment,
     createdAt: new Date(comment.createdAt)

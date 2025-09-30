@@ -15,6 +15,8 @@ import AdminProtectedRoute from "@/components/AdminProtectedRoute";
 import CmdProtectedRoute from "@/components/CmdProtectedRoute";
 import HodProtectedRoute from "@/components/HodProtectedRoute";
 import StaffProtectedRoute from "@/components/StaffProtectedRoute";
+import RegistryProtectedRoute from "@/components/RegistryProtectedRoute";
+import DirectorAdminProtectedRoute from "@/components/DirectorAdminProtectedRoute";
 import CmdDepartmentsList from "./components/CmdDepartmentsList";
 
 // Lazy load components
@@ -46,6 +48,12 @@ const HodDocumentSubmissions = lazy(() => import("./pages/hod/HodDocumentSubmiss
 const StaffDashboard = lazy(() => import("./pages/staff/StaffDashboard"));
 const StaffInbox = lazy(() => import("./pages/staff/StaffInbox"));
 const StaffDocumentCommunications = lazy(() => import("./pages/staff/StaffDocumentCommunications"));
+
+// Registry Pages
+const RegistryDashboard = lazy(() => import("./pages/registry/RegistryDashboard"));
+
+// Director of Admin Pages
+const DirectorAdminDashboard = lazy(() => import("./pages/director-admin/DirectorAdminDashboard"));
 
 // Shared Pages
 const Documents = lazy(() => import("./pages/Documents"));
@@ -183,6 +191,29 @@ const App = () => (
                     <Route path="forms/my-forms" element={<MyForms />} />
                     <Route path="forms/view/:formId" element={<MyForms />} />
                     <Route path="forms/edit/:formId" element={<FormCreate />} />
+                  </Route>
+
+                  {/* Registry specific routes - All under /dashboard/registry */}
+                  <Route path="/dashboard/registry" element={<RegistryProtectedRoute />}>
+                    <Route index element={<RegistryDashboard />} />
+                    <Route path="documents" element={<Documents />} />
+                    <Route path="upload" element={<Upload />} />
+                    <Route path="inbox" element={<Inbox />} />
+                    <Route path="audit" element={<AuditLogs />} />
+                    <Route path="document-communication" element={<DocumentCommunication />} />
+                    <Route path="settings" element={<Settings />} />
+                  </Route>
+
+                  {/* Director of Admin specific routes - All under /dashboard/director-admin */}
+                  <Route path="/dashboard/director-admin" element={<DirectorAdminProtectedRoute />}>
+                    <Route index element={<DirectorAdminDashboard />} />
+                    <Route path="documents" element={<Documents />} />
+                    <Route path="upload" element={<Upload />} />
+                    <Route path="inbox" element={<Inbox />} />
+                    <Route path="audits" element={<AuditLogs />} />
+                    <Route path="document-communication" element={<DocumentCommunication />} />
+                    <Route path="users" element={<Users />} />
+                    <Route path="settings" element={<Settings />} />
                   </Route>
 
                   {/* Catch all route */}
