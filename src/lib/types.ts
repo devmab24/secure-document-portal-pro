@@ -4,6 +4,8 @@ export enum UserRole {
   CMD = "CMD",         // Chief Medical Director
   CMAC = "CMAC",       // Chairman Medical Advisory Council
   HEAD_OF_NURSING = "HEAD_OF_NURSING", // Head of Nursing
+  REGISTRY = "REGISTRY", // Registry Officer
+  DIRECTOR_ADMIN = "DIRECTOR_ADMIN", // Director of Administration
   HOD = "HOD",         // Head of Department
   STAFF = "STAFF",     // Regular Staff
   ADMIN = "ADMIN",     // System Administrator

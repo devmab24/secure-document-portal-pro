@@ -37,6 +37,30 @@
     "isActive": true
   },
   {
+    "id": "user-registry-1",
+    "email": "registry@hospital.org",
+    "firstName": "Patricia",
+    "lastName": "Williams",
+    "role": "REGISTRY",
+    "department": "Registry",
+    "avatarUrl": "https://i.pravatar.cc/150?img=34",
+    "createdAt": "2024-01-16T08:00:00Z",
+    "lastLogin": "2025-07-02T09:00:00Z",
+    "isActive": true
+  },
+  {
+    "id": "user-director-admin-1",
+    "email": "director.admin@hospital.org",
+    "firstName": "Richard",
+    "lastName": "Johnson",
+    "role": "DIRECTOR_ADMIN",
+    "department": "Director of Administration",
+    "avatarUrl": "https://i.pravatar.cc/150?img=35",
+    "createdAt": "2024-01-16T08:00:00Z",
+    "lastLogin": "2025-07-02T08:30:00Z",
+    "isActive": true
+  },
+  {
     "id": "user-super-admin-1",
     "email": "superadmin@hospital.org",
     "firstName": "Robert",

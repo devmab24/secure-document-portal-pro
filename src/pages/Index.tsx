@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { useAuth } from '@/contexts/AuthContext';
+import { UserRole } from '@/lib/types';
 import { FileText, Shield, Users, Zap } from 'lucide-react';
 
 const Index = () => {
@@ -12,38 +13,33 @@ const Index = () => {
 
   useEffect(() => {
     if (!isLoading && user) {
-      // Redirect authenticated users to their appropriate dashboard
-      // First check department-specific routes
-      if (user.department === 'Registry') {
-        navigate('/dashboard/registry');
-        return;
-      }
-      if (user.department === 'Director of Administration') {
-        navigate('/dashboard/director-admin');
-        return;
-      }
-      
-      // Then check role-based routes
+      // Redirect authenticated users to their appropriate dashboard based on role
       switch (user.role) {
-        case 'SUPER_ADMIN':
+        case UserRole.SUPER_ADMIN:
           navigate('/dashboard/super-admin');
           break;
-        case 'ADMIN':
+        case UserRole.ADMIN:
           navigate('/dashboard/admin');
           break;
-        case 'CMD':
+        case UserRole.CMD:
           navigate('/dashboard/cmd');
           break;
-        case 'CMAC':
+        case UserRole.CMAC:
           navigate('/dashboard/cmac');
           break;
-        case 'HEAD_OF_NURSING':
+        case UserRole.HEAD_OF_NURSING:
           navigate('/dashboard/head-of-nursing');
           break;
-        case 'HOD':
+        case UserRole.REGISTRY:
+          navigate('/dashboard/registry');
+          break;
+        case UserRole.DIRECTOR_ADMIN:
+          navigate('/dashboard/director-admin');
+          break;
+        case UserRole.HOD:
           navigate('/dashboard/hod');
           break;
-        case 'STAFF':
+        case UserRole.STAFF:
           navigate('/dashboard/staff');
           break;
         default:

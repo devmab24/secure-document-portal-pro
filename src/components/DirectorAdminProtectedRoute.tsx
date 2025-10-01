@@ -1,6 +1,6 @@
 import { Navigate, Outlet, useLocation } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
-import { Department } from "@/lib/types";
+import { UserRole } from "@/lib/types";
 import DirectorAdminLayout from "./DirectorAdminLayout";
 
 const DirectorAdminProtectedRoute = () => {
@@ -19,7 +19,7 @@ const DirectorAdminProtectedRoute = () => {
     return <Navigate to="/login" state={{ from: location }} replace />;
   }
 
-  if (user.department !== Department.DIRECTOR_OF_ADMIN) {
+  if (user.role !== UserRole.DIRECTOR_ADMIN && user.role !== UserRole.SUPER_ADMIN) {
     return <Navigate to="/" replace />;
   }
 

@@ -1,6 +1,6 @@
 import { Navigate, Outlet, useLocation } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
-import { Department } from "@/lib/types";
+import { UserRole } from "@/lib/types";
 import RegistryLayout from "./RegistryLayout";
 
 const RegistryProtectedRoute = () => {
@@ -19,7 +19,7 @@ const RegistryProtectedRoute = () => {
     return <Navigate to="/login" state={{ from: location }} replace />;
   }
 
-  if (user.department !== Department.REGISTRY) {
+  if (user.role !== UserRole.REGISTRY && user.role !== UserRole.SUPER_ADMIN) {
     return <Navigate to="/" replace />;
   }
 
