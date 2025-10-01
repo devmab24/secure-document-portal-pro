@@ -13,6 +13,8 @@ import ProtectedRoute from "@/components/ProtectedRoute";
 import SuperAdminProtectedRoute from "@/components/SuperAdminProtectedRoute";
 import AdminProtectedRoute from "@/components/AdminProtectedRoute";
 import CmdProtectedRoute from "@/components/CmdProtectedRoute";
+import CmacProtectedRoute from "@/components/CmacProtectedRoute";
+import HeadOfNursingProtectedRoute from "@/components/HeadOfNursingProtectedRoute";
 import HodProtectedRoute from "@/components/HodProtectedRoute";
 import StaffProtectedRoute from "@/components/StaffProtectedRoute";
 import RegistryProtectedRoute from "@/components/RegistryProtectedRoute";
@@ -54,6 +56,12 @@ const RegistryDashboard = lazy(() => import("./pages/registry/RegistryDashboard"
 
 // Director of Admin Pages
 const DirectorAdminDashboard = lazy(() => import("./pages/director-admin/DirectorAdminDashboard"));
+
+// CMAC Pages
+const CmacDashboard = lazy(() => import("./pages/cmac/CmacDashboard"));
+
+// Head of Nursing Pages
+const HeadOfNursingDashboard = lazy(() => import("./pages/head-of-nursing/HeadOfNursingDashboard"));
 
 // Shared Pages
 const Documents = lazy(() => import("./pages/Documents"));
@@ -213,6 +221,35 @@ const App = () => (
                     <Route path="audits" element={<AuditLogs />} />
                     <Route path="document-communication" element={<DocumentCommunication />} />
                     <Route path="users" element={<Users />} />
+                    <Route path="settings" element={<Settings />} />
+                  </Route>
+
+                  {/* CMAC specific routes - All under /dashboard/cmac */}
+                  <Route path="/dashboard/cmac" element={<CmacProtectedRoute />}>
+                    <Route index element={<CmacDashboard />} />
+                    <Route path="clinical-oversight" element={<CmacDashboard />} />
+                    <Route path="quality-control" element={<CmacDashboard />} />
+                    <Route path="documents" element={<Documents />} />
+                    <Route path="upload" element={<Upload />} />
+                    <Route path="inbox" element={<Inbox />} />
+                    <Route path="audits" element={<AuditLogs />} />
+                    <Route path="document-communication" element={<DocumentCommunication />} />
+                    <Route path="medical-staff" element={<Users />} />
+                    <Route path="settings" element={<Settings />} />
+                  </Route>
+
+                  {/* Head of Nursing specific routes - All under /dashboard/head-of-nursing */}
+                  <Route path="/dashboard/head-of-nursing" element={<HeadOfNursingProtectedRoute />}>
+                    <Route index element={<HeadOfNursingDashboard />} />
+                    <Route path="nursing-staff" element={<Users />} />
+                    <Route path="duty-roster" element={<HeadOfNursingDashboard />} />
+                    <Route path="training" element={<HeadOfNursingDashboard />} />
+                    <Route path="infection-control" element={<HeadOfNursingDashboard />} />
+                    <Route path="documents" element={<Documents />} />
+                    <Route path="upload" element={<Upload />} />
+                    <Route path="inbox" element={<Inbox />} />
+                    <Route path="audits" element={<AuditLogs />} />
+                    <Route path="document-communication" element={<DocumentCommunication />} />
                     <Route path="settings" element={<Settings />} />
                   </Route>
 

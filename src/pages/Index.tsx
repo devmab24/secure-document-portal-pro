@@ -34,6 +34,12 @@ const Index = () => {
         case 'CMD':
           navigate('/dashboard/cmd');
           break;
+        case 'CMAC':
+          navigate('/dashboard/cmac');
+          break;
+        case 'HEAD_OF_NURSING':
+          navigate('/dashboard/head-of-nursing');
+          break;
         case 'HOD':
           navigate('/dashboard/hod');
           break;
