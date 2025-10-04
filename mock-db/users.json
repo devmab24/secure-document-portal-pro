@@ -73,6 +73,18 @@
     "isActive": true
   },
   {
+    "id": "user-chief-procurement-1",
+    "email": "chief.procurement@hospital.org",
+    "firstName": "Ibrahim",
+    "lastName": "Musa",
+    "role": "CHIEF_PROCUREMENT_OFFICER",
+    "department": "Administration",
+    "avatarUrl": "https://i.pravatar.cc/150?img=43",
+    "createdAt": "2024-01-16T08:00:00Z",
+    "lastLogin": "2025-07-02T09:15:00Z",
+    "isActive": true
+  },
+  {
     "id": "user-super-admin-1",
     "email": "superadmin@hospital.org",
     "firstName": "Robert",

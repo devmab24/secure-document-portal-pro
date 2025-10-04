@@ -16,6 +16,7 @@ import CmdProtectedRoute from "@/components/CmdProtectedRoute";
 import CmacProtectedRoute from "@/components/CmacProtectedRoute";
 import HeadOfNursingProtectedRoute from "@/components/HeadOfNursingProtectedRoute";
 import ChiefAccountantProtectedRoute from "@/components/ChiefAccountantProtectedRoute";
+import ChiefProcurementProtectedRoute from "@/components/ChiefProcurementProtectedRoute";
 import HodProtectedRoute from "@/components/HodProtectedRoute";
 import StaffProtectedRoute from "@/components/StaffProtectedRoute";
 import RegistryProtectedRoute from "@/components/RegistryProtectedRoute";
@@ -66,6 +67,9 @@ const HeadOfNursingDashboard = lazy(() => import("./pages/head-of-nursing/HeadOf
 
 // Chief Accountant Pages
 const ChiefAccountantDashboard = lazy(() => import("./pages/chief-accountant/ChiefAccountantDashboard"));
+
+// Chief Procurement Officer Pages
+const ChiefProcurementDashboard = lazy(() => import("./pages/chief-procurement/ChiefProcurementDashboard"));
 
 // Shared Pages
 const Documents = lazy(() => import("./pages/Documents"));
@@ -262,6 +266,23 @@ const App = () => (
                     <Route index element={<ChiefAccountantDashboard />} />
                     <Route path="financial-reports" element={<ChiefAccountantDashboard />} />
                     <Route path="budget-planning" element={<ChiefAccountantDashboard />} />
+                    <Route path="documents" element={<Documents />} />
+                    <Route path="upload" element={<Upload />} />
+                    <Route path="inbox" element={<Inbox />} />
+                    <Route path="audits" element={<AuditLogs />} />
+                    <Route path="document-communication" element={<DocumentCommunication />} />
+                    <Route path="settings" element={<Settings />} />
+                  </Route>
+
+                  {/* Chief Procurement Officer specific routes - All under /dashboard/chief-procurement */}
+                  <Route path="/dashboard/chief-procurement" element={<ChiefProcurementProtectedRoute />}>
+                    <Route index element={<ChiefProcurementDashboard />} />
+                    <Route path="requisitions" element={<ChiefProcurementDashboard />} />
+                    <Route path="vendors" element={<ChiefProcurementDashboard />} />
+                    <Route path="contracts" element={<ChiefProcurementDashboard />} />
+                    <Route path="purchase-orders" element={<ChiefProcurementDashboard />} />
+                    <Route path="due-process" element={<ChiefProcurementDashboard />} />
+                    <Route path="reports" element={<ChiefProcurementDashboard />} />
                     <Route path="documents" element={<Documents />} />
                     <Route path="upload" element={<Upload />} />
                     <Route path="inbox" element={<Inbox />} />

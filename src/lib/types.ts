@@ -7,6 +7,7 @@ export enum UserRole {
   REGISTRY = "REGISTRY", // Registry Officer
   DIRECTOR_ADMIN = "DIRECTOR_ADMIN", // Director of Administration
   CHIEF_ACCOUNTANT = "CHIEF_ACCOUNTANT", // Chief Accountant
+  CHIEF_PROCUREMENT_OFFICER = "CHIEF_PROCUREMENT_OFFICER", // Chief Procurement Officer
   HOD = "HOD",         // Head of Department
   STAFF = "STAFF",     // Regular Staff
   ADMIN = "ADMIN",     // System Administrator
