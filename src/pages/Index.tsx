@@ -30,6 +30,9 @@ const Index = () => {
         case UserRole.HEAD_OF_NURSING:
           navigate('/dashboard/head-of-nursing');
           break;
+        case UserRole.CHIEF_ACCOUNTANT:
+          navigate('/dashboard/chief-accountant');
+          break;
         case UserRole.REGISTRY:
           navigate('/dashboard/registry');
           break;

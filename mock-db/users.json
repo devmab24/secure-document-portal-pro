@@ -61,6 +61,18 @@
     "isActive": true
   },
   {
+    "id": "user-chief-accountant-1",
+    "email": "chief.accountant@hospital.org",
+    "firstName": "Benjamin",
+    "lastName": "Okonkwo",
+    "role": "CHIEF_ACCOUNTANT",
+    "department": "Finance",
+    "avatarUrl": "https://i.pravatar.cc/150?img=42",
+    "createdAt": "2024-01-16T08:00:00Z",
+    "lastLogin": "2025-07-02T08:45:00Z",
+    "isActive": true
+  },
+  {
     "id": "user-super-admin-1",
     "email": "superadmin@hospital.org",
     "firstName": "Robert",

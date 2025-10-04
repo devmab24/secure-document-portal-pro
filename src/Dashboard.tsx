@@ -24,6 +24,21 @@ const RedirectDashboard = () => {
         case UserRole.SUPER_ADMIN:
           navigate("/dashboard/super-admin", { replace: true });
           break;
+        case UserRole.CMAC:
+          navigate("/dashboard/cmac", { replace: true });
+          break;
+        case UserRole.HEAD_OF_NURSING:
+          navigate("/dashboard/head-of-nursing", { replace: true });
+          break;
+        case UserRole.CHIEF_ACCOUNTANT:
+          navigate("/dashboard/chief-accountant", { replace: true });
+          break;
+        case UserRole.REGISTRY:
+          navigate("/dashboard/registry", { replace: true });
+          break;
+        case UserRole.DIRECTOR_ADMIN:
+          navigate("/dashboard/director-admin", { replace: true });
+          break;
         case UserRole.STAFF:
           navigate("/dashboard/staff", { replace: true });
           break;

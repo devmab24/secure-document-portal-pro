@@ -58,6 +58,17 @@ export const mockUsers: User[] = [
     avatarUrl: "https://i.pravatar.cc/150?img=35"
   },
   
+  // Chief Accountant - 1 user
+  {
+    id: "user-chief-accountant-1",
+    email: "chief.accountant@hospital.org",
+    firstName: "Benjamin",
+    lastName: "Okonkwo",
+    role: UserRole.CHIEF_ACCOUNTANT,
+    department: Department.FINANCE,
+    avatarUrl: "https://i.pravatar.cc/150?img=42"
+  },
+  
   // Super Administrators - 1 user
   {
     id: "user-super-admin-1",
@@ -435,6 +446,7 @@ export const getCMACUsers = (): User[] => getUsersByRole(UserRole.CMAC);
 export const getHeadOfNursingUsers = (): User[] => getUsersByRole(UserRole.HEAD_OF_NURSING);
 export const getRegistryUsers = (): User[] => getUsersByRole(UserRole.REGISTRY);
 export const getDirectorAdminUsers = (): User[] => getUsersByRole(UserRole.DIRECTOR_ADMIN);
+export const getChiefAccountantUsers = (): User[] => getUsersByRole(UserRole.CHIEF_ACCOUNTANT);
 export const getAdminUsers = (): User[] => getUsersByRole(UserRole.ADMIN);
 export const getSuperAdminUsers = (): User[] => getUsersByRole(UserRole.SUPER_ADMIN);
 export const getHODUsers = (): User[] => getUsersByRole(UserRole.HOD);

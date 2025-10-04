@@ -15,6 +15,7 @@ import AdminProtectedRoute from "@/components/AdminProtectedRoute";
 import CmdProtectedRoute from "@/components/CmdProtectedRoute";
 import CmacProtectedRoute from "@/components/CmacProtectedRoute";
 import HeadOfNursingProtectedRoute from "@/components/HeadOfNursingProtectedRoute";
+import ChiefAccountantProtectedRoute from "@/components/ChiefAccountantProtectedRoute";
 import HodProtectedRoute from "@/components/HodProtectedRoute";
 import StaffProtectedRoute from "@/components/StaffProtectedRoute";
 import RegistryProtectedRoute from "@/components/RegistryProtectedRoute";
@@ -62,6 +63,9 @@ const CmacDashboard = lazy(() => import("./pages/cmac/CmacDashboard"));
 
 // Head of Nursing Pages
 const HeadOfNursingDashboard = lazy(() => import("./pages/head-of-nursing/HeadOfNursingDashboard"));
+
+// Chief Accountant Pages
+const ChiefAccountantDashboard = lazy(() => import("./pages/chief-accountant/ChiefAccountantDashboard"));
 
 // Shared Pages
 const Documents = lazy(() => import("./pages/Documents"));
@@ -245,6 +249,19 @@ const App = () => (
                     <Route path="duty-roster" element={<HeadOfNursingDashboard />} />
                     <Route path="training" element={<HeadOfNursingDashboard />} />
                     <Route path="infection-control" element={<HeadOfNursingDashboard />} />
+                    <Route path="documents" element={<Documents />} />
+                    <Route path="upload" element={<Upload />} />
+                    <Route path="inbox" element={<Inbox />} />
+                    <Route path="audits" element={<AuditLogs />} />
+                    <Route path="document-communication" element={<DocumentCommunication />} />
+                    <Route path="settings" element={<Settings />} />
+                  </Route>
+
+                  {/* Chief Accountant specific routes - All under /dashboard/chief-accountant */}
+                  <Route path="/dashboard/chief-accountant" element={<ChiefAccountantProtectedRoute />}>
+                    <Route index element={<ChiefAccountantDashboard />} />
+                    <Route path="financial-reports" element={<ChiefAccountantDashboard />} />
+                    <Route path="budget-planning" element={<ChiefAccountantDashboard />} />
                     <Route path="documents" element={<Documents />} />
                     <Route path="upload" element={<Upload />} />
                     <Route path="inbox" element={<Inbox />} />
