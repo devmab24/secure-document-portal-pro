@@ -17,6 +17,7 @@ import CmacProtectedRoute from "@/components/CmacProtectedRoute";
 import HeadOfNursingProtectedRoute from "@/components/HeadOfNursingProtectedRoute";
 import ChiefAccountantProtectedRoute from "@/components/ChiefAccountantProtectedRoute";
 import ChiefProcurementProtectedRoute from "@/components/ChiefProcurementProtectedRoute";
+import MedicalRecordsProtectedRoute from "@/components/MedicalRecordsProtectedRoute";
 import HodProtectedRoute from "@/components/HodProtectedRoute";
 import StaffProtectedRoute from "@/components/StaffProtectedRoute";
 import RegistryProtectedRoute from "@/components/RegistryProtectedRoute";
@@ -70,6 +71,9 @@ const ChiefAccountantDashboard = lazy(() => import("./pages/chief-accountant/Chi
 
 // Chief Procurement Officer Pages
 const ChiefProcurementDashboard = lazy(() => import("./pages/chief-procurement/ChiefProcurementDashboard"));
+
+// Medical Records Officer Pages
+const MedicalRecordsDashboard = lazy(() => import("./pages/medical-records/MedicalRecordsDashboard"));
 
 // Shared Pages
 const Documents = lazy(() => import("./pages/Documents"));
@@ -283,6 +287,23 @@ const App = () => (
                     <Route path="purchase-orders" element={<ChiefProcurementDashboard />} />
                     <Route path="due-process" element={<ChiefProcurementDashboard />} />
                     <Route path="reports" element={<ChiefProcurementDashboard />} />
+                    <Route path="documents" element={<Documents />} />
+                    <Route path="upload" element={<Upload />} />
+                    <Route path="inbox" element={<Inbox />} />
+                    <Route path="audits" element={<AuditLogs />} />
+                    <Route path="document-communication" element={<DocumentCommunication />} />
+                    <Route path="settings" element={<Settings />} />
+                  </Route>
+
+                  {/* Medical Records Officer specific routes - All under /dashboard/medical-records */}
+                  <Route path="/dashboard/medical-records" element={<MedicalRecordsProtectedRoute />}>
+                    <Route index element={<MedicalRecordsDashboard />} />
+                    <Route path="patient-records" element={<MedicalRecordsDashboard />} />
+                    <Route path="clinical-docs" element={<MedicalRecordsDashboard />} />
+                    <Route path="compliance" element={<MedicalRecordsDashboard />} />
+                    <Route path="reports" element={<MedicalRecordsDashboard />} />
+                    <Route path="retention" element={<MedicalRecordsDashboard />} />
+                    <Route path="departments" element={<MedicalRecordsDashboard />} />
                     <Route path="documents" element={<Documents />} />
                     <Route path="upload" element={<Upload />} />
                     <Route path="inbox" element={<Inbox />} />

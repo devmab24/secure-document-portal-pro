@@ -85,6 +85,18 @@
     "isActive": true
   },
   {
+    "id": "user-medical-records-1",
+    "email": "medical.records@hospital.org",
+    "firstName": "Amina",
+    "lastName": "Yusuf",
+    "role": "MEDICAL_RECORDS_OFFICER",
+    "department": "Administration",
+    "avatarUrl": "https://i.pravatar.cc/150?img=44",
+    "createdAt": "2024-01-16T08:00:00Z",
+    "lastLogin": "2025-07-02T09:30:00Z",
+    "isActive": true
+  },
+  {
     "id": "user-super-admin-1",
     "email": "superadmin@hospital.org",
     "firstName": "Robert",

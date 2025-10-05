@@ -36,6 +36,9 @@ const RedirectDashboard = () => {
         case UserRole.CHIEF_PROCUREMENT_OFFICER:
           navigate("/dashboard/chief-procurement", { replace: true });
           break;
+        case UserRole.MEDICAL_RECORDS_OFFICER:
+          navigate("/dashboard/medical-records", { replace: true });
+          break;
         case UserRole.REGISTRY:
           navigate("/dashboard/registry", { replace: true });
           break;
