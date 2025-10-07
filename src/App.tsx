@@ -89,6 +89,7 @@ const DocumentView = lazy(() => import("./pages/DocumentView"));
 const InterDepartmentCommunication = lazy(() => import("./pages/InterDepartmentCommunication"));
 const DocumentCommunication = lazy(() => import("./pages/DocumentCommunication"));
 const AuditLogs = lazy(() => import("./pages/AuditLogs"));
+const DatabaseSeeding = lazy(() => import("./pages/DatabaseSeeding"));
 // const CoreTesting = lazy(() => import("./pages/CoreTesting"));
 
 const queryClient = new QueryClient();
@@ -110,6 +111,9 @@ const App = () => (
                   <Route path="/" element={<Index />} />
                   <Route path="/login" element={<Login />} />
                   <Route path="/auth" element={<Login />} />
+                  
+                  {/* Database Seeding Route for Testing */}
+                  <Route path="/database-seeding" element={<DatabaseSeeding />} />
 
                   {/* Super Admin specific routes - All under /dashboard/super-admin */}
                   <Route path="/dashboard/super-admin" element={<SuperAdminProtectedRoute />}>
