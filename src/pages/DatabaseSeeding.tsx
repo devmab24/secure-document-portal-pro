@@ -83,32 +83,74 @@ const DatabaseSeeding = () => {
               <div className="border-t pt-4 mt-6">
                 <h3 className="font-semibold mb-2">Test User Credentials</h3>
                 <p className="text-sm text-muted-foreground mb-3">
-                  All seeded users use the password: <code className="bg-muted px-2 py-1 rounded">Test@1234</code>
+                  All seeded users use the password: <code className="bg-muted px-2 py-1 rounded">password123</code>
                 </p>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-sm">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2 text-sm">
                   <div className="p-2 bg-muted rounded">
-                    <span className="font-semibold">CMD:</span> cmd@fmcjalingo.gov.ng
+                    <span className="font-semibold">CMD:</span> cmd@test.com
                   </div>
                   <div className="p-2 bg-muted rounded">
-                    <span className="font-semibold">HOD (Radiology):</span> hod.radiology@fmcjalingo.gov.ng
+                    <span className="font-semibold">Super Admin:</span> superadmin@test.com
                   </div>
                   <div className="p-2 bg-muted rounded">
-                    <span className="font-semibold">CMAC:</span> cmac@fmcjalingo.gov.ng
+                    <span className="font-semibold">Admin:</span> admin@test.com
                   </div>
                   <div className="p-2 bg-muted rounded">
-                    <span className="font-semibold">Admin:</span> admin@fmcjalingo.gov.ng
+                    <span className="font-semibold">Chief Accountant:</span> ca@test.com
                   </div>
                   <div className="p-2 bg-muted rounded">
-                    <span className="font-semibold">Chief Accountant:</span> ca@fmcjalingo.gov.ng
+                    <span className="font-semibold">Chief Procurement:</span> cpo@test.com
                   </div>
                   <div className="p-2 bg-muted rounded">
-                    <span className="font-semibold">Chief Procurement:</span> cpo@fmcjalingo.gov.ng
+                    <span className="font-semibold">Director Admin:</span> directoradmin@test.com
                   </div>
                   <div className="p-2 bg-muted rounded">
-                    <span className="font-semibold">Registry:</span> registry@fmcjalingo.gov.ng
+                    <span className="font-semibold">Head of Nursing:</span> headnursing@test.com
                   </div>
                   <div className="p-2 bg-muted rounded">
-                    <span className="font-semibold">Medical Records:</span> medrecords@fmcjalingo.gov.ng
+                    <span className="font-semibold">CMAC:</span> cmac@test.com
+                  </div>
+                  <div className="p-2 bg-muted rounded">
+                    <span className="font-semibold">Registry:</span> registry@test.com
+                  </div>
+                  <div className="p-2 bg-muted rounded">
+                    <span className="font-semibold">Medical Records:</span> medrecords@test.com
+                  </div>
+                  <div className="p-2 bg-muted rounded">
+                    <span className="font-semibold">HOD Radiology:</span> hod.radiology@test.com
+                  </div>
+                  <div className="p-2 bg-muted rounded">
+                    <span className="font-semibold">HOD Dental:</span> hod.dental@test.com
+                  </div>
+                  <div className="p-2 bg-muted rounded">
+                    <span className="font-semibold">HOD Emergency:</span> hod.emergency@test.com
+                  </div>
+                  <div className="p-2 bg-muted rounded">
+                    <span className="font-semibold">HOD Pharmacy:</span> hod.pharmacy@test.com
+                  </div>
+                  <div className="p-2 bg-muted rounded">
+                    <span className="font-semibold">HOD Finance:</span> hod.finance@test.com
+                  </div>
+                  <div className="p-2 bg-muted rounded">
+                    <span className="font-semibold">HOD HR:</span> hod.hr@test.com
+                  </div>
+                  <div className="p-2 bg-muted rounded">
+                    <span className="font-semibold">Staff Radiology:</span> staff.radiology@test.com
+                  </div>
+                  <div className="p-2 bg-muted rounded">
+                    <span className="font-semibold">Staff Dental:</span> staff.dental@test.com
+                  </div>
+                  <div className="p-2 bg-muted rounded">
+                    <span className="font-semibold">Staff Emergency:</span> staff.emergency@test.com
+                  </div>
+                  <div className="p-2 bg-muted rounded">
+                    <span className="font-semibold">Staff Pharmacy:</span> staff.pharmacy@test.com
+                  </div>
+                  <div className="p-2 bg-muted rounded">
+                    <span className="font-semibold">Staff Finance:</span> staff.finance@test.com
+                  </div>
+                  <div className="p-2 bg-muted rounded">
+                    <span className="font-semibold">Staff Registry:</span> staff.registry@test.com
                   </div>
                 </div>
               </div>
