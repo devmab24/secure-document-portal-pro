@@ -19,31 +19,45 @@ const Login = () => {
     const location = useLocation(); 
 
     // Helper function to get dashboard route based on user role
-    const getDashboardRoute = (userRole: UserRole) => {
-        switch (userRole) {
+    const getDashboardRoute = (userRole: UserRole | string) => {
+        const role = userRole as string;
+        switch (role) {
         case UserRole.CMD:
+        case 'CMD':
             return '/dashboard/cmd';
         case UserRole.HOD:
+        case 'HOD':
             return '/dashboard/hod';
         case UserRole.ADMIN:
+        case 'ADMIN':
             return '/dashboard/admin';
         case UserRole.SUPER_ADMIN:
+        case 'SUPER_ADMIN':
             return '/dashboard/super-admin';
         case UserRole.STAFF:
+        case 'STAFF':
             return '/dashboard/staff';
         case UserRole.CMAC:
+        case 'CMAC':
             return '/dashboard/cmac';
         case UserRole.HEAD_OF_NURSING:
+        case 'HEAD_OF_NURSING':
             return '/dashboard/head-of-nursing';
         case UserRole.REGISTRY:
+        case 'REGISTRY':
+        case 'REGISTRY_OFFICER':
             return '/dashboard/registry';
         case UserRole.DIRECTOR_ADMIN:
+        case 'DIRECTOR_ADMIN':
             return '/dashboard/director-admin';
         case UserRole.CHIEF_ACCOUNTANT:
+        case 'CHIEF_ACCOUNTANT':
             return '/dashboard/chief-accountant';
         case UserRole.CHIEF_PROCUREMENT_OFFICER:
+        case 'CHIEF_PROCUREMENT_OFFICER':
             return '/dashboard/chief-procurement';
         case UserRole.MEDICAL_RECORDS_OFFICER:
+        case 'MEDICAL_RECORDS_OFFICER':
             return '/dashboard/medical-records';
         default:
             return '/dashboard/staff';
