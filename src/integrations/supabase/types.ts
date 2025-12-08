@@ -109,6 +109,51 @@ export type Database = {
           },
         ]
       }
+      document_access_log: {
+        Row: {
+          access_timestamp: string | null
+          access_type: string
+          document_id: string | null
+          id: string
+          ip_address: string | null
+          notes: string | null
+          user_id: string | null
+        }
+        Insert: {
+          access_timestamp?: string | null
+          access_type: string
+          document_id?: string | null
+          id?: string
+          ip_address?: string | null
+          notes?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          access_timestamp?: string | null
+          access_type?: string
+          document_id?: string | null
+          id?: string
+          ip_address?: string | null
+          notes?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "document_access_log_document_id_fkey"
+            columns: ["document_id"]
+            isOneToOne: false
+            referencedRelation: "documents"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "document_access_log_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       document_comments: {
         Row: {
           comment: string
@@ -142,6 +187,67 @@ export type Database = {
           {
             foreignKeyName: "document_comments_user_id_fkey"
             columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      document_requests: {
+        Row: {
+          access_duration_days: number | null
+          approved_at: string | null
+          approver_id: string | null
+          document_id: string | null
+          id: string
+          rejection_reason: string | null
+          request_reason: string
+          request_status: string | null
+          requested_at: string | null
+          requester_id: string | null
+        }
+        Insert: {
+          access_duration_days?: number | null
+          approved_at?: string | null
+          approver_id?: string | null
+          document_id?: string | null
+          id?: string
+          rejection_reason?: string | null
+          request_reason: string
+          request_status?: string | null
+          requested_at?: string | null
+          requester_id?: string | null
+        }
+        Update: {
+          access_duration_days?: number | null
+          approved_at?: string | null
+          approver_id?: string | null
+          document_id?: string | null
+          id?: string
+          rejection_reason?: string | null
+          request_reason?: string
+          request_status?: string | null
+          requested_at?: string | null
+          requester_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "document_requests_approver_id_fkey"
+            columns: ["approver_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "document_requests_document_id_fkey"
+            columns: ["document_id"]
+            isOneToOne: false
+            referencedRelation: "documents"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "document_requests_requester_id_fkey"
+            columns: ["requester_id"]
             isOneToOne: false
             referencedRelation: "users"
             referencedColumns: ["id"]
@@ -247,22 +353,34 @@ export type Database = {
       documents: {
         Row: {
           approval_chain: string[] | null
+          approval_required: boolean | null
           assigned_to: string | null
+          board_restricted: boolean | null
+          confidentiality_level: string | null
           created_at: string | null
           created_by: string | null
           current_approver: string | null
           description: string | null
+          disposal_status: string | null
+          document_category: string | null
           document_type: string | null
           file_size: number | null
           file_type: string | null
           file_url: string | null
           form_data: Json | null
+          healthcare_professional: string | null
           id: string
+          intended_recipient: string | null
           is_digital_form: boolean | null
           is_locked: boolean | null
           name: string
+          patient_name: string | null
+          policy_version: string | null
           priority: string | null
+          reference_number: string | null
+          registration_number: string | null
           requires_signature: boolean | null
+          retention_schedule_date: string | null
           status: string | null
           tags: string[] | null
           template_id: string | null
@@ -271,22 +389,34 @@ export type Database = {
         }
         Insert: {
           approval_chain?: string[] | null
+          approval_required?: boolean | null
           assigned_to?: string | null
+          board_restricted?: boolean | null
+          confidentiality_level?: string | null
           created_at?: string | null
           created_by?: string | null
           current_approver?: string | null
           description?: string | null
+          disposal_status?: string | null
+          document_category?: string | null
           document_type?: string | null
           file_size?: number | null
           file_type?: string | null
           file_url?: string | null
           form_data?: Json | null
+          healthcare_professional?: string | null
           id?: string
+          intended_recipient?: string | null
           is_digital_form?: boolean | null
           is_locked?: boolean | null
           name: string
+          patient_name?: string | null
+          policy_version?: string | null
           priority?: string | null
+          reference_number?: string | null
+          registration_number?: string | null
           requires_signature?: boolean | null
+          retention_schedule_date?: string | null
           status?: string | null
           tags?: string[] | null
           template_id?: string | null
@@ -295,22 +425,34 @@ export type Database = {
         }
         Update: {
           approval_chain?: string[] | null
+          approval_required?: boolean | null
           assigned_to?: string | null
+          board_restricted?: boolean | null
+          confidentiality_level?: string | null
           created_at?: string | null
           created_by?: string | null
           current_approver?: string | null
           description?: string | null
+          disposal_status?: string | null
+          document_category?: string | null
           document_type?: string | null
           file_size?: number | null
           file_type?: string | null
           file_url?: string | null
           form_data?: Json | null
+          healthcare_professional?: string | null
           id?: string
+          intended_recipient?: string | null
           is_digital_form?: boolean | null
           is_locked?: boolean | null
           name?: string
+          patient_name?: string | null
+          policy_version?: string | null
           priority?: string | null
+          reference_number?: string | null
+          registration_number?: string | null
           requires_signature?: boolean | null
+          retention_schedule_date?: string | null
           status?: string | null
           tags?: string[] | null
           template_id?: string | null

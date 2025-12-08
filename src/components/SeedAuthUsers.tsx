@@ -10,15 +10,35 @@ type SeedResult = {
 };
 
 const testUsers = [
+  // Core Leadership
   { email: "cmd@test.com", password: "password123", firstName: "Chief Medical", lastName: "Director", role: "CMD", department: "Administration" },
   { email: "superadmin@test.com", password: "password123", firstName: "Super", lastName: "Admin", role: "SUPER_ADMIN", department: "Information Technology" },
   { email: "admin@test.com", password: "password123", firstName: "System", lastName: "Admin", role: "ADMIN", department: "Information Technology" },
+  
+  // Special Roles
+  { email: "ca@test.com", password: "password123", firstName: "Chief", lastName: "Accountant", role: "CHIEF_ACCOUNTANT", department: "Finance" },
+  { email: "cpo@test.com", password: "password123", firstName: "Chief Procurement", lastName: "Officer", role: "CHIEF_PROCUREMENT_OFFICER", department: "Procurement" },
+  { email: "directoradmin@test.com", password: "password123", firstName: "Director", lastName: "Admin", role: "DIRECTOR_ADMIN", department: "Administration" },
+  { email: "headnursing@test.com", password: "password123", firstName: "Head of", lastName: "Nursing", role: "HEAD_OF_NURSING", department: "Nursing" },
+  { email: "cmac@test.com", password: "password123", firstName: "CMAC", lastName: "Officer", role: "CMAC", department: "Administration" },
+  { email: "registry@test.com", password: "password123", firstName: "Registry", lastName: "Officer", role: "REGISTRY_OFFICER", department: "Registry" },
+  { email: "medrecords@test.com", password: "password123", firstName: "Medical Records", lastName: "Officer", role: "MEDICAL_RECORDS_OFFICER", department: "Medical Records" },
+  
+  // HODs (Heads of Department)
   { email: "hod.radiology@test.com", password: "password123", firstName: "Dr. Sarah", lastName: "Johnson", role: "HOD", department: "Radiology" },
   { email: "hod.dental@test.com", password: "password123", firstName: "Dr. Michael", lastName: "Chen", role: "HOD", department: "Dental" },
   { email: "hod.emergency@test.com", password: "password123", firstName: "Dr. Marcus", lastName: "Williams", role: "HOD", department: "Accident & Emergency" },
+  { email: "hod.pharmacy@test.com", password: "password123", firstName: "Dr. Amina", lastName: "Yusuf", role: "HOD", department: "Pharmacy" },
+  { email: "hod.finance@test.com", password: "password123", firstName: "Dr. Ibrahim", lastName: "Musa", role: "HOD", department: "Finance" },
+  { email: "hod.hr@test.com", password: "password123", firstName: "Dr. Fatima", lastName: "Bello", role: "HOD", department: "Human Resources" },
+  
+  // Staff Members
   { email: "staff.radiology@test.com", password: "password123", firstName: "Lisa", lastName: "Garcia", role: "STAFF", department: "Radiology" },
   { email: "staff.dental@test.com", password: "password123", firstName: "Kevin", lastName: "Zhao", role: "STAFF", department: "Dental" },
   { email: "staff.emergency@test.com", password: "password123", firstName: "Amanda", lastName: "Foster", role: "STAFF", department: "Accident & Emergency" },
+  { email: "staff.pharmacy@test.com", password: "password123", firstName: "Musa", lastName: "Adamu", role: "STAFF", department: "Pharmacy" },
+  { email: "staff.finance@test.com", password: "password123", firstName: "Grace", lastName: "Ojo", role: "STAFF", department: "Finance" },
+  { email: "staff.registry@test.com", password: "password123", firstName: "John", lastName: "Danladi", role: "STAFF", department: "Registry" },
 ];
 
 const SeedAuthUsers: React.FC = () => {

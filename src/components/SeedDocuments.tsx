@@ -303,33 +303,14 @@ export const SeedDocuments = () => {
         return;
       }
 
-      // Get all users to assign documents properly
-      const { data: users, error: usersError } = await supabase
-        .from('users')
-        .select('id, role, department');
+      // Get all users - use service role approach or get current user's info
+      // Since RLS restricts users table, we'll use the current user as creator
+      const currentUserId = user.id;
 
-      if (usersError) {
-        toast.error("Failed to fetch users for document assignment");
-        console.error(usersError);
-        setSeeding(false);
-        return;
-      }
-
-      // Create documents
+      // Create documents - all created by current logged in user
       for (const doc of mockDocuments) {
         try {
-          // Find appropriate user based on department/role
-          const departmentUser = users?.find(u => u.department === doc.department);
-          const createdBy = departmentUser?.id || user.id;
-
-          // Assign to CMD or appropriate HOD for review
-          const cmdUser = users?.find(u => u.role === 'CMD');
-          const hodUser = users?.find(u => u.role === 'HOD' && u.department === doc.department);
-          const assignedTo = doc.status === 'SUBMITTED' || doc.status === 'UNDER_REVIEW' 
-            ? (cmdUser?.id || hodUser?.id || null)
-            : null;
-
-          const { data, error } = await supabase
+          const { error } = await supabase
             .from('documents')
             .insert({
               name: doc.name,
@@ -342,15 +323,11 @@ export const SeedDocuments = () => {
               file_type: doc.file_type,
               file_size: doc.file_size,
               file_url: doc.file_url,
-              created_by: createdBy,
-              assigned_to: assignedTo,
-              current_approver: assignedTo,
+              created_by: currentUserId,
               reference_number: doc.reference_number,
               confidentiality_level: doc.confidentiality_level || 'standard',
               version: 1
-            })
-            .select()
-            .single();
+            });
 
           if (error) {
             if (error.code === '23505') { // Unique constraint violation
