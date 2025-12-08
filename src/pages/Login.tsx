@@ -31,8 +31,22 @@ const Login = () => {
             return '/dashboard/super-admin';
         case UserRole.STAFF:
             return '/dashboard/staff';
+        case UserRole.CMAC:
+            return '/dashboard/cmac';
+        case UserRole.HEAD_OF_NURSING:
+            return '/dashboard/head-of-nursing';
+        case UserRole.REGISTRY:
+            return '/dashboard/registry';
+        case UserRole.DIRECTOR_ADMIN:
+            return '/dashboard/director-admin';
+        case UserRole.CHIEF_ACCOUNTANT:
+            return '/dashboard/chief-accountant';
+        case UserRole.CHIEF_PROCUREMENT_OFFICER:
+            return '/dashboard/chief-procurement';
+        case UserRole.MEDICAL_RECORDS_OFFICER:
+            return '/dashboard/medical-records';
         default:
-            return '/dashboard';
+            return '/dashboard/staff';
         }
     };
 
