@@ -21,7 +21,7 @@ const testUsers = [
   { email: "directoradmin@test.com", password: "password123", firstName: "Director", lastName: "Admin", role: "DIRECTOR_ADMIN", department: "Administration" },
   { email: "headnursing@test.com", password: "password123", firstName: "Head of", lastName: "Nursing", role: "HEAD_OF_NURSING", department: "Nursing" },
   { email: "cmac@test.com", password: "password123", firstName: "CMAC", lastName: "Officer", role: "CMAC", department: "Administration" },
-  { email: "registry@test.com", password: "password123", firstName: "Registry", lastName: "Officer", role: "REGISTRY_OFFICER", department: "Registry" },
+  { email: "registry@test.com", password: "password123", firstName: "Registry", lastName: "Officer", role: "REGISTRY", department: "Registry" },
   { email: "medrecords@test.com", password: "password123", firstName: "Medical Records", lastName: "Officer", role: "MEDICAL_RECORDS_OFFICER", department: "Medical Records" },
   
   // HODs (Heads of Department)
