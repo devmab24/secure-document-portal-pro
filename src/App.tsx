@@ -218,7 +218,8 @@ const App = () => (
                   </Route>
 
                   {/* Registry specific routes - All under /dashboard/registry */}
-                  <Route path="/dashboard/registry" element={<RegistryProtectedRoute />}>
+                  {/* <Route path="/dashboard/registry" element={<RegistryProtectedRoute />}> */}
+                   <Route path="/dashboard/registry" >
                     <Route index element={<RegistryDashboard />} />
                     <Route path="documents" element={<Documents />} />
                     <Route path="upload" element={<Upload />} />
@@ -229,7 +230,8 @@ const App = () => (
                   </Route>
 
                   {/* Director of Admin specific routes - All under /dashboard/director-admin */}
-                  <Route path="/dashboard/director-admin" element={<DirectorAdminProtectedRoute />}>
+                  <Route path="/dashboard/director-admin">
+                  {/* <Route path="/dashboard/director-admin" element={<DirectorAdminProtectedRoute />}> */}
                     <Route index element={<DirectorAdminDashboard />} />
                     <Route path="documents" element={<Documents />} />
                     <Route path="upload" element={<Upload />} />
@@ -241,7 +243,8 @@ const App = () => (
                   </Route>
 
                   {/* CMAC specific routes - All under /dashboard/cmac */}
-                  <Route path="/dashboard/cmac" element={<CmacProtectedRoute />}>
+                  <Route path="/dashboard/cmac" >
+                  {/* <Route path="/dashboard/cmac" element={<CmacProtectedRoute />}> */}
                     <Route index element={<CmacDashboard />} />
                     <Route path="clinical-oversight" element={<CmacDashboard />} />
                     <Route path="quality-control" element={<CmacDashboard />} />
@@ -255,7 +258,8 @@ const App = () => (
                   </Route>
 
                   {/* Head of Nursing specific routes - All under /dashboard/head-of-nursing */}
-                  <Route path="/dashboard/head-of-nursing" element={<HeadOfNursingProtectedRoute />}>
+                  <Route path="/dashboard/head-of-nursing">
+                  {/* <Route path="/dashboard/head-of-nursing" element={<HeadOfNursingProtectedRoute />}> */}
                     <Route index element={<HeadOfNursingDashboard />} />
                     <Route path="nursing-staff" element={<Users />} />
                     <Route path="duty-roster" element={<HeadOfNursingDashboard />} />
@@ -270,7 +274,8 @@ const App = () => (
                   </Route>
 
                   {/* Chief Accountant specific routes - All under /dashboard/chief-accountant */}
-                  <Route path="/dashboard/chief-accountant" element={<ChiefAccountantProtectedRoute />}>
+                  <Route path="/dashboard/chief-accountant">
+                  {/* <Route path="/dashboard/chief-accountant" element={<ChiefAccountantProtectedRoute />}> */}
                     <Route index element={<ChiefAccountantDashboard />} />
                     <Route path="financial-reports" element={<ChiefAccountantDashboard />} />
                     <Route path="budget-planning" element={<ChiefAccountantDashboard />} />
@@ -283,7 +288,8 @@ const App = () => (
                   </Route>
 
                   {/* Chief Procurement Officer specific routes - All under /dashboard/chief-procurement */}
-                  <Route path="/dashboard/chief-procurement" element={<ChiefProcurementProtectedRoute />}>
+                  {/* <Route path="/dashboard/chief-procurement" element={<ChiefProcurementProtectedRoute />}> */}
+                  <Route path="/dashboard/chief-procurement" >
                     <Route index element={<ChiefProcurementDashboard />} />
                     <Route path="requisitions" element={<ChiefProcurementDashboard />} />
                     <Route path="vendors" element={<ChiefProcurementDashboard />} />
@@ -300,7 +306,8 @@ const App = () => (
                   </Route>
 
                   {/* Medical Records Officer specific routes - All under /dashboard/medical-records */}
-                  <Route path="/dashboard/medical-records" element={<MedicalRecordsProtectedRoute />}>
+                  {/* element={<MedicalRecordsProtectedRoute />} */}
+                  <Route path="/dashboard/medical-records" >
                     <Route index element={<MedicalRecordsDashboard />} />
                     <Route path="patient-records" element={<MedicalRecordsDashboard />} />
                     <Route path="clinical-docs" element={<MedicalRecordsDashboard />} />
