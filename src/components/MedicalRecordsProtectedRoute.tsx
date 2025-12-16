@@ -1,9 +1,11 @@
-import { Navigate, Outlet } from "react-router-dom";
+import { Navigate, Outlet, useLocation } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { UserRole } from "@/lib/types";
+import MedicalRecordsLayout from "./MedicalRecordsLayout";
 
 const MedicalRecordsProtectedRoute = () => {
   const { user, isLoading } = useAuth();
+  const location = useLocation();
 
   if (isLoading) {
     return (
@@ -13,11 +15,19 @@ const MedicalRecordsProtectedRoute = () => {
     );
   }
 
-  if (!user || user.role !== UserRole.MEDICAL_RECORDS_OFFICER) {
-    return <Navigate to="/auth" replace />;
+  if (!user) {
+    return <Navigate to="/login" state={{ from: location }} replace />;
   }
 
-  return <Outlet />;
+  if (user.role !== UserRole.MEDICAL_RECORDS_OFFICER && user.role !== UserRole.SUPER_ADMIN) {
+    return <Navigate to="/" replace />;
+  }
+
+  return (
+    <MedicalRecordsLayout>
+      <Outlet />
+    </MedicalRecordsLayout>
+  );
 };
 
 export default MedicalRecordsProtectedRoute;
