@@ -52,23 +52,125 @@ export type Database = {
           },
         ]
       }
-      departments: {
+      department_units: {
         Row: {
+          code: string | null
+          created_at: string | null
+          department_id: string
           description: string | null
+          head_user_id: string | null
           id: string
+          is_active: boolean | null
+          location: string | null
           name: string
+          staff_count: number | null
+          updated_at: string | null
         }
         Insert: {
+          code?: string | null
+          created_at?: string | null
+          department_id: string
           description?: string | null
+          head_user_id?: string | null
           id?: string
+          is_active?: boolean | null
+          location?: string | null
           name: string
+          staff_count?: number | null
+          updated_at?: string | null
         }
         Update: {
+          code?: string | null
+          created_at?: string | null
+          department_id?: string
           description?: string | null
+          head_user_id?: string | null
           id?: string
+          is_active?: boolean | null
+          location?: string | null
           name?: string
+          staff_count?: number | null
+          updated_at?: string | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "department_units_department_id_fkey"
+            columns: ["department_id"]
+            isOneToOne: false
+            referencedRelation: "departments"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "department_units_head_user_id_fkey"
+            columns: ["head_user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      departments: {
+        Row: {
+          code: string | null
+          created_at: string | null
+          description: string | null
+          head_user_id: string | null
+          id: string
+          is_active: boolean | null
+          level: number | null
+          location: string | null
+          name: string
+          parent_id: string | null
+          service_type: Database["public"]["Enums"]["service_type"] | null
+          staff_count: number | null
+          updated_at: string | null
+        }
+        Insert: {
+          code?: string | null
+          created_at?: string | null
+          description?: string | null
+          head_user_id?: string | null
+          id?: string
+          is_active?: boolean | null
+          level?: number | null
+          location?: string | null
+          name: string
+          parent_id?: string | null
+          service_type?: Database["public"]["Enums"]["service_type"] | null
+          staff_count?: number | null
+          updated_at?: string | null
+        }
+        Update: {
+          code?: string | null
+          created_at?: string | null
+          description?: string | null
+          head_user_id?: string | null
+          id?: string
+          is_active?: boolean | null
+          level?: number | null
+          location?: string | null
+          name?: string
+          parent_id?: string | null
+          service_type?: Database["public"]["Enums"]["service_type"] | null
+          staff_count?: number | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "departments_head_user_id_fkey"
+            columns: ["head_user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "departments_parent_id_fkey"
+            columns: ["parent_id"]
+            isOneToOne: false
+            referencedRelation: "departments"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       digital_signatures: {
         Row: {
@@ -754,6 +856,30 @@ export type Database = {
           },
         ]
       }
+      user_roles: {
+        Row: {
+          assigned_at: string | null
+          assigned_by: string | null
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          assigned_at?: string | null
+          assigned_by?: string | null
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          assigned_at?: string | null
+          assigned_by?: string | null
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
       users: {
         Row: {
           created_at: string | null
@@ -822,10 +948,43 @@ export type Database = {
       }
     }
     Functions: {
-      [_ in never]: never
+      get_department_hierarchy: {
+        Args: { dept_id: string }
+        Returns: {
+          id: string
+          level: number
+          name: string
+          path: string[]
+        }[]
+      }
+      get_user_role: {
+        Args: { _user_id: string }
+        Returns: Database["public"]["Enums"]["app_role"]
+      }
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
+      is_admin: { Args: { _user_id: string }; Returns: boolean }
     }
     Enums: {
-      [_ in never]: never
+      app_role:
+        | "CMD"
+        | "CMAC"
+        | "HEAD_OF_NURSING"
+        | "REGISTRY"
+        | "DIRECTOR_ADMIN"
+        | "CHIEF_ACCOUNTANT"
+        | "CHIEF_PROCUREMENT_OFFICER"
+        | "MEDICAL_RECORDS_OFFICER"
+        | "HOD"
+        | "STAFF"
+        | "ADMIN"
+        | "SUPER_ADMIN"
+      service_type: "clinical" | "non_clinical" | "administrative"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -952,6 +1111,22 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: [
+        "CMD",
+        "CMAC",
+        "HEAD_OF_NURSING",
+        "REGISTRY",
+        "DIRECTOR_ADMIN",
+        "CHIEF_ACCOUNTANT",
+        "CHIEF_PROCUREMENT_OFFICER",
+        "MEDICAL_RECORDS_OFFICER",
+        "HOD",
+        "STAFF",
+        "ADMIN",
+        "SUPER_ADMIN",
+      ],
+      service_type: ["clinical", "non_clinical", "administrative"],
+    },
   },
 } as const
