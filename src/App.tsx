@@ -48,6 +48,7 @@ const CmdUpload = lazy(() => import("./pages/cmd/CmdUpload"));
 const HodDashboard = lazy(() => import("./pages/hod/HodDashboard"));
 const HODInbox = lazy(() => import("./pages/hod/HODInbox"));
 const HodDocumentSubmissions = lazy(() => import("./pages/hod/HodDocumentSubmissions"));
+const HodDepartmentUnits = lazy(() => import("./pages/hod/HodDepartmentUnits"));
 
 // Staff Pages
 const StaffDashboard = lazy(() => import("./pages/staff/StaffDashboard"));
@@ -173,6 +174,7 @@ const App = () => (
                   {/* HOD Routes */}
                   <Route path="/dashboard/hod" element={<HodProtectedRoute />}>
                     <Route index element={<HodDashboard />} />
+                    <Route path="units" element={<HodDepartmentUnits />} />
                     <Route path="staffs" element={<Users />} />
                     <Route path="documents" element={<Documents />} />
                     <Route path="upload" element={<Upload />} />

@@ -11,11 +11,13 @@ import {
   Settings,
   PenTool,
   Shield,
-  Send
+  Send,
+  Building2,
+  ArrowRight
 } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
-import { UserRole } from "@/lib/types";
 import { Link } from "react-router-dom";
+import DepartmentUnitsCard from "@/components/DepartmentUnitsCard";
 
 const HodDashboard = () => {
   const { user } = useAuth();
@@ -40,29 +42,29 @@ const HodDashboard = () => {
       </div>
 
       {/* Digital Signature Feature Highlight */}
-      <Card className="border-green-200 bg-green-50/50">
+      <Card className="border-green-200 bg-green-50/50 dark:bg-green-950/20 dark:border-green-800">
         <CardHeader className="pb-3">
-          <CardTitle className="flex items-center gap-2 text-green-800">
+          <CardTitle className="flex items-center gap-2 text-green-800 dark:text-green-400">
             <PenTool className="h-5 w-5" />
             Digital Signature Authority
           </CardTitle>
-          <CardDescription className="text-green-700">
+          <CardDescription className="text-green-700 dark:text-green-500">
             As an HOD, you can digitally sign documents for approval, rejection, or acknowledgment. 
             Once signed, documents are locked to ensure integrity and authenticity.
           </CardDescription>
         </CardHeader>
         <CardContent>
           <div className="flex flex-wrap gap-2">
-            <Badge variant="outline" className="text-green-700 border-green-300">
+            <Badge variant="outline" className="text-green-700 border-green-300 dark:text-green-400 dark:border-green-700">
               Remote Approval
             </Badge>
-            <Badge variant="outline" className="text-green-700 border-green-300">
+            <Badge variant="outline" className="text-green-700 border-green-300 dark:text-green-400 dark:border-green-700">
               Document Locking
             </Badge>
-            <Badge variant="outline" className="text-green-700 border-green-300">
+            <Badge variant="outline" className="text-green-700 border-green-300 dark:text-green-400 dark:border-green-700">
               Audit Trail
             </Badge>
-            <Badge variant="outline" className="text-green-700 border-green-300">
+            <Badge variant="outline" className="text-green-700 border-green-300 dark:text-green-400 dark:border-green-700">
               Legal Compliance
             </Badge>
           </div>
@@ -116,8 +118,38 @@ const HodDashboard = () => {
         </Card>
       </div>
 
+      {/* Department Units Section */}
+      <DepartmentUnitsCard showViewAll={true} maxUnits={3} />
+
       {/* HOD Actions */}
       <div className="grid gap-6 md:grid-cols-2">
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Building2 className="h-5 w-5" />
+              Unit Management
+            </CardTitle>
+            <CardDescription>
+              Manage sub-units and delegate tasks to unit heads
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-3">
+            <Button asChild className="w-full">
+              <Link to="/dashboard/hod/units">
+                <Building2 className="h-4 w-4 mr-2" />
+                View All Units
+                <ArrowRight className="h-4 w-4 ml-auto" />
+              </Link>
+            </Button>
+            <Button asChild variant="outline" className="w-full">
+              <Link to="/dashboard/hod/staffs">
+                <Users className="h-4 w-4 mr-2" />
+                View Department Staff
+              </Link>
+            </Button>
+          </CardContent>
+        </Card>
+
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
@@ -156,29 +188,9 @@ const HodDashboard = () => {
           </CardHeader>
           <CardContent className="space-y-3">
             <Button asChild className="w-full">
-              <Link to="/dashboard/hod/uploads">
+              <Link to="/dashboard/hod/upload">
                 <Upload className="h-4 w-4 mr-2" />
                 Upload Documents
-              </Link>
-            </Button>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Settings className="h-5 w-5" />
-              Settings
-            </CardTitle>
-            <CardDescription>
-              Configure your account and preferences
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-3">
-            <Button asChild variant="outline" className="w-full">
-              <Link to="/dashboard/hod/settings">
-                <Settings className="h-4 w-4 mr-2" />
-                Account Settings
               </Link>
             </Button>
           </CardContent>
