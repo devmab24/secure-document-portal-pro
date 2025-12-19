@@ -81,16 +81,16 @@ const Login = () => {
         e.preventDefault();
 
         if (!email || !password) {
-        return;
+            return;
         }
 
         setIsSubmitting(true);
         try {
-            const success = await login(email, password);
-            if (success) {
-                // console.log("Login successful, redirecting to:", from);
-                // navigate(from, { replace: true });
+            const result = await login(email, password);
+            if (result.success) {
                 console.log("Login successful. Waiting for AuthContext to set user...");
+            } else {
+                console.error("Login failed:", result.error);
             }
         } catch (error) {
             console.error("Login error:", error);
