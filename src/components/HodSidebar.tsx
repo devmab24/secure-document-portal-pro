@@ -1,9 +1,7 @@
-
 import { NavLink } from "react-router-dom";
 import { 
   LayoutDashboard, File, Upload, Settings, Users, 
-  FileText, FolderHeart, FormInput, Inbox,
-  Share
+  FormInput, Inbox, Share, Building2
 } from "lucide-react";
 import {
   Sidebar,
@@ -41,9 +39,18 @@ const HodSidebar = () => {
             <SidebarMenu>
               <SidebarMenuItem>
                 <SidebarMenuButton asChild>
-                  <NavLink to="/dashboard/hod" className={getNavClass}>
+                  <NavLink to="/dashboard/hod" end className={getNavClass}>
                     <LayoutDashboard className="h-5 w-5" />
                     {!collapsed && <span>Dashboard</span>}
+                  </NavLink>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+
+              <SidebarMenuItem>
+                <SidebarMenuButton asChild>
+                  <NavLink to="/dashboard/hod/units" className={getNavClass}>
+                    <Building2 className="h-5 w-5" />
+                    {!collapsed && <span>Department Units</span>}
                   </NavLink>
                 </SidebarMenuButton>
               </SidebarMenuItem>
