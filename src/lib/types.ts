@@ -10,6 +10,7 @@ export enum UserRole {
   CHIEF_PROCUREMENT_OFFICER = "CHIEF_PROCUREMENT_OFFICER", // Chief Procurement Officer
   MEDICAL_RECORDS_OFFICER = "MEDICAL_RECORDS_OFFICER", // Medical Records Officer / Health Information Manager
   HOD = "HOD",         // Head of Department
+  HEAD_OF_UNIT = "HEAD_OF_UNIT", // Head of Unit (Administrative Units)
   STAFF = "STAFF",     // Regular Staff
   ADMIN = "ADMIN",     // System Administrator
   SUPER_ADMIN = "SUPER_ADMIN"  // Super Administrator
