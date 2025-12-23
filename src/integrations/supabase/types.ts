@@ -984,6 +984,7 @@ export type Database = {
         | "STAFF"
         | "ADMIN"
         | "SUPER_ADMIN"
+        | "HEAD_OF_UNIT"
       service_type: "clinical" | "non_clinical" | "administrative"
     }
     CompositeTypes: {
@@ -1125,6 +1126,7 @@ export const Constants = {
         "STAFF",
         "ADMIN",
         "SUPER_ADMIN",
+        "HEAD_OF_UNIT",
       ],
       service_type: ["clinical", "non_clinical", "administrative"],
     },
