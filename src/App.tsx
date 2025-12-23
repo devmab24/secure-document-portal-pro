@@ -22,6 +22,7 @@ import HodProtectedRoute from "@/components/HodProtectedRoute";
 import StaffProtectedRoute from "@/components/StaffProtectedRoute";
 import RegistryProtectedRoute from "@/components/RegistryProtectedRoute";
 import DirectorAdminProtectedRoute from "@/components/DirectorAdminProtectedRoute";
+import HeadOfUnitProtectedRoute from "@/components/HeadOfUnitProtectedRoute";
 import CmdDepartmentsList from "./components/CmdDepartmentsList";
 
 // Lazy load components
@@ -75,6 +76,11 @@ const ChiefProcurementDashboard = lazy(() => import("./pages/chief-procurement/C
 
 // Medical Records Officer Pages
 const MedicalRecordsDashboard = lazy(() => import("./pages/medical-records/MedicalRecordsDashboard"));
+
+// Head of Unit Pages
+const HeadOfUnitDashboard = lazy(() => import("./pages/head-of-unit/HeadOfUnitDashboard"));
+const HeadOfUnitInbox = lazy(() => import("./pages/head-of-unit/HeadOfUnitInbox"));
+const HeadOfUnitMyUnit = lazy(() => import("./pages/head-of-unit/HeadOfUnitMyUnit"));
 
 // Shared Pages
 const Documents = lazy(() => import("./pages/Documents"));
@@ -316,6 +322,25 @@ const App = () => (
                     <Route path="audits" element={<AuditLogs />} />
                     <Route path="document-communication" element={<DocumentCommunication />} />
                     <Route path="settings" element={<Settings />} />
+                  </Route>
+
+                  {/* Head of Unit specific routes - All under /dashboard/head-of-unit */}
+                  <Route path="/dashboard/head-of-unit" element={<HeadOfUnitProtectedRoute />}>
+                    <Route index element={<HeadOfUnitDashboard />} />
+                    <Route path="my-unit" element={<HeadOfUnitMyUnit />} />
+                    <Route path="inbox" element={<HeadOfUnitInbox />} />
+                    <Route path="approvals" element={<HeadOfUnitDashboard />} />
+                    <Route path="documents" element={<Documents />} />
+                    <Route path="upload" element={<Upload />} />
+                    <Route path="send-document" element={<DocumentCommunication />} />
+                    <Route path="staff" element={<Users />} />
+                    <Route path="document-communication" element={<DocumentCommunication />} />
+                    <Route path="settings" element={<Settings />} />
+                    
+                    {/* Forms Routes */}
+                    <Route path="forms" element={<FormTemplates />} />
+                    <Route path="forms/create/:templateId" element={<FormCreate />} />
+                    <Route path="forms/my-forms" element={<MyForms />} />
                   </Route>
 
                   {/* Catch all route */}
