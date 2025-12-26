@@ -1,8 +1,9 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Shield, FileText, Users, TrendingUp } from "lucide-react";
+import { Shield, FileText, Users, TrendingUp, Building2, Send } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
+import { SendToUnitHeadDialog } from "@/components/SendToUnitHeadDialog";
 
 const DirectorAdminDashboard = () => {
   const navigate = useNavigate();
@@ -16,9 +17,12 @@ const DirectorAdminDashboard = () => {
 
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-3xl font-bold tracking-tight">Director of Administration Dashboard</h1>
-        <p className="text-muted-foreground">High-level administrative oversight and board management</p>
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-3xl font-bold tracking-tight">Director of Administration Dashboard</h1>
+          <p className="text-muted-foreground">High-level administrative oversight and board management</p>
+        </div>
+        <SendToUnitHeadDialog />
       </div>
 
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
@@ -35,13 +39,57 @@ const DirectorAdminDashboard = () => {
         ))}
       </div>
 
-      <Tabs defaultValue="board" className="space-y-4">
+      <Tabs defaultValue="units" className="space-y-4">
         <TabsList>
+          <TabsTrigger value="units">Unit Management</TabsTrigger>
           <TabsTrigger value="board">Board Management</TabsTrigger>
           <TabsTrigger value="policies">Policy Documents</TabsTrigger>
           <TabsTrigger value="departments">Department Oversight</TabsTrigger>
           <TabsTrigger value="compliance">Compliance</TabsTrigger>
         </TabsList>
+
+        <TabsContent value="units" className="space-y-4">
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Building2 className="h-5 w-5" />
+                Administrative Units
+              </CardTitle>
+              <CardDescription>Send documents and communications to Unit Heads</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="grid gap-4 md:grid-cols-3">
+                <SendToUnitHeadDialog 
+                  trigger={
+                    <Button className="w-full">
+                      <Send className="h-4 w-4 mr-2" />
+                      Send Document to Unit
+                    </Button>
+                  }
+                />
+                <Button variant="outline" onClick={() => navigate("/dashboard/director-admin/units")} className="w-full">
+                  <Building2 className="h-4 w-4 mr-2" />
+                  View All Units
+                </Button>
+                <Button variant="outline" onClick={() => navigate("/dashboard/director-admin/workflow")} className="w-full">
+                  <FileText className="h-4 w-4 mr-2" />
+                  Document Workflow
+                </Button>
+              </div>
+              
+              <div className="mt-4 p-4 bg-muted rounded-lg">
+                <h4 className="font-medium mb-2">Document Routing Workflow</h4>
+                <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                  <span className="bg-primary text-primary-foreground px-2 py-1 rounded text-xs">Director Admin</span>
+                  <span>→</span>
+                  <span className="bg-secondary text-secondary-foreground px-2 py-1 rounded text-xs">Head of Unit</span>
+                  <span>→</span>
+                  <span className="bg-accent text-accent-foreground px-2 py-1 rounded text-xs">Staff</span>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
 
         <TabsContent value="board" className="space-y-4">
           <Card>

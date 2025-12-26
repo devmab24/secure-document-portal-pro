@@ -4,12 +4,13 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { 
-  Inbox, Mail, MailOpen, Clock, CheckCircle, 
-  FileText, User, Calendar, ArrowRight
+  Inbox, Mail, MailOpen, CheckCircle, Forward,
+  FileText, User, Calendar
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { format } from "date-fns";
+import { ForwardToStaffDialog } from "@/components/ForwardToStaffDialog";
 
 interface Message {
   id: string;
@@ -21,6 +22,8 @@ interface Message {
   read_at: string | null;
   acknowledged_at: string | null;
   from_user_id: string;
+  document_id: string | null;
+  metadata: any;
   from_user?: {
     first_name: string;
     last_name: string;
@@ -42,7 +45,6 @@ const HeadOfUnitInbox = () => {
     if (!user?.id) return;
 
     try {
-      // Fetch messages
       const { data: messagesData, error } = await supabase
         .from('inter_department_messages')
         .select('*')
@@ -51,7 +53,6 @@ const HeadOfUnitInbox = () => {
 
       if (error) throw error;
 
-      // Fetch sender info for each message
       const messagesWithSenders = await Promise.all(
         (messagesData || []).map(async (message) => {
           const { data: senderData } = await supabase
@@ -119,8 +120,14 @@ const HeadOfUnitInbox = () => {
     }
   };
 
+  const handleMessageForwarded = () => {
+    fetchMessages();
+    setSelectedMessage(null);
+  };
+
   const unreadMessages = messages.filter(m => !m.read_at);
-  const readMessages = messages.filter(m => m.read_at && !m.acknowledged_at);
+  const readMessages = messages.filter(m => m.read_at && !m.acknowledged_at && m.status !== 'forwarded');
+  const forwardedMessages = messages.filter(m => m.status === 'forwarded');
   const acknowledgedMessages = messages.filter(m => m.acknowledged_at);
 
   const getPriorityColor = (priority: string) => {
@@ -129,6 +136,17 @@ const HeadOfUnitInbox = () => {
       case 'high': return 'bg-orange-500';
       case 'normal': return 'bg-blue-500';
       default: return 'bg-gray-500';
+    }
+  };
+
+  const getStatusBadge = (status: string) => {
+    switch (status) {
+      case 'forwarded':
+        return <Badge variant="outline" className="text-blue-600 border-blue-600"><Forward className="h-3 w-3 mr-1" />Forwarded</Badge>;
+      case 'acknowledged':
+        return <Badge variant="outline" className="text-emerald-600 border-emerald-600"><CheckCircle className="h-3 w-3 mr-1" />Acknowledged</Badge>;
+      default:
+        return null;
     }
   };
 
@@ -164,9 +182,10 @@ const HeadOfUnitInbox = () => {
               </p>
             </div>
           </div>
-          {message.acknowledged_at && (
-            <CheckCircle className="h-5 w-5 text-emerald-500" />
-          )}
+          <div className="flex flex-col items-end gap-1">
+            {message.status === 'forwarded' && <Forward className="h-5 w-5 text-blue-500" />}
+            {message.acknowledged_at && <CheckCircle className="h-5 w-5 text-emerald-500" />}
+          </div>
         </div>
       </CardContent>
     </Card>
@@ -196,18 +215,22 @@ const HeadOfUnitInbox = () => {
         {/* Message List */}
         <div className="space-y-4">
           <Tabs defaultValue="unread">
-            <TabsList>
-              <TabsTrigger value="unread" className="gap-2">
-                <Mail className="h-4 w-4" />
+            <TabsList className="grid grid-cols-4 w-full">
+              <TabsTrigger value="unread" className="text-xs">
+                <Mail className="h-3 w-3 mr-1" />
                 Unread ({unreadMessages.length})
               </TabsTrigger>
-              <TabsTrigger value="read" className="gap-2">
-                <MailOpen className="h-4 w-4" />
+              <TabsTrigger value="read" className="text-xs">
+                <MailOpen className="h-3 w-3 mr-1" />
                 Read ({readMessages.length})
               </TabsTrigger>
-              <TabsTrigger value="acknowledged" className="gap-2">
-                <CheckCircle className="h-4 w-4" />
-                Acknowledged ({acknowledgedMessages.length})
+              <TabsTrigger value="forwarded" className="text-xs">
+                <Forward className="h-3 w-3 mr-1" />
+                Forwarded ({forwardedMessages.length})
+              </TabsTrigger>
+              <TabsTrigger value="acknowledged" className="text-xs">
+                <CheckCircle className="h-3 w-3 mr-1" />
+                Done ({acknowledgedMessages.length})
               </TabsTrigger>
             </TabsList>
 
@@ -231,11 +254,26 @@ const HeadOfUnitInbox = () => {
                 <Card>
                   <CardContent className="p-8 text-center text-muted-foreground">
                     <MailOpen className="h-12 w-12 mx-auto mb-4 opacity-50" />
-                    <p>No read messages pending acknowledgment</p>
+                    <p>No messages pending action</p>
                   </CardContent>
                 </Card>
               ) : (
                 readMessages.map(message => (
+                  <MessageCard key={message.id} message={message} />
+                ))
+              )}
+            </TabsContent>
+
+            <TabsContent value="forwarded" className="space-y-3 mt-4">
+              {forwardedMessages.length === 0 ? (
+                <Card>
+                  <CardContent className="p-8 text-center text-muted-foreground">
+                    <Forward className="h-12 w-12 mx-auto mb-4 opacity-50" />
+                    <p>No forwarded messages</p>
+                  </CardContent>
+                </Card>
+              ) : (
+                forwardedMessages.map(message => (
                   <MessageCard key={message.id} message={message} />
                 ))
               )}
@@ -266,7 +304,7 @@ const HeadOfUnitInbox = () => {
                 <div className="flex items-start justify-between">
                   <div>
                     <CardTitle>{selectedMessage.subject}</CardTitle>
-                    <CardDescription className="mt-2 flex items-center gap-4">
+                    <CardDescription className="mt-2 flex flex-wrap items-center gap-4">
                       <span className="flex items-center gap-1">
                         <User className="h-4 w-4" />
                         {selectedMessage.from_user?.first_name} {selectedMessage.from_user?.last_name}
@@ -277,9 +315,12 @@ const HeadOfUnitInbox = () => {
                       </span>
                     </CardDescription>
                   </div>
-                  <Badge className={`${getPriorityColor(selectedMessage.priority)} text-white`}>
-                    {selectedMessage.priority}
-                  </Badge>
+                  <div className="flex flex-col items-end gap-2">
+                    <Badge className={`${getPriorityColor(selectedMessage.priority)} text-white`}>
+                      {selectedMessage.priority}
+                    </Badge>
+                    {getStatusBadge(selectedMessage.status)}
+                  </div>
                 </div>
               </CardHeader>
               <CardContent className="space-y-4">
@@ -287,12 +328,31 @@ const HeadOfUnitInbox = () => {
                   <p className="whitespace-pre-wrap">{selectedMessage.message_content}</p>
                 </div>
 
-                <div className="flex items-center gap-2 pt-4 border-t">
-                  {selectedMessage.read_at && !selectedMessage.acknowledged_at && (
-                    <Button onClick={() => acknowledgeMessage(selectedMessage.id)}>
-                      <CheckCircle className="h-4 w-4 mr-2" />
-                      Acknowledge
-                    </Button>
+                <div className="flex flex-wrap items-center gap-2 pt-4 border-t">
+                  {selectedMessage.read_at && selectedMessage.status !== 'forwarded' && !selectedMessage.acknowledged_at && (
+                    <>
+                      <ForwardToStaffDialog 
+                        message={{
+                          id: selectedMessage.id,
+                          subject: selectedMessage.subject,
+                          message_content: selectedMessage.message_content || '',
+                          from_user_id: selectedMessage.from_user_id,
+                          document_id: selectedMessage.document_id || undefined,
+                          metadata: selectedMessage.metadata
+                        }}
+                        onForwarded={handleMessageForwarded}
+                      />
+                      <Button variant="outline" onClick={() => acknowledgeMessage(selectedMessage.id)}>
+                        <CheckCircle className="h-4 w-4 mr-2" />
+                        Acknowledge Only
+                      </Button>
+                    </>
+                  )}
+                  {selectedMessage.status === 'forwarded' && (
+                    <Badge variant="outline" className="text-blue-600 border-blue-600">
+                      <Forward className="h-4 w-4 mr-1" />
+                      Forwarded to staff
+                    </Badge>
                   )}
                   {selectedMessage.acknowledged_at && (
                     <Badge variant="outline" className="text-emerald-600 border-emerald-600">
