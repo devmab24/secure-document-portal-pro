@@ -948,6 +948,7 @@ export type Database = {
       }
     }
     Functions: {
+      can_route_documents: { Args: { _user_id: string }; Returns: boolean }
       get_department_hierarchy: {
         Args: { dept_id: string }
         Returns: {
@@ -970,10 +971,13 @@ export type Database = {
         Returns: boolean
       }
       is_admin: { Args: { _user_id: string }; Returns: boolean }
+      is_director_admin: { Args: { _user_id: string }; Returns: boolean }
+      is_executive: { Args: { _user_id: string }; Returns: boolean }
       is_head_of_unit: {
         Args: { _unit_id: string; _user_id: string }
         Returns: boolean
       }
+      is_hod: { Args: { _user_id: string }; Returns: boolean }
     }
     Enums: {
       app_role:
