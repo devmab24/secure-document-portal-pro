@@ -97,7 +97,7 @@ const Index = () => {
                   variant="outline"
                   size="lg"
                   className="text-md border-hospital-600 text-hospital-600 hover:bg-hospital-50"
-                  onClick={() => window.open('https://fmcjalingo.gov.ng/about-us/', '_blank')}
+                  onClick={() => window.open('https://fmcjalingo.gov.ng/about/', '_blank')}
                 >
                   Learn More
                 </Button>
