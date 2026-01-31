@@ -1,7 +1,7 @@
 import { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
-import { Department, DocumentStatus, DocumentType, UserRole } from "@/lib/types";
+import { Department, DocumentType, UserRole } from "@/lib/types";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -15,8 +15,10 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/components/ui/use-toast";
 import { Card, CardContent } from "@/components/ui/card";
-import { Upload as UploadIcon, File, X, Check } from "lucide-react";
+import { Upload as UploadIcon, X, Check, AlertCircle } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import { StorageService } from "@/services/storageService";
+import { Progress } from "@/components/ui/progress";
 
 const Upload = () => {
   const { user } = useAuth();
@@ -32,7 +34,10 @@ const Upload = () => {
   const [description, setDescription] = useState("");
   const [tags, setTags] = useState("");
   const [priority, setPriority] = useState<"low" | "medium" | "high" | "urgent">("medium");
+  const [confidentiality, setConfidentiality] = useState<"public" | "internal" | "confidential" | "restricted">("internal");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState(0);
+  const [uploadError, setUploadError] = useState<string | null>(null);
   
   // Prepare department options
   const departmentOptions = Object.values(Department);
@@ -69,6 +74,32 @@ const Upload = () => {
   };
   
   const handleFileSelected = (selectedFile: File) => {
+    setUploadError(null);
+    
+    // Validate file size (50MB limit)
+    if (selectedFile.size > 52428800) {
+      setUploadError("File size exceeds 50MB limit");
+      return;
+    }
+    
+    // Validate file type
+    const allowedTypes = [
+      'application/pdf',
+      'application/msword',
+      'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+      'image/jpeg',
+      'image/png',
+      'image/gif',
+      'text/plain',
+      'application/vnd.ms-excel',
+      'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+    ];
+    
+    if (!allowedTypes.includes(selectedFile.type)) {
+      setUploadError("File type not supported. Please upload PDF, DOC, DOCX, XLS, XLSX, TXT, or image files.");
+      return;
+    }
+    
     setFile(selectedFile);
     
     // Auto-fill document name from file name (remove extension)
@@ -96,13 +127,14 @@ const Upload = () => {
   // Remove selected file
   const handleRemoveFile = () => {
     setFile(null);
+    setUploadError(null);
     if (fileInputRef.current) {
       fileInputRef.current.value = "";
     }
   };
   
-  // Handle form submission
-  const handleSubmit = (e: React.FormEvent) => {
+  // Handle form submission with real Supabase upload
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
     if (!file || !documentName || !documentType || !department) {
@@ -113,19 +145,83 @@ const Upload = () => {
       });
       return;
     }
+
+    if (!user?.id) {
+      toast({
+        title: "Authentication required",
+        description: "Please log in to upload documents.",
+        variant: "destructive",
+      });
+      return;
+    }
     
     setIsSubmitting(true);
+    setUploadProgress(0);
+    setUploadError(null);
     
-    // Simulate API upload delay
-    setTimeout(() => {
+    try {
+      // Simulate progress for UX (real progress would need XMLHttpRequest)
+      const progressInterval = setInterval(() => {
+        setUploadProgress(prev => Math.min(prev + 10, 90));
+      }, 200);
+
+      // Upload file to Supabase Storage
+      const uploadResult = await StorageService.uploadDocument(
+        file,
+        user.id,
+        documentType
+      );
+      
+      clearInterval(progressInterval);
+      
+      if (!uploadResult.success) {
+        throw new Error(uploadResult.error || 'Upload failed');
+      }
+      
+      setUploadProgress(95);
+      
+      // Create document record in database
+      const tagsArray = tags.split(',').map(t => t.trim()).filter(t => t);
+      
+      const documentRecord = await StorageService.createDocumentRecord(
+        documentName,
+        uploadResult.url || '',
+        file.type,
+        file.size,
+        user.id,
+        {
+          description,
+          documentType,
+          documentCategory: department,
+          priority,
+          confidentialityLevel: confidentiality,
+          tags: tagsArray.length > 0 ? tagsArray : undefined
+        }
+      );
+      
+      if (!documentRecord) {
+        throw new Error('Failed to create document record');
+      }
+      
+      setUploadProgress(100);
+      
       toast({
         title: "Document uploaded successfully",
         description: "Your document has been uploaded and submitted for review.",
       });
       
-      setIsSubmitting(false);
       navigate("/documents");
-    }, 1500);
+    } catch (error: any) {
+      console.error('Upload error:', error);
+      setUploadError(error.message || 'Upload failed');
+      toast({
+        title: "Upload failed",
+        description: error.message || "Failed to upload document. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -142,7 +238,7 @@ const Upload = () => {
               <div
                 className={`file-drop-area ${isDragging ? "active" : ""} ${
                   file ? "bg-muted/50" : ""
-                }`}
+                } ${uploadError ? "border-destructive" : ""}`}
                 onDragOver={handleDragOver}
                 onDragLeave={handleDragLeave}
                 onDrop={handleDrop}
@@ -153,10 +249,31 @@ const Upload = () => {
                   className="hidden"
                   ref={fileInputRef}
                   onChange={handleFileInputChange}
-                  accept=".pdf,.doc,.docx,.xls,.xlsx,.txt,.png,.jpg,.jpeg"
+                  accept=".pdf,.doc,.docx,.xls,.xlsx,.txt,.png,.jpg,.jpeg,.gif"
                 />
                 
-                {file ? (
+                {uploadError ? (
+                  <div className="space-y-4 text-center">
+                    <div className="flex items-center justify-center w-12 h-12 rounded-full bg-destructive/10 mx-auto">
+                      <AlertCircle className="h-6 w-6 text-destructive" />
+                    </div>
+                    <div>
+                      <h3 className="font-medium text-destructive">Upload Error</h3>
+                      <p className="text-sm text-muted-foreground">{uploadError}</p>
+                    </div>
+                    <Button
+                      type="button"
+                      size="sm"
+                      variant="outline"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleRemoveFile();
+                      }}
+                    >
+                      Try Again
+                    </Button>
+                  </div>
+                ) : file ? (
                   <div className="space-y-4">
                     <div className="flex items-center justify-center w-12 h-12 rounded-full bg-hospital-100 mx-auto">
                       <Check className="h-6 w-6 text-hospital-600" />
@@ -174,7 +291,10 @@ const Upload = () => {
                       type="button"
                       size="sm"
                       variant="outline"
-                      onClick={handleRemoveFile}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleRemoveFile();
+                      }}
                     >
                       <X className="h-4 w-4 mr-2" />
                       Remove File
@@ -189,13 +309,26 @@ const Upload = () => {
                     <p className="text-sm text-muted-foreground mb-4">
                       or click to browse your files
                     </p>
-                    <Badge variant="outline" className="mx-1">PDF</Badge>
-                    <Badge variant="outline" className="mx-1">DOC</Badge>
-                    <Badge variant="outline" className="mx-1">XLS</Badge>
-                    <Badge variant="outline" className="mx-1">JPG</Badge>
+                    <div className="flex flex-wrap justify-center gap-1">
+                      <Badge variant="outline">PDF</Badge>
+                      <Badge variant="outline">DOC</Badge>
+                      <Badge variant="outline">XLS</Badge>
+                      <Badge variant="outline">JPG</Badge>
+                    </div>
+                    <p className="text-xs text-muted-foreground mt-2">Max 50MB</p>
                   </div>
                 )}
               </div>
+              
+              {isSubmitting && (
+                <div className="mt-4 space-y-2">
+                  <div className="flex justify-between text-sm">
+                    <span>Uploading...</span>
+                    <span>{uploadProgress}%</span>
+                  </div>
+                  <Progress value={uploadProgress} className="h-2" />
+                </div>
+              )}
               
               <div className="mt-6 space-y-1">
                 <h3 className="font-medium text-sm">Document submission process:</h3>
@@ -275,12 +408,12 @@ const Upload = () => {
                 />
               </div>
               
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div className="space-y-2">
                   <Label htmlFor="tags">Tags</Label>
                   <Input
                     id="tags"
-                    placeholder="E.g. clinical, report, quarterly (comma separated)"
+                    placeholder="clinical, report (comma separated)"
                     value={tags}
                     onChange={(e) => setTags(e.target.value)}
                   />
@@ -303,6 +436,24 @@ const Upload = () => {
                     </SelectContent>
                   </Select>
                 </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="confidentiality">Confidentiality</Label>
+                  <Select
+                    value={confidentiality}
+                    onValueChange={(value) => setConfidentiality(value as "public" | "internal" | "confidential" | "restricted")}
+                  >
+                    <SelectTrigger id="confidentiality">
+                      <SelectValue placeholder="Select level" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="public">Public</SelectItem>
+                      <SelectItem value="internal">Internal</SelectItem>
+                      <SelectItem value="confidential">Confidential</SelectItem>
+                      <SelectItem value="restricted">Restricted</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
               </div>
               
               <div className="pt-4 flex justify-end gap-3">
@@ -310,13 +461,14 @@ const Upload = () => {
                   type="button"
                   variant="outline"
                   onClick={() => navigate("/documents")}
+                  disabled={isSubmitting}
                 >
                   Cancel
                 </Button>
                 <Button
                   type="submit"
                   className="bg-hospital-600 hover:bg-hospital-700"
-                  disabled={isSubmitting}
+                  disabled={isSubmitting || !file}
                 >
                   {isSubmitting ? (
                     <>
