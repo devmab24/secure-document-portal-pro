@@ -1,6 +1,7 @@
 
 import { useAuth } from "@/contexts/AuthContext";
 import ThemeToggle from "./ThemeToggle";
+import NotificationBell from "./NotificationBell";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { Button } from "./ui/button";
 import {
@@ -30,6 +31,7 @@ const AppHeader = () => {
       </div>
       
       <div className="flex items-center gap-4">
+        <NotificationBell />
         <ThemeToggle />
         
         {user && (
