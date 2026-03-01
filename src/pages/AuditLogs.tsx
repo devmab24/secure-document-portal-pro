@@ -7,7 +7,9 @@ import { Badge } from "@/components/ui/badge";
 import { mockAuditLogs, mockUsers, mockDocuments } from "@/lib/mock-data";
 import { useAuth } from "@/contexts/AuthContext";
 import { UserRole } from "@/lib/types";
-import { Search, FileText, Eye, FilePlus, FileEdit, Trash2, CheckCircle, XCircle, Download } from "lucide-react";
+import { Search, FileText, Eye, FilePlus, FileEdit, Trash2, CheckCircle, XCircle, Download, FileDown } from "lucide-react";
+import { exportToCSV, exportToPDF } from "@/lib/exportUtils";
+import { Button } from "@/components/ui/button";
 import { format } from "date-fns";
 import {
   Select,
@@ -117,6 +119,40 @@ const AuditLogs = () => {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <h1 className="text-3xl font-bold tracking-tight">Audit Logs</h1>
+        <div className="flex gap-2">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => {
+              const exportData = filteredLogs.map((log) => ({
+                Date: format(log.timestamp, "yyyy-MM-dd HH:mm"),
+                User: getUserById(log.userId),
+                Document: getDocumentById(log.documentId),
+                Action: log.action,
+                Details: log.details || "",
+              }));
+              exportToCSV(exportData, "audit-logs");
+            }}
+          >
+            <FileDown className="mr-2 h-4 w-4" /> CSV
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => {
+              const exportData = filteredLogs.map((log) => ({
+                Date: format(log.timestamp, "yyyy-MM-dd HH:mm"),
+                User: getUserById(log.userId),
+                Document: getDocumentById(log.documentId),
+                Action: log.action,
+                Details: log.details || "",
+              }));
+              exportToPDF(exportData, "audit-logs", "FMC Jalingo - Audit Logs Report");
+            }}
+          >
+            <FileDown className="mr-2 h-4 w-4" /> PDF
+          </Button>
+        </div>
       </div>
 
       <Card>

@@ -1,6 +1,6 @@
 
-import { DocumentShare, ShareStatus, Document, User } from '@/lib/types';
-import { FormSubmissionsAPI, apiCall } from './api';
+import { supabase } from "@/integrations/supabase/client";
+import { NotificationService } from "./notificationService";
 
 export interface DocumentSubmission {
   id: string;
@@ -31,101 +31,210 @@ export interface DocumentSubmission {
   };
 }
 
-export class DocumentSharingService {
-  private static STORAGE_KEY = 'document_submissions';
+// Map a document_shares row to our DocumentSubmission interface
+function mapShareToSubmission(share: any): DocumentSubmission {
+  const metadata = share.feedback ? JSON.parse(share.feedback) : {};
+  return {
+    id: share.id,
+    documentId: share.document_id || '',
+    title: metadata.title || 'Document',
+    fromUserId: share.from_user_id || '',
+    fromUserName: metadata.fromUserName || '',
+    fromDepartment: metadata.fromDepartment || share.to_department || '',
+    toUserId: share.to_user_id || '',
+    toUserName: metadata.toUserName || '',
+    submissionType: metadata.submissionType || 'staff-to-hod',
+    status: (share.status as DocumentSubmission['status']) || 'pending',
+    submittedAt: share.shared_at || new Date().toISOString(),
+    reviewedAt: share.acknowledged_at || undefined,
+    comments: metadata.comments,
+    feedback: metadata.feedbackText,
+    attachments: metadata.attachments,
+    digitalSignature: metadata.digitalSignature,
+  };
+}
 
-  // Use localStorage as a temporary storage while we don't have a real backend
-  // In production, these would be replaced with actual API calls
+export class DocumentSharingService {
   static getSubmissions(): DocumentSubmission[] {
-    const stored = localStorage.getItem(this.STORAGE_KEY);
+    // Sync fallback – kept for backward compat but prefer async methods
+    const stored = localStorage.getItem('document_submissions');
     return stored ? JSON.parse(stored) : [];
   }
 
   static saveSubmissions(submissions: DocumentSubmission[]): void {
-    localStorage.setItem(this.STORAGE_KEY, JSON.stringify(submissions));
+    localStorage.setItem('document_submissions', JSON.stringify(submissions));
   }
 
-  static async submitDocument(submission: Omit<DocumentSubmission, 'id' | 'submittedAt' | 'status'>): Promise<DocumentSubmission> {
-    // Simulate API call delay
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    
-    const submissions = this.getSubmissions();
-    const newSubmission: DocumentSubmission = {
-      ...submission,
-      id: Date.now().toString(),
-      status: 'pending',
-      submittedAt: new Date().toISOString()
-    };
-    
-    submissions.unshift(newSubmission);
-    this.saveSubmissions(submissions);
-    
-    console.log('Document submitted via API:', newSubmission);
-    return newSubmission;
+  static async submitDocument(
+    submission: Omit<DocumentSubmission, 'id' | 'submittedAt' | 'status'>
+  ): Promise<DocumentSubmission> {
+    const metadata = JSON.stringify({
+      title: submission.title,
+      fromUserName: submission.fromUserName,
+      fromDepartment: submission.fromDepartment,
+      toUserName: submission.toUserName,
+      submissionType: submission.submissionType,
+      comments: submission.comments,
+      attachments: submission.attachments,
+    });
+
+    const { data, error } = await supabase
+      .from('document_shares')
+      .insert({
+        document_id: submission.documentId || null,
+        from_user_id: submission.fromUserId,
+        to_user_id: submission.toUserId,
+        to_department: submission.fromDepartment,
+        status: 'pending',
+        feedback: metadata,
+      })
+      .select()
+      .single();
+
+    if (error) {
+      console.error('Error submitting document:', error);
+      throw error;
+    }
+
+    // Create notification for recipient
+    await NotificationService.createNotification({
+      userId: submission.toUserId,
+      title: 'New Document Submission',
+      message: `${submission.fromUserName} submitted "${submission.title}" for your review.`,
+      type: 'approval',
+      referenceId: data.id,
+      referenceType: 'submission',
+    });
+
+    return mapShareToSubmission(data);
   }
 
   static async updateSubmissionStatus(
-    submissionId: string, 
-    status: DocumentSubmission['status'], 
-    feedback?: string,
+    submissionId: string,
+    status: DocumentSubmission['status'],
+    feedbackText?: string,
     digitalSignature?: DocumentSubmission['digitalSignature']
   ): Promise<DocumentSubmission | null> {
-    // Simulate API call delay
-    await new Promise(resolve => setTimeout(resolve, 800));
-    
-    const submissions = this.getSubmissions();
-    const submission = submissions.find(s => s.id === submissionId);
-    
-    if (submission) {
-      submission.status = status;
-      submission.reviewedAt = new Date().toISOString();
-      if (feedback) submission.feedback = feedback;
-      if (digitalSignature) submission.digitalSignature = digitalSignature;
-      
-      this.saveSubmissions(submissions);
-      console.log('Submission status updated via API:', submission);
-      return submission;
+    // First get existing record to preserve metadata
+    const { data: existing } = await supabase
+      .from('document_shares')
+      .select('*')
+      .eq('id', submissionId)
+      .single();
+
+    if (!existing) return null;
+
+    const existingMeta = existing.feedback ? JSON.parse(existing.feedback) : {};
+    const updatedMeta = {
+      ...existingMeta,
+      feedbackText: feedbackText || existingMeta.feedbackText,
+      digitalSignature: digitalSignature || existingMeta.digitalSignature,
+    };
+
+    const { data, error } = await supabase
+      .from('document_shares')
+      .update({
+        status,
+        acknowledged_at: new Date().toISOString(),
+        feedback: JSON.stringify(updatedMeta),
+      })
+      .eq('id', submissionId)
+      .select()
+      .single();
+
+    if (error) {
+      console.error('Error updating submission:', error);
+      return null;
     }
-    
-    return null;
+
+    // Notify the original sender
+    const statusLabel = status === 'approved' ? 'approved' : status === 'rejected' ? 'rejected' : 'updated';
+    await NotificationService.createNotification({
+      userId: existing.from_user_id,
+      title: `Document ${statusLabel}`,
+      message: `Your submission "${existingMeta.title || 'Document'}" has been ${statusLabel}.`,
+      type: 'document',
+      referenceId: submissionId,
+      referenceType: 'submission',
+    });
+
+    return mapShareToSubmission(data);
   }
 
   static async getSubmissionsByUser(userId: string): Promise<DocumentSubmission[]> {
-    await new Promise(resolve => setTimeout(resolve, 300));
-    return this.getSubmissions().filter(s => s.fromUserId === userId);
+    const { data, error } = await supabase
+      .from('document_shares')
+      .select('*')
+      .eq('from_user_id', userId)
+      .order('shared_at', { ascending: false });
+
+    if (error) {
+      console.error('Error fetching submissions by user:', error);
+      return [];
+    }
+    return (data || []).map(mapShareToSubmission);
   }
 
   static async getSubmissionsToUser(userId: string): Promise<DocumentSubmission[]> {
-    await new Promise(resolve => setTimeout(resolve, 300));
-    return this.getSubmissions().filter(s => s.toUserId === userId);
+    const { data, error } = await supabase
+      .from('document_shares')
+      .select('*')
+      .eq('to_user_id', userId)
+      .order('shared_at', { ascending: false });
+
+    if (error) {
+      console.error('Error fetching submissions to user:', error);
+      return [];
+    }
+    return (data || []).map(mapShareToSubmission);
   }
 
   static async getPendingSubmissions(): Promise<DocumentSubmission[]> {
-    await new Promise(resolve => setTimeout(resolve, 300));
-    return this.getSubmissions().filter(s => s.status === 'pending');
+    const { data, error } = await supabase
+      .from('document_shares')
+      .select('*')
+      .eq('status', 'pending')
+      .order('shared_at', { ascending: false });
+
+    if (error) {
+      console.error('Error fetching pending submissions:', error);
+      return [];
+    }
+    return (data || []).map(mapShareToSubmission);
   }
 
   static async getPendingSubmissionsForUser(userId: string): Promise<DocumentSubmission[]> {
-    await new Promise(resolve => setTimeout(resolve, 300));
-    return this.getSubmissions().filter(s => s.toUserId === userId && s.status === 'pending');
+    const { data, error } = await supabase
+      .from('document_shares')
+      .select('*')
+      .eq('to_user_id', userId)
+      .eq('status', 'pending')
+      .order('shared_at', { ascending: false });
+
+    if (error) return [];
+    return (data || []).map(mapShareToSubmission);
   }
 
   static async getSubmissionsByType(type: DocumentSubmission['submissionType']): Promise<DocumentSubmission[]> {
-    await new Promise(resolve => setTimeout(resolve, 300));
-    return this.getSubmissions().filter(s => s.submissionType === type);
+    // Filter by submissionType stored in the feedback JSON metadata
+    const { data, error } = await supabase
+      .from('document_shares')
+      .select('*')
+      .order('shared_at', { ascending: false });
+
+    if (error) return [];
+    return (data || [])
+      .map(mapShareToSubmission)
+      .filter((s) => s.submissionType === type);
   }
 
   static async getStaffSubmissionsForHod(hodUserId: string): Promise<DocumentSubmission[]> {
-    await new Promise(resolve => setTimeout(resolve, 300));
-    return this.getSubmissions().filter(s => 
-      s.toUserId === hodUserId && s.submissionType === 'staff-to-hod'
-    );
+    const all = await this.getSubmissionsToUser(hodUserId);
+    return all.filter((s) => s.submissionType === 'staff-to-hod');
   }
 
   static async getHodSubmissionsForStaff(staffUserId: string): Promise<DocumentSubmission[]> {
-    await new Promise(resolve => setTimeout(resolve, 300));
-    return this.getSubmissions().filter(s => 
-      s.toUserId === staffUserId && s.submissionType === 'hod-to-staff'
-    );
+    const all = await this.getSubmissionsToUser(staffUserId);
+    return all.filter((s) => s.submissionType === 'hod-to-staff');
   }
 }
