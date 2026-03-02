@@ -4,8 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
-import { PDFPreview } from './PDFPreview';
-import { DocumentCommunicationService, DocumentMessage } from '@/services/documentCommunicationService';
+import { DocumentSubmission, DocumentSharingService } from '@/services/documentSharingService';
 import { useAuth } from '@/contexts/AuthContext';
 import { useToast } from '@/hooks/use-toast';
 import { 
@@ -15,7 +14,6 @@ import {
   ThumbsUp, 
   Search, 
   FileText, 
-  Download,
   Clock,
   Mail,
   MailOpen
@@ -25,119 +23,97 @@ import { format } from 'date-fns';
 export const EnhancedInboxView: React.FC = () => {
   const { user } = useAuth();
   const { toast } = useToast();
-  const [messages, setMessages] = useState<DocumentMessage[]>([]);
+  const [submissions, setSubmissions] = useState<DocumentSubmission[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
-  const [selectedPDF, setSelectedPDF] = useState<{fileUrl: string, fileName: string} | null>(null);
-  const [filter, setFilter] = useState<'all' | 'new' | 'viewed' | 'acknowledged'>('all');
+  const [filter, setFilter] = useState<'all' | 'pending' | 'approved' | 'rejected' | 'acknowledged'>('all');
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (user) {
-      loadMessages();
-    }
+    if (user) loadSubmissions();
   }, [user]);
 
-  const loadMessages = () => {
+  const loadSubmissions = async () => {
     if (!user) return;
-    const inboxMessages = DocumentCommunicationService.getInboxMessages(user.id);
-    setMessages(inboxMessages);
+    setLoading(true);
+    try {
+      const received = await DocumentSharingService.getSubmissionsToUser(user.id);
+      const sent = await DocumentSharingService.getSubmissionsByUser(user.id);
+      setSubmissions([...received, ...sent]);
+    } catch (error) {
+      console.error('Error loading inbox:', error);
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const handleViewDocument = (message: DocumentMessage) => {
-    if (message.status === 'sent') {
-      DocumentCommunicationService.markAsViewed(message.id, user!.id);
-      loadMessages();
+  const handleAcknowledge = async (submission: DocumentSubmission) => {
+    try {
+      await DocumentSharingService.updateSubmissionStatus(submission.id, 'acknowledged');
+      await loadSubmissions();
       toast({
-        title: "Document Viewed",
-        description: "Document marked as viewed"
+        title: "Document Acknowledged",
+        description: "Document has been acknowledged successfully"
       });
-    }
-    
-    if (message.documentDetails.fileType === 'application/pdf') {
-      setSelectedPDF({
-        fileUrl: message.documentDetails.fileUrl,
-        fileName: message.documentDetails.name
-      });
+    } catch (error) {
+      toast({ title: "Error", description: "Failed to acknowledge", variant: "destructive" });
     }
   };
 
-  const handleAcknowledge = (message: DocumentMessage) => {
-    DocumentCommunicationService.acknowledgeDocument(message.id, user!.id);
-    loadMessages();
-    toast({
-      title: "Document Acknowledged",
-      description: "Document has been acknowledged successfully"
-    });
-  };
-
-  const handleApprove = (message: DocumentMessage) => {
-    if (user?.role !== 'CMD') {
+  const handleApprove = async (submission: DocumentSubmission) => {
+    try {
+      await DocumentSharingService.updateSubmissionStatus(submission.id, 'approved');
+      await loadSubmissions();
       toast({
-        title: "Permission Denied",
-        description: "Only CMD can approve documents",
-        variant: "destructive"
+        title: "Document Approved",
+        description: "Document has been approved"
       });
-      return;
+    } catch (error) {
+      toast({ title: "Error", description: "Failed to approve", variant: "destructive" });
     }
-    
-    DocumentCommunicationService.approveDocument(message.id, user.id);
-    loadMessages();
-    toast({
-      title: "Document Approved",
-      description: "Document has been approved by CMD"
-    });
   };
 
-  const getStatusIcon = (status: string, isNew: boolean) => {
-    if (isNew) return <Mail className="h-4 w-4 text-blue-600" />;
-    
+  const getStatusIcon = (status: string) => {
     switch (status) {
-      case 'viewed': return <MailOpen className="h-4 w-4 text-blue-600" />;
+      case 'pending': return <Clock className="h-4 w-4 text-amber-600" />;
       case 'acknowledged': return <CheckCircle className="h-4 w-4 text-green-600" />;
-      case 'approved': return <ThumbsUp className="h-4 w-4 text-purple-600" />;
-      default: return <Clock className="h-4 w-4 text-gray-600" />;
+      case 'approved': return <ThumbsUp className="h-4 w-4 text-primary" />;
+      case 'rejected': return <Mail className="h-4 w-4 text-destructive" />;
+      default: return <FileText className="h-4 w-4" />;
     }
   };
 
-  const getStatusColor = (status: string, isNew: boolean) => {
-    if (isNew) return 'bg-blue-100 text-blue-800 border-blue-300';
-    
+  const getStatusColor = (status: string) => {
     switch (status) {
+      case 'pending': return 'bg-amber-100 text-amber-800';
       case 'acknowledged': return 'bg-green-100 text-green-800';
-      case 'approved': return 'bg-purple-100 text-purple-800';
-      case 'viewed': return 'bg-blue-100 text-blue-800';
-      default: return 'bg-gray-100 text-gray-800';
+      case 'approved': return 'bg-blue-100 text-blue-800';
+      case 'rejected': return 'bg-red-100 text-red-800';
+      default: return 'bg-muted text-muted-foreground';
     }
   };
 
-  const filteredMessages = messages.filter(message => {
-    const matchesSearch = message.documentDetails.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         message.fromUserName.toLowerCase().includes(searchTerm.toLowerCase());
-    
-    const matchesFilter = filter === 'all' || 
-                         (filter === 'new' && message.isNew) ||
-                         (filter === 'viewed' && message.status === 'viewed') ||
-                         (filter === 'acknowledged' && message.status === 'acknowledged');
-    
+  const filteredSubmissions = submissions.filter(sub => {
+    const matchesSearch = sub.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         sub.fromUserName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         sub.fromDepartment.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesFilter = filter === 'all' || sub.status === filter;
     return matchesSearch && matchesFilter;
   });
 
-  const getFilterCounts = () => {
-    return {
-      all: messages.length,
-      new: messages.filter(m => m.isNew).length,
-      viewed: messages.filter(m => m.status === 'viewed').length,
-      acknowledged: messages.filter(m => m.status === 'acknowledged').length
-    };
+  const counts = {
+    all: submissions.length,
+    pending: submissions.filter(s => s.status === 'pending').length,
+    approved: submissions.filter(s => s.status === 'approved').length,
+    acknowledged: submissions.filter(s => s.status === 'acknowledged').length,
+    rejected: submissions.filter(s => s.status === 'rejected').length,
   };
-
-  const counts = getFilterCounts();
 
   return (
     <div className="space-y-6">
       <div className="flex items-center gap-3">
         <Inbox className="h-8 w-8 text-primary" />
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">Enhanced Inbox</h1>
+          <h1 className="text-3xl font-bold tracking-tight">Inbox</h1>
           <p className="text-muted-foreground">
             View and manage your document communications
           </p>
@@ -146,16 +122,16 @@ export const EnhancedInboxView: React.FC = () => {
 
       {/* Stats Cards */}
       <div className="grid gap-4 md:grid-cols-4">
-        <Card className="border-blue-200 bg-blue-50/50">
-          <CardContent className="p-4">
-            <div className="text-2xl font-bold text-blue-600">{counts.new}</div>
-            <p className="text-sm text-muted-foreground">New Messages</p>
-          </CardContent>
-        </Card>
         <Card>
           <CardContent className="p-4">
             <div className="text-2xl font-bold">{counts.all}</div>
-            <p className="text-sm text-muted-foreground">Total Messages</p>
+            <p className="text-sm text-muted-foreground">Total</p>
+          </CardContent>
+        </Card>
+        <Card className="border-amber-200 bg-amber-50/50">
+          <CardContent className="p-4">
+            <div className="text-2xl font-bold text-amber-600">{counts.pending}</div>
+            <p className="text-sm text-muted-foreground">Pending</p>
           </CardContent>
         </Card>
         <Card>
@@ -166,8 +142,8 @@ export const EnhancedInboxView: React.FC = () => {
         </Card>
         <Card>
           <CardContent className="p-4">
-            <div className="text-2xl font-bold text-blue-600">{counts.viewed}</div>
-            <p className="text-sm text-muted-foreground">Viewed</p>
+            <div className="text-2xl font-bold text-blue-600">{counts.approved}</div>
+            <p className="text-sm text-muted-foreground">Approved</p>
           </CardContent>
         </Card>
       </div>
@@ -184,7 +160,7 @@ export const EnhancedInboxView: React.FC = () => {
           />
         </div>
         <div className="flex gap-2">
-          {(['all', 'new', 'viewed', 'acknowledged'] as const).map((filterType) => (
+          {(['all', 'pending', 'acknowledged', 'approved'] as const).map((filterType) => (
             <Button
               key={filterType}
               variant={filter === filterType ? 'default' : 'outline'}
@@ -202,77 +178,66 @@ export const EnhancedInboxView: React.FC = () => {
         </div>
       </div>
 
-      {/* Messages List */}
+      {/* Submissions List */}
       <Card>
         <CardHeader>
-          <CardTitle>Messages ({filteredMessages.length})</CardTitle>
+          <CardTitle>Documents ({filteredSubmissions.length})</CardTitle>
         </CardHeader>
         <CardContent>
-          {filteredMessages.length === 0 ? (
+          {loading ? (
+            <div className="text-center py-8">
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto" />
+              <p className="mt-2 text-muted-foreground">Loading...</p>
+            </div>
+          ) : filteredSubmissions.length === 0 ? (
             <div className="text-center py-8 text-muted-foreground">
               <Inbox className="h-12 w-12 mx-auto mb-2 opacity-50" />
-              <p>No messages found</p>
+              <p>No documents found</p>
               <p className="text-sm">
-                {searchTerm ? 'Try adjusting your search' : 'No messages in your inbox'}
+                {searchTerm ? 'Try adjusting your search' : 'No documents in your inbox'}
               </p>
             </div>
           ) : (
             <div className="space-y-4">
-              {filteredMessages.map((message) => (
-                <div key={message.id} className={`border rounded-lg p-4 ${message.isNew ? 'border-blue-300 bg-blue-50/30' : ''}`}>
+              {filteredSubmissions.map((sub) => (
+                <div key={sub.id} className={`border rounded-lg p-4 ${sub.status === 'pending' ? 'border-amber-300 bg-amber-50/30' : ''}`}>
                   <div className="flex items-start justify-between">
                     <div className="space-y-2 flex-1">
                       <div className="flex items-center gap-2">
-                        {getStatusIcon(message.status, message.isNew)}
-                        <h4 className="font-medium">{message.documentDetails.name}</h4>
-                        <Badge className={getStatusColor(message.status, message.isNew)}>
-                          {message.isNew ? 'NEW' : message.status.toUpperCase()}
+                        {getStatusIcon(sub.status)}
+                        <h4 className="font-medium">{sub.title}</h4>
+                        <Badge className={getStatusColor(sub.status)}>
+                          {sub.status.replace('_', ' ').toUpperCase()}
                         </Badge>
+                        {sub.toUserId === user?.id && sub.status === 'pending' && (
+                          <Badge variant="outline" className="text-orange-600 border-orange-300">
+                            Action Required
+                          </Badge>
+                        )}
                       </div>
                       <div className="text-sm text-muted-foreground">
-                        <p><strong>From:</strong> {message.fromUserName} ({message.fromDepartment.replace(/_/g, ' ')})</p>
-                        <p><strong>Sent:</strong> {format(new Date(message.sentAt), 'MMM d, yyyy at h:mm a')}</p>
-                        {message.message && <p><strong>Message:</strong> {message.message}</p>}
-                        <p><strong>File:</strong> {message.documentDetails.name} ({Math.round(message.documentDetails.fileSize / 1024)} KB)</p>
-                        {message.viewedAt && (
-                          <p><strong>Viewed:</strong> {format(new Date(message.viewedAt), 'MMM d, yyyy at h:mm a')}</p>
-                        )}
-                        {message.acknowledgedAt && (
-                          <p><strong>Acknowledged:</strong> {format(new Date(message.acknowledgedAt), 'MMM d, yyyy at h:mm a')}</p>
-                        )}
-                        {message.approvedAt && (
-                          <p className="text-purple-600"><strong>Approved:</strong> {format(new Date(message.approvedAt), 'MMM d, yyyy at h:mm a')}</p>
+                        <p><strong>{sub.fromUserId === user?.id ? 'To:' : 'From:'}</strong> {sub.fromUserId === user?.id ? (sub.toUserName || 'Recipient') : sub.fromUserName} ({sub.fromDepartment})</p>
+                        <p><strong>Date:</strong> {format(new Date(sub.submittedAt), 'MMM d, yyyy at h:mm a')}</p>
+                        {sub.comments && <p><strong>Comments:</strong> {sub.comments}</p>}
+                        {sub.feedback && (
+                          <div className="mt-2 p-2 bg-muted rounded">
+                            <p><strong>Feedback:</strong> {sub.feedback}</p>
+                          </div>
                         )}
                       </div>
                     </div>
                     <div className="flex items-center gap-2">
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => handleViewDocument(message)}
-                      >
-                        <Eye className="h-4 w-4" />
-                      </Button>
-                      {!['acknowledged', 'approved'].includes(message.status) && (
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={() => handleAcknowledge(message)}
-                        >
-                          <CheckCircle className="h-4 w-4 mr-1" />
-                          Acknowledge
-                        </Button>
-                      )}
-                      {user?.role === 'CMD' && message.status === 'acknowledged' && (
-                        <Button
-                          variant="default"
-                          size="sm"
-                          onClick={() => handleApprove(message)}
-                          className="bg-purple-600 hover:bg-purple-700"
-                        >
-                          <ThumbsUp className="h-4 w-4 mr-1" />
-                          Approve
-                        </Button>
+                      {sub.toUserId === user?.id && sub.status === 'pending' && (
+                        <>
+                          <Button variant="outline" size="sm" onClick={() => handleAcknowledge(sub)}>
+                            <CheckCircle className="h-4 w-4 mr-1" />
+                            Acknowledge
+                          </Button>
+                          <Button variant="default" size="sm" onClick={() => handleApprove(sub)}>
+                            <ThumbsUp className="h-4 w-4 mr-1" />
+                            Approve
+                          </Button>
+                        </>
                       )}
                     </div>
                   </div>
@@ -282,15 +247,6 @@ export const EnhancedInboxView: React.FC = () => {
           )}
         </CardContent>
       </Card>
-
-      {/* PDF Preview Modal */}
-      {selectedPDF && (
-        <PDFPreview
-          fileUrl={selectedPDF.fileUrl}
-          fileName={selectedPDF.fileName}
-          onClose={() => setSelectedPDF(null)}
-        />
-      )}
     </div>
   );
 };

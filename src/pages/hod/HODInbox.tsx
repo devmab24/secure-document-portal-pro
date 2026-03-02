@@ -9,24 +9,34 @@ import { DocumentSubmission, DocumentSharingService } from '@/services/documentS
 import { Search, Clock, CheckCircle, XCircle, MessageSquare, FileText, Inbox, Share } from 'lucide-react';
 import { format } from 'date-fns';
 import { Link } from 'react-router-dom';
+import { useAuth } from '@/contexts/AuthContext';
 
 const HODInbox = () => {
+  const { user } = useAuth();
   const [submissions, setSubmissions] = useState<DocumentSubmission[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [filter, setFilter] = useState<'all' | 'pending' | 'approved' | 'rejected' | 'revision_requested'>('all');
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    loadSubmissions();
-  }, []);
+    if (user) loadSubmissions();
+  }, [user]);
 
-  const loadSubmissions = () => {
-    const allSubmissions = DocumentSharingService.getSubmissions();
-    setSubmissions(allSubmissions);
+  const loadSubmissions = async () => {
+    setLoading(true);
+    try {
+      const received = await DocumentSharingService.getSubmissionsToUser(user!.id);
+      const sent = await DocumentSharingService.getSubmissionsByUser(user!.id);
+      setSubmissions([...received, ...sent]);
+    } catch (error) {
+      console.error('Error loading submissions:', error);
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const handleReview = (submissionId: string, status: DocumentSubmission['status'], feedback?: string) => {
-    // Refresh submissions after review
-    loadSubmissions();
+  const handleReview = async (submissionId: string, status: DocumentSubmission['status'], feedback?: string) => {
+    await loadSubmissions();
   };
 
   const filteredSubmissions = submissions.filter(submission => {
