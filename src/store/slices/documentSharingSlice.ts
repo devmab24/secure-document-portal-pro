@@ -22,16 +22,16 @@ const initialState: DocumentSharingState = {
 // Async thunks for document sharing operations
 export const loadSubmissions = createAsyncThunk(
   'documentSharing/loadSubmissions',
-  async () => {
-    await new Promise(resolve => setTimeout(resolve, 500)); // Simulate API call
-    return DocumentSharingService.getSubmissions();
+  async (userId: string) => {
+    const received = await DocumentSharingService.getSubmissionsToUser(userId);
+    const sent = await DocumentSharingService.getSubmissionsByUser(userId);
+    return [...received, ...sent];
   }
 );
 
 export const loadUserSubmissions = createAsyncThunk(
   'documentSharing/loadUserSubmissions',
   async (userId: string) => {
-    await new Promise(resolve => setTimeout(resolve, 300));
     return DocumentSharingService.getSubmissionsByUser(userId);
   }
 );
@@ -39,7 +39,6 @@ export const loadUserSubmissions = createAsyncThunk(
 export const loadPendingSubmissions = createAsyncThunk(
   'documentSharing/loadPendingSubmissions',
   async () => {
-    await new Promise(resolve => setTimeout(resolve, 300));
     return DocumentSharingService.getPendingSubmissions();
   }
 );
@@ -47,7 +46,6 @@ export const loadPendingSubmissions = createAsyncThunk(
 export const submitDocument = createAsyncThunk(
   'documentSharing/submitDocument',
   async (submission: Omit<DocumentSubmission, 'id' | 'submittedAt' | 'status'>) => {
-    await new Promise(resolve => setTimeout(resolve, 1000));
     return DocumentSharingService.submitDocument(submission);
   }
 );
@@ -55,7 +53,6 @@ export const submitDocument = createAsyncThunk(
 export const loadSubmissionsToUser = createAsyncThunk(
   'documentSharing/loadSubmissionsToUser',
   async (userId: string) => {
-    await new Promise(resolve => setTimeout(resolve, 300));
     return DocumentSharingService.getSubmissionsToUser(userId);
   }
 );
@@ -73,7 +70,6 @@ export const updateSubmissionStatus = createAsyncThunk(
     feedback?: string;
     digitalSignature?: DocumentSubmission['digitalSignature'];
   }) => {
-    await new Promise(resolve => setTimeout(resolve, 800));
     return DocumentSharingService.updateSubmissionStatus(submissionId, status, feedback, digitalSignature);
   }
 );
