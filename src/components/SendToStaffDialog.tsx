@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -11,6 +11,15 @@ import { Send, Upload, X } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { useAppDispatch } from '@/store';
 import { submitDocument } from '@/store/slices/documentSharingSlice';
+import { supabase } from '@/integrations/supabase/client';
+
+interface StaffMember {
+  id: string;
+  first_name: string | null;
+  last_name: string | null;
+  email: string;
+  department: string | null;
+}
 
 interface SendToStaffDialogProps {
   document?: any;
@@ -19,28 +28,48 @@ interface SendToStaffDialogProps {
 }
 
 export const SendToStaffDialog: React.FC<SendToStaffDialogProps> = ({ 
-  document, 
+  document: doc, 
   trigger,
   departmentStaff = []
 }) => {
   const { user } = useAuth();
   const dispatch = useAppDispatch();
   const [isOpen, setIsOpen] = useState(false);
-  const [title, setTitle] = useState(document?.name || '');
+  const [title, setTitle] = useState(doc?.name || '');
   const [comments, setComments] = useState('');
   const [selectedStaff, setSelectedStaff] = useState('');
   const [attachments, setAttachments] = useState<File[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [staffMembers, setStaffMembers] = useState<StaffMember[]>([]);
+  const [loadingStaff, setLoadingStaff] = useState(false);
   const { toast } = useToast();
 
-  // Mock staff data if not provided
-  const mockStaff = [
-    { id: 'staff-1', name: 'John Smith', email: 'john.smith@hospital.com' },
-    { id: 'staff-2', name: 'Sarah Johnson', email: 'sarah.johnson@hospital.com' },
-    { id: 'staff-3', name: 'Mike Brown', email: 'mike.brown@hospital.com' }
-  ];
+  useEffect(() => {
+    if (isOpen && departmentStaff.length === 0) {
+      setLoadingStaff(true);
+      supabase
+        .from('users')
+        .select('id, first_name, last_name, email, department')
+        .eq('is_active', true)
+        .neq('id', user?.id || '')
+        .order('first_name')
+        .then(({ data }) => {
+          if (data) setStaffMembers(data);
+          setLoadingStaff(false);
+        });
+    }
+  }, [isOpen, user, departmentStaff.length]);
 
-  const staffList = departmentStaff.length > 0 ? departmentStaff : mockStaff;
+  // Build unified staff list
+  const staffList: { id: string; name: string; email: string; department?: string }[] = 
+    departmentStaff.length > 0 
+      ? departmentStaff 
+      : staffMembers.map(s => ({ 
+          id: s.id, 
+          name: `${s.first_name || ''} ${s.last_name || ''}`.trim(), 
+          email: s.email,
+          department: s.department || undefined
+        }));
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files || []);
@@ -53,20 +82,12 @@ export const SendToStaffDialog: React.FC<SendToStaffDialogProps> = ({
 
   const handleSubmit = async () => {
     if (!title.trim()) {
-      toast({
-        title: "Title required",
-        description: "Please enter a document title.",
-        variant: "destructive"
-      });
+      toast({ title: "Title required", description: "Please enter a document title.", variant: "destructive" });
       return;
     }
 
     if (!selectedStaff) {
-      toast({
-        title: "Staff member required",
-        description: "Please select a staff member to send the document to.",
-        variant: "destructive"
-      });
+      toast({ title: "Staff member required", description: "Please select a staff member.", variant: "destructive" });
       return;
     }
 
@@ -86,7 +107,7 @@ export const SendToStaffDialog: React.FC<SendToStaffDialogProps> = ({
       const selectedStaffMember = staffList.find(s => s.id === selectedStaff);
 
       await dispatch(submitDocument({
-        documentId: document?.id || `doc-${Date.now()}`,
+        documentId: doc?.id || `doc-${Date.now()}`,
         title: title.trim(),
         fromUserId: user.id,
         fromUserName: `${user.firstName} ${user.lastName}`,
@@ -103,18 +124,13 @@ export const SendToStaffDialog: React.FC<SendToStaffDialogProps> = ({
         description: `"${title}" has been sent to ${selectedStaffMember?.name}.`
       });
 
-      // Reset form
-      setTitle(document?.name || '');
+      setTitle(doc?.name || '');
       setComments('');
       setSelectedStaff('');
       setAttachments([]);
       setIsOpen(false);
     } catch (error) {
-      toast({
-        title: "Failed to send document",
-        description: "Please try again.",
-        variant: "destructive"
-      });
+      toast({ title: "Failed to send document", description: "Please try again.", variant: "destructive" });
     } finally {
       setIsLoading(false);
     }
@@ -137,14 +153,14 @@ export const SendToStaffDialog: React.FC<SendToStaffDialogProps> = ({
         <div className="space-y-4">
           <div className="space-y-2">
             <Label htmlFor="staff-select">Select Staff Member</Label>
-            <Select value={selectedStaff} onValueChange={setSelectedStaff}>
+            <Select value={selectedStaff} onValueChange={setSelectedStaff} disabled={loadingStaff}>
               <SelectTrigger>
-                <SelectValue placeholder="Choose a staff member" />
+                <SelectValue placeholder={loadingStaff ? "Loading staff..." : "Choose a staff member"} />
               </SelectTrigger>
               <SelectContent>
                 {staffList.map((staff) => (
                   <SelectItem key={staff.id} value={staff.id}>
-                    {staff.name} ({staff.email})
+                    {staff.name} ({staff.email}){staff.department ? ` — ${staff.department}` : ''}
                   </SelectItem>
                 ))}
               </SelectContent>
@@ -152,49 +168,23 @@ export const SendToStaffDialog: React.FC<SendToStaffDialogProps> = ({
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="title">Document Title</Label>
-            <Input
-              id="title"
-              placeholder="Enter document title"
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-            />
+            <Label htmlFor="staff-title">Document Title</Label>
+            <Input id="staff-title" placeholder="Enter document title" value={title} onChange={(e) => setTitle(e.target.value)} />
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="attachments">Attach Files (Optional)</Label>
+            <Label htmlFor="staff-attachments">Attach Files (Optional)</Label>
             <div className="space-y-2">
-              <input
-                id="attachments"
-                type="file"
-                multiple
-                onChange={handleFileChange}
-                className="hidden"
-                accept=".pdf,.doc,.docx,.txt,.jpg,.jpeg,.png,.xlsx,.xls"
-              />
-              <Button
-                type="button"
-                variant="outline"
-                onClick={() => document.getElementById('attachments')?.click()}
-                className="w-full"
-              >
-                <Upload className="h-4 w-4 mr-2" />
-                Choose Files
+              <input id="staff-attachments" type="file" multiple onChange={handleFileChange} className="hidden" accept=".pdf,.doc,.docx,.txt,.jpg,.jpeg,.png,.xlsx,.xls" />
+              <Button type="button" variant="outline" onClick={() => window.document.getElementById('staff-attachments')?.click()} className="w-full">
+                <Upload className="h-4 w-4 mr-2" /> Choose Files
               </Button>
-              
               {attachments.length > 0 && (
                 <div className="space-y-1">
                   {attachments.map((file, index) => (
                     <div key={index} className="flex items-center justify-between p-2 bg-muted rounded">
                       <span className="text-sm truncate">{file.name}</span>
-                      <Button
-                        type="button"
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => removeAttachment(index)}
-                      >
-                        <X className="h-4 w-4" />
-                      </Button>
+                      <Button type="button" variant="ghost" size="sm" onClick={() => removeAttachment(index)}><X className="h-4 w-4" /></Button>
                     </div>
                   ))}
                 </div>
@@ -203,20 +193,12 @@ export const SendToStaffDialog: React.FC<SendToStaffDialogProps> = ({
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="comments">Comments (Optional)</Label>
-            <Textarea
-              id="comments"
-              placeholder="Add any comments or instructions for the staff member..."
-              value={comments}
-              onChange={(e) => setComments(e.target.value)}
-              rows={3}
-            />
+            <Label htmlFor="staff-comments">Comments (Optional)</Label>
+            <Textarea id="staff-comments" placeholder="Add any comments or instructions..." value={comments} onChange={(e) => setComments(e.target.value)} rows={3} />
           </div>
 
           <div className="flex justify-end gap-2">
-            <Button variant="outline" onClick={() => setIsOpen(false)}>
-              Cancel
-            </Button>
+            <Button variant="outline" onClick={() => setIsOpen(false)}>Cancel</Button>
             <Button onClick={handleSubmit} disabled={isLoading}>
               {isLoading ? 'Sending...' : 'Send to Staff'}
             </Button>
