@@ -11,7 +11,7 @@ export interface DocumentSubmission {
   fromDepartment: string;
   toUserId: string;
   toUserName?: string;
-  submissionType: 'hod-to-cmd' | 'staff-to-hod' | 'hod-to-staff';
+  submissionType: 'hod-to-cmd' | 'staff-to-hod' | 'hod-to-staff' | 'cmd-to-hod' | 'cmd-to-director' | 'director-to-unit' | 'unit-to-staff' | 'cross-department' | 'general';
   status: 'pending' | 'approved' | 'rejected' | 'revision_requested' | 'acknowledged';
   submittedAt: string;
   reviewedAt?: string;
