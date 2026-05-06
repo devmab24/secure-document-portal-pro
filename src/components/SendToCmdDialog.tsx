@@ -69,7 +69,13 @@ export const SendToCmdDialog: React.FC<SendToCmdDialogProps> = ({ document: doc,
 
     try {
       const attachmentObjects = attachments.length > 0
-        ? await uploadAttachments(attachments, user.id, 'cmd-submissions')
+        ? await uploadAttachments(attachments, user.id, 'cmd-submissions', (p) => {
+            setUploadProgress(prev => {
+              const next = prev.filter(x => x.index !== p.index);
+              next.push(p);
+              return next;
+            });
+          })
         : [];
 
       await DocumentSharingService.submitDocument({
@@ -93,6 +99,7 @@ export const SendToCmdDialog: React.FC<SendToCmdDialogProps> = ({ document: doc,
       setTitle(doc?.name || '');
       setComments('');
       setAttachments([]);
+      setUploadProgress([]);
       setIsOpen(false);
     } catch (error) {
       toast({ title: "Failed to send document", description: "Please try again.", variant: "destructive" });
@@ -127,25 +134,13 @@ export const SendToCmdDialog: React.FC<SendToCmdDialogProps> = ({ document: doc,
             <Input id="cmd-title" placeholder="Enter document title" value={title} onChange={(e) => setTitle(e.target.value)} />
           </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="cmd-attachments">Attach Files (Optional)</Label>
-            <div className="space-y-2">
-              <input id="cmd-attachments" type="file" multiple onChange={handleFileChange} className="hidden" accept=".pdf,.doc,.docx,.txt,.jpg,.jpeg,.png,.xlsx,.xls" />
-              <Button type="button" variant="outline" onClick={() => window.document.getElementById('cmd-attachments')?.click()} className="w-full">
-                <Upload className="h-4 w-4 mr-2" /> Choose Files
-              </Button>
-              {attachments.length > 0 && (
-                <div className="space-y-1">
-                  {attachments.map((file, index) => (
-                    <div key={index} className="flex items-center justify-between p-2 bg-muted rounded">
-                      <span className="text-sm truncate">{file.name}</span>
-                      <Button type="button" variant="ghost" size="sm" onClick={() => removeAttachment(index)}><X className="h-4 w-4" /></Button>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
-          </div>
+          <AttachmentsField
+            id="cmd-attachments"
+            files={attachments}
+            onChange={setAttachments}
+            progress={uploadProgress}
+            disabled={isLoading}
+          />
 
           <div className="space-y-2">
             <Label htmlFor="cmd-comments">Comments (Optional)</Label>
