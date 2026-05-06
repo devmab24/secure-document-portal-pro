@@ -6,11 +6,12 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/hooks/use-toast';
-import { Send, Upload, X } from 'lucide-react';
+import { Send } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { DocumentSharingService } from '@/services/documentSharingService';
 import { supabase } from '@/integrations/supabase/client';
-import { uploadAttachments } from '@/lib/uploadAttachments';
+import { uploadAttachments, AttachmentProgress } from '@/lib/uploadAttachments';
+import { AttachmentsField } from '@/components/AttachmentsField';
 
 interface SendToCmdDialogProps {
   document?: any;
@@ -23,13 +24,13 @@ export const SendToCmdDialog: React.FC<SendToCmdDialogProps> = ({ document: doc,
   const [title, setTitle] = useState(doc?.name || '');
   const [comments, setComments] = useState('');
   const [attachments, setAttachments] = useState<File[]>([]);
+  const [uploadProgress, setUploadProgress] = useState<AttachmentProgress[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [cmdUser, setCmdUser] = useState<{ id: string; first_name: string; last_name: string } | null>(null);
   const { toast } = useToast();
 
   useEffect(() => {
     if (isOpen) {
-      // Look up the CMD user from Supabase
       supabase
         .from('users')
         .select('id, first_name, last_name')
@@ -42,33 +43,28 @@ export const SendToCmdDialog: React.FC<SendToCmdDialogProps> = ({ document: doc,
     }
   }, [isOpen]);
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const files = Array.from(e.target.files || []);
-    setAttachments(prev => [...prev, ...files]);
-  };
-
-  const removeAttachment = (index: number) => {
-    setAttachments(prev => prev.filter((_, i) => i !== index));
-  };
-
   const handleSubmit = async () => {
     if (!title.trim()) {
       toast({ title: "Title required", description: "Please enter a document title.", variant: "destructive" });
       return;
     }
-
     if (!cmdUser) {
       toast({ title: "CMD not found", description: "Unable to find the CMD user. Please try again.", variant: "destructive" });
       return;
     }
-
     if (!user) return;
 
     setIsLoading(true);
-
+    setUploadProgress([]);
     try {
       const attachmentObjects = attachments.length > 0
-        ? await uploadAttachments(attachments, user.id, 'cmd-submissions')
+        ? await uploadAttachments(attachments, user.id, 'cmd-submissions', (p) => {
+            setUploadProgress(prev => {
+              const next = prev.filter(x => x.index !== p.index);
+              next.push(p);
+              return next;
+            });
+          })
         : [];
 
       await DocumentSharingService.submitDocument({
@@ -92,9 +88,10 @@ export const SendToCmdDialog: React.FC<SendToCmdDialogProps> = ({ document: doc,
       setTitle(doc?.name || '');
       setComments('');
       setAttachments([]);
+      setUploadProgress([]);
       setIsOpen(false);
-    } catch (error) {
-      toast({ title: "Failed to send document", description: "Please try again.", variant: "destructive" });
+    } catch (error: any) {
+      toast({ title: "Failed to send document", description: error?.message || "Please try again.", variant: "destructive" });
     } finally {
       setIsLoading(false);
     }
@@ -126,25 +123,13 @@ export const SendToCmdDialog: React.FC<SendToCmdDialogProps> = ({ document: doc,
             <Input id="cmd-title" placeholder="Enter document title" value={title} onChange={(e) => setTitle(e.target.value)} />
           </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="cmd-attachments">Attach Files (Optional)</Label>
-            <div className="space-y-2">
-              <input id="cmd-attachments" type="file" multiple onChange={handleFileChange} className="hidden" accept=".pdf,.doc,.docx,.txt,.jpg,.jpeg,.png,.xlsx,.xls" />
-              <Button type="button" variant="outline" onClick={() => window.document.getElementById('cmd-attachments')?.click()} className="w-full">
-                <Upload className="h-4 w-4 mr-2" /> Choose Files
-              </Button>
-              {attachments.length > 0 && (
-                <div className="space-y-1">
-                  {attachments.map((file, index) => (
-                    <div key={index} className="flex items-center justify-between p-2 bg-muted rounded">
-                      <span className="text-sm truncate">{file.name}</span>
-                      <Button type="button" variant="ghost" size="sm" onClick={() => removeAttachment(index)}><X className="h-4 w-4" /></Button>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
-          </div>
+          <AttachmentsField
+            id="cmd-attachments"
+            files={attachments}
+            onChange={setAttachments}
+            progress={uploadProgress}
+            disabled={isLoading}
+          />
 
           <div className="space-y-2">
             <Label htmlFor="cmd-comments">Comments (Optional)</Label>
@@ -152,9 +137,9 @@ export const SendToCmdDialog: React.FC<SendToCmdDialogProps> = ({ document: doc,
           </div>
 
           <div className="flex justify-end gap-2">
-            <Button variant="outline" onClick={() => setIsOpen(false)}>Cancel</Button>
+            <Button variant="outline" onClick={() => setIsOpen(false)} disabled={isLoading}>Cancel</Button>
             <Button onClick={handleSubmit} disabled={isLoading || !cmdUser}>
-              {isLoading ? 'Sending...' : 'Send to CMD'}
+              {isLoading ? 'Sending…' : 'Send to CMD'}
             </Button>
           </div>
         </div>

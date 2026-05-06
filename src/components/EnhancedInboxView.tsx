@@ -6,6 +6,7 @@ import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { DocumentSubmission, DocumentSharingService } from '@/services/documentSharingService';
 import { StorageService } from '@/services/storageService';
+import { logAttachmentAccess } from '@/lib/uploadAttachments';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
 import { useToast } from '@/hooks/use-toast';
@@ -65,6 +66,7 @@ export const EnhancedInboxView: React.FC = () => {
       const path = att.path || att.url;
       const signed = await StorageService.getSignedUrl(path, 3600);
       if (!signed) throw new Error('Could not get download URL');
+      logAttachmentAccess(path, 'download');
       window.open(signed, '_blank');
     } catch (e: any) {
       toast({ title: 'Download failed', description: e.message || 'Try again', variant: 'destructive' });

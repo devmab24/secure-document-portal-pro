@@ -7,12 +7,13 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useToast } from '@/hooks/use-toast';
-import { Send, Upload, X } from 'lucide-react';
+import { Send } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { useAppDispatch } from '@/store';
 import { submitDocument } from '@/store/slices/documentSharingSlice';
 import { supabase } from '@/integrations/supabase/client';
-import { uploadAttachments } from '@/lib/uploadAttachments';
+import { uploadAttachments, AttachmentProgress } from '@/lib/uploadAttachments';
+import { AttachmentsField } from '@/components/AttachmentsField';
 
 interface HodOption {
   id: string;
@@ -28,18 +29,14 @@ interface SendToHodDialogProps {
   hodName?: string;
 }
 
-export const SendToHodDialog: React.FC<SendToHodDialogProps> = ({ 
-  document: doc, 
-  trigger, 
-  hodUserId, 
-  hodName 
-}) => {
+export const SendToHodDialog: React.FC<SendToHodDialogProps> = ({ document: doc, trigger, hodUserId, hodName }) => {
   const { user } = useAuth();
   const dispatch = useAppDispatch();
   const [isOpen, setIsOpen] = useState(false);
   const [title, setTitle] = useState(doc?.name || '');
   const [comments, setComments] = useState('');
   const [attachments, setAttachments] = useState<File[]>([]);
+  const [uploadProgress, setUploadProgress] = useState<AttachmentProgress[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [hods, setHods] = useState<HodOption[]>([]);
   const [selectedHod, setSelectedHod] = useState(hodUserId || '');
@@ -47,47 +44,39 @@ export const SendToHodDialog: React.FC<SendToHodDialogProps> = ({
 
   useEffect(() => {
     if (isOpen && !hodUserId) {
-      // Fetch all HODs from Supabase
       supabase
         .from('users')
         .select('id, first_name, last_name, department')
         .eq('role', 'HOD')
         .eq('is_active', true)
         .order('department')
-        .then(({ data }) => {
-          if (data) setHods(data);
-        });
+        .then(({ data }) => { if (data) setHods(data); });
     }
   }, [isOpen, hodUserId]);
-
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const files = Array.from(e.target.files || []);
-    setAttachments(prev => [...prev, ...files]);
-  };
-
-  const removeAttachment = (index: number) => {
-    setAttachments(prev => prev.filter((_, i) => i !== index));
-  };
 
   const handleSubmit = async () => {
     if (!title.trim()) {
       toast({ title: "Title required", description: "Please enter a document title.", variant: "destructive" });
       return;
     }
-
     const targetId = hodUserId || selectedHod;
     if (!targetId) {
       toast({ title: "HOD required", description: "Please select a department head.", variant: "destructive" });
       return;
     }
-
     if (!user) return;
 
     setIsLoading(true);
-
+    setUploadProgress([]);
     try {
       const attachmentObjects = attachments.length > 0
-        ? await uploadAttachments(attachments, user.id, 'hod-submissions')
+        ? await uploadAttachments(attachments, user.id, 'hod-submissions', (p) => {
+            setUploadProgress(prev => {
+              const next = prev.filter(x => x.index !== p.index);
+              next.push(p);
+              return next;
+            });
+          })
         : [];
 
       const selectedHodData = hods.find(h => h.id === targetId);
@@ -106,18 +95,16 @@ export const SendToHodDialog: React.FC<SendToHodDialogProps> = ({
         attachments: attachmentObjects.length > 0 ? attachmentObjects : undefined
       }));
 
-      toast({
-        title: "Document sent to HOD",
-        description: `"${title}" has been submitted to ${toName} for review.`
-      });
+      toast({ title: "Document sent to HOD", description: `"${title}" has been submitted to ${toName} for review.` });
 
       setTitle(doc?.name || '');
       setComments('');
       setAttachments([]);
+      setUploadProgress([]);
       setSelectedHod('');
       setIsOpen(false);
-    } catch (error) {
-      toast({ title: "Failed to send document", description: "Please try again.", variant: "destructive" });
+    } catch (error: any) {
+      toast({ title: "Failed to send document", description: error?.message || "Please try again.", variant: "destructive" });
     } finally {
       setIsLoading(false);
     }
@@ -128,8 +115,7 @@ export const SendToHodDialog: React.FC<SendToHodDialogProps> = ({
       <DialogTrigger asChild>
         {trigger || (
           <Button className="bg-hospital-600 hover:bg-hospital-700">
-            <Send className="h-4 w-4 mr-2" />
-            Send to HOD
+            <Send className="h-4 w-4 mr-2" /> Send to HOD
           </Button>
         )}
       </DialogTrigger>
@@ -142,9 +128,7 @@ export const SendToHodDialog: React.FC<SendToHodDialogProps> = ({
             <div className="space-y-2">
               <Label>Select Department Head</Label>
               <Select value={selectedHod} onValueChange={setSelectedHod}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Choose a department head..." />
-                </SelectTrigger>
+                <SelectTrigger><SelectValue placeholder="Choose a department head..." /></SelectTrigger>
                 <SelectContent>
                   {hods.map((hod) => (
                     <SelectItem key={hod.id} value={hod.id}>
@@ -167,25 +151,13 @@ export const SendToHodDialog: React.FC<SendToHodDialogProps> = ({
             <Input id="hod-title" placeholder="Enter document title" value={title} onChange={(e) => setTitle(e.target.value)} />
           </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="hod-attachments">Attach Files (Optional)</Label>
-            <div className="space-y-2">
-              <input id="hod-attachments" type="file" multiple onChange={handleFileChange} className="hidden" accept=".pdf,.doc,.docx,.txt,.jpg,.jpeg,.png,.xlsx,.xls" />
-              <Button type="button" variant="outline" onClick={() => window.document.getElementById('hod-attachments')?.click()} className="w-full">
-                <Upload className="h-4 w-4 mr-2" /> Choose Files
-              </Button>
-              {attachments.length > 0 && (
-                <div className="space-y-1">
-                  {attachments.map((file, index) => (
-                    <div key={index} className="flex items-center justify-between p-2 bg-muted rounded">
-                      <span className="text-sm truncate">{file.name}</span>
-                      <Button type="button" variant="ghost" size="sm" onClick={() => removeAttachment(index)}><X className="h-4 w-4" /></Button>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
-          </div>
+          <AttachmentsField
+            id="hod-attachments"
+            files={attachments}
+            onChange={setAttachments}
+            progress={uploadProgress}
+            disabled={isLoading}
+          />
 
           <div className="space-y-2">
             <Label htmlFor="hod-comments">Comments (Optional)</Label>
@@ -193,10 +165,8 @@ export const SendToHodDialog: React.FC<SendToHodDialogProps> = ({
           </div>
 
           <div className="flex justify-end gap-2">
-            <Button variant="outline" onClick={() => setIsOpen(false)}>Cancel</Button>
-            <Button onClick={handleSubmit} disabled={isLoading}>
-              {isLoading ? 'Sending...' : 'Send to HOD'}
-            </Button>
+            <Button variant="outline" onClick={() => setIsOpen(false)} disabled={isLoading}>Cancel</Button>
+            <Button onClick={handleSubmit} disabled={isLoading}>{isLoading ? 'Sending…' : 'Send to HOD'}</Button>
           </div>
         </div>
       </DialogContent>
