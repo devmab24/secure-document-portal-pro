@@ -24,13 +24,13 @@ export const SendToCmdDialog: React.FC<SendToCmdDialogProps> = ({ document: doc,
   const [title, setTitle] = useState(doc?.name || '');
   const [comments, setComments] = useState('');
   const [attachments, setAttachments] = useState<File[]>([]);
+  const [uploadProgress, setUploadProgress] = useState<AttachmentProgress[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [cmdUser, setCmdUser] = useState<{ id: string; first_name: string; last_name: string } | null>(null);
   const { toast } = useToast();
 
   useEffect(() => {
     if (isOpen) {
-      // Look up the CMD user from Supabase
       supabase
         .from('users')
         .select('id, first_name, last_name')
@@ -43,30 +43,19 @@ export const SendToCmdDialog: React.FC<SendToCmdDialogProps> = ({ document: doc,
     }
   }, [isOpen]);
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const files = Array.from(e.target.files || []);
-    setAttachments(prev => [...prev, ...files]);
-  };
-
-  const removeAttachment = (index: number) => {
-    setAttachments(prev => prev.filter((_, i) => i !== index));
-  };
-
   const handleSubmit = async () => {
     if (!title.trim()) {
       toast({ title: "Title required", description: "Please enter a document title.", variant: "destructive" });
       return;
     }
-
     if (!cmdUser) {
       toast({ title: "CMD not found", description: "Unable to find the CMD user. Please try again.", variant: "destructive" });
       return;
     }
-
     if (!user) return;
 
     setIsLoading(true);
-
+    setUploadProgress([]);
     try {
       const attachmentObjects = attachments.length > 0
         ? await uploadAttachments(attachments, user.id, 'cmd-submissions', (p) => {
@@ -101,8 +90,8 @@ export const SendToCmdDialog: React.FC<SendToCmdDialogProps> = ({ document: doc,
       setAttachments([]);
       setUploadProgress([]);
       setIsOpen(false);
-    } catch (error) {
-      toast({ title: "Failed to send document", description: "Please try again.", variant: "destructive" });
+    } catch (error: any) {
+      toast({ title: "Failed to send document", description: error?.message || "Please try again.", variant: "destructive" });
     } finally {
       setIsLoading(false);
     }
@@ -148,9 +137,9 @@ export const SendToCmdDialog: React.FC<SendToCmdDialogProps> = ({ document: doc,
           </div>
 
           <div className="flex justify-end gap-2">
-            <Button variant="outline" onClick={() => setIsOpen(false)}>Cancel</Button>
+            <Button variant="outline" onClick={() => setIsOpen(false)} disabled={isLoading}>Cancel</Button>
             <Button onClick={handleSubmit} disabled={isLoading || !cmdUser}>
-              {isLoading ? 'Sending...' : 'Send to CMD'}
+              {isLoading ? 'Sending…' : 'Send to CMD'}
             </Button>
           </div>
         </div>
