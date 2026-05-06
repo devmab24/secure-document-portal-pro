@@ -5,6 +5,8 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { DocumentSubmission, DocumentSharingService } from '@/services/documentSharingService';
+import { StorageService } from '@/services/storageService';
+import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
 import { useToast } from '@/hooks/use-toast';
 import { 
@@ -16,7 +18,9 @@ import {
   FileText, 
   Clock,
   Mail,
-  MailOpen
+  MailOpen,
+  Download,
+  Paperclip
 } from 'lucide-react';
 import { format } from 'date-fns';
 
@@ -29,7 +33,17 @@ export const EnhancedInboxView: React.FC = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (user) loadSubmissions();
+    if (!user) return;
+    loadSubmissions();
+
+    // Realtime: refresh inbox when document_shares relevant to this user change
+    const channel = supabase
+      .channel(`document_shares:${user.id}`)
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'document_shares', filter: `to_user_id=eq.${user.id}` }, () => loadSubmissions())
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'document_shares', filter: `from_user_id=eq.${user.id}` }, () => loadSubmissions())
+      .subscribe();
+
+    return () => { supabase.removeChannel(channel); };
   }, [user]);
 
   const loadSubmissions = async () => {
@@ -43,6 +57,17 @@ export const EnhancedInboxView: React.FC = () => {
       console.error('Error loading inbox:', error);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleDownload = async (att: { name: string; url: string; path?: string }) => {
+    try {
+      const path = att.path || att.url;
+      const signed = await StorageService.getSignedUrl(path, 3600);
+      if (!signed) throw new Error('Could not get download URL');
+      window.open(signed, '_blank');
+    } catch (e: any) {
+      toast({ title: 'Download failed', description: e.message || 'Try again', variant: 'destructive' });
     }
   };
 
@@ -222,6 +247,19 @@ export const EnhancedInboxView: React.FC = () => {
                         {sub.feedback && (
                           <div className="mt-2 p-2 bg-muted rounded">
                             <p><strong>Feedback:</strong> {sub.feedback}</p>
+                          </div>
+                        )}
+                        {sub.attachments && sub.attachments.length > 0 && (
+                          <div className="mt-2 space-y-1">
+                            <p className="flex items-center gap-1 font-medium"><Paperclip className="h-3 w-3" /> Attachments ({sub.attachments.length})</p>
+                            {sub.attachments.map((att) => (
+                              <div key={att.id} className="flex items-center justify-between p-2 bg-muted rounded">
+                                <span className="text-sm truncate">{att.name}</span>
+                                <Button variant="ghost" size="sm" onClick={() => handleDownload(att)}>
+                                  <Download className="h-4 w-4" />
+                                </Button>
+                              </div>
+                            ))}
                           </div>
                         )}
                       </div>

@@ -12,6 +12,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useAppDispatch } from '@/store';
 import { submitDocument } from '@/store/slices/documentSharingSlice';
 import { supabase } from '@/integrations/supabase/client';
+import { uploadAttachments } from '@/lib/uploadAttachments';
 
 interface StaffMember {
   id: string;
@@ -96,13 +97,9 @@ export const SendToStaffDialog: React.FC<SendToStaffDialogProps> = ({
     setIsLoading(true);
 
     try {
-      const attachmentObjects = attachments.map((file, index) => ({
-        id: `${Date.now()}-${index}`,
-        name: file.name,
-        size: file.size,
-        type: file.type,
-        url: URL.createObjectURL(file)
-      }));
+      const attachmentObjects = attachments.length > 0
+        ? await uploadAttachments(attachments, user.id, 'staff-submissions')
+        : [];
 
       const selectedStaffMember = staffList.find(s => s.id === selectedStaff);
 
