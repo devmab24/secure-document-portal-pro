@@ -10,6 +10,7 @@ import { Send, Upload, X } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { DocumentSharingService } from '@/services/documentSharingService';
 import { supabase } from '@/integrations/supabase/client';
+import { uploadAttachments } from '@/lib/uploadAttachments';
 
 interface SendToCmdDialogProps {
   document?: any;
@@ -66,13 +67,9 @@ export const SendToCmdDialog: React.FC<SendToCmdDialogProps> = ({ document: doc,
     setIsLoading(true);
 
     try {
-      const attachmentObjects = attachments.map((file, index) => ({
-        id: `${Date.now()}-${index}`,
-        name: file.name,
-        size: file.size,
-        type: file.type,
-        url: URL.createObjectURL(file)
-      }));
+      const attachmentObjects = attachments.length > 0
+        ? await uploadAttachments(attachments, user.id, 'cmd-submissions')
+        : [];
 
       await DocumentSharingService.submitDocument({
         documentId: doc?.id || `doc-${Date.now()}`,
