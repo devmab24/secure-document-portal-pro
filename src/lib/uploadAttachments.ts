@@ -52,6 +52,11 @@ export async function uploadAttachments(
     const result = await StorageService.uploadDocument(file, userId, category);
     if (!result.success || !result.path) {
       onProgress?.({ index: i, name: file.name, status: 'error', error: result.error });
+      logStorageEvent('denied', `${userId}/${category}/${file.name}`, {
+        operation: 'upload',
+        size: file.size,
+        error: result.error,
+      });
       throw new Error(result.error || `Failed to upload ${file.name}`);
     }
     out.push({
@@ -62,13 +67,21 @@ export async function uploadAttachments(
       url: result.path,
       path: result.path,
     });
+    logStorageEvent('upload', result.path, { size: file.size, type: file.type, category });
     onProgress?.({ index: i, name: file.name, status: 'done' });
   }
   return out;
 }
 
-/** Best-effort audit log for attachment downloads. Never throws. */
-export async function logAttachmentAccess(path: string, accessType: 'view' | 'download' = 'download') {
+/**
+ * Best-effort audit log for attachment downloads. Writes to both
+ * `document_access_log` (legacy) and `audit_logs` (security review).
+ * Also feeds the client-side burst detector. Never throws.
+ */
+export async function logAttachmentAccess(
+  path: string,
+  accessType: 'view' | 'download' = 'download',
+) {
   try {
     const { data } = await supabase.auth.getUser();
     const userId = data.user?.id;
@@ -78,6 +91,8 @@ export async function logAttachmentAccess(path: string, accessType: 'view' | 'do
       access_type: `attachment_${accessType}`,
       notes: path,
     });
+    logStorageEvent(accessType, path);
+    if (accessType === 'download') trackDownloadForBurst(path);
   } catch {
     // swallow
   }
