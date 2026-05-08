@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { useAuth } from "@/contexts/AuthContext";
 import { supabase } from "@/integrations/supabase/client";
-import { Search, FileText, Eye, FilePlus, FileEdit, Trash2, CheckCircle, XCircle, Download, FileDown, Loader2 } from "lucide-react";
+import { Search, FileText, Eye, FilePlus, FileEdit, Trash2, CheckCircle, XCircle, Download, FileDown, Loader2, AlertTriangle, ShieldAlert } from "lucide-react";
 import { exportToCSV, exportToPDF } from "@/lib/exportUtils";
 import { Button } from "@/components/ui/button";
 import { format } from "date-fns";
