@@ -197,7 +197,62 @@ const AuditLogs = () => {
         </div>
       </div>
 
-      <Card>
+      {(alerts.length > 0 || denialCount > 0) && (
+        <Card className="border-destructive/40">
+          <CardHeader className="pb-3">
+            <CardTitle className="flex items-center gap-2 text-destructive">
+              <ShieldAlert className="h-5 w-5" />
+              Security Alerts
+            </CardTitle>
+            <CardDescription>
+              {denialCount > 0 && (
+                <span className="mr-4">
+                  <AlertTriangle className="inline h-3.5 w-3.5 mr-1 text-amber-600" />
+                  {denialCount} access denial{denialCount === 1 ? "" : "s"} in the last 24h
+                </span>
+              )}
+              {alerts.length > 0 && (
+                <span>
+                  <AlertTriangle className="inline h-3.5 w-3.5 mr-1 text-destructive" />
+                  {alerts.length} user{alerts.length === 1 ? "" : "s"} with abnormal download activity
+                </span>
+              )}
+            </CardDescription>
+          </CardHeader>
+          {alerts.length > 0 && (
+            <CardContent>
+              <div className="rounded-md border">
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>User</TableHead>
+                      <TableHead>Downloads (last hour)</TableHead>
+                      <TableHead>Window</TableHead>
+                      <TableHead>Last activity</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {alerts.map((a) => (
+                      <TableRow key={a.user_id}>
+                        <TableCell>{a.userName}</TableCell>
+                        <TableCell>
+                          <Badge variant="destructive">{a.download_count}</Badge>
+                        </TableCell>
+                        <TableCell className="text-muted-foreground">
+                          {format(new Date(a.window_start), "h:mm a")} – {format(new Date(a.last_download), "h:mm a")}
+                        </TableCell>
+                        <TableCell className="text-muted-foreground">
+                          {format(new Date(a.last_download), "MMM d, h:mm a")}
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </div>
+            </CardContent>
+          )}
+        </Card>
+      )}
         <CardHeader>
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
             <div>
