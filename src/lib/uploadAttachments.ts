@@ -1,5 +1,6 @@
 import { StorageService } from '@/services/storageService';
 import { supabase } from '@/integrations/supabase/client';
+import { logStorageEvent, trackDownloadForBurst } from '@/lib/auditLogger';
 
 export interface PersistedAttachment {
   id: string;
