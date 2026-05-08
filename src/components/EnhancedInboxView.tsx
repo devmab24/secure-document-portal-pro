@@ -63,13 +63,17 @@ export const EnhancedInboxView: React.FC = () => {
   };
 
   const handleDownload = async (att: { name: string; url: string; path?: string }) => {
+    const path = att.path || att.url;
     try {
-      const path = att.path || att.url;
       const signed = await StorageService.getSignedUrl(path, 3600);
-      if (!signed) throw new Error('Could not get download URL');
+      if (!signed) {
+        logStorageEvent('denied', path, { operation: 'signed_url' });
+        throw new Error('Could not get download URL');
+      }
       logAttachmentAccess(path, 'download');
       window.open(signed, '_blank');
     } catch (e: any) {
+      logStorageEvent('denied', path, { operation: 'download', error: e?.message });
       toast({ title: 'Download failed', description: e.message || 'Try again', variant: 'destructive' });
     }
   };
