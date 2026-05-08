@@ -119,6 +119,8 @@ const AuditLogs = () => {
 
       if (!cancelled) {
         setLogs(merged);
+        setAlerts(alertRows);
+        setDenialCount(denials);
         setLoading(false);
       }
     };
