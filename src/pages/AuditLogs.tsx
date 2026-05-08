@@ -253,6 +253,8 @@ const AuditLogs = () => {
           )}
         </Card>
       )}
+
+      <Card>
         <CardHeader>
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
             <div>
