@@ -962,6 +962,24 @@ export type Database = {
       }
     }
     Views: {
+      abnormal_download_alerts: {
+        Row: {
+          documents_touched: string[] | null
+          download_count: number | null
+          last_download: string | null
+          user_id: string | null
+          window_start: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "document_access_log_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       document_stats: {
         Row: {
           approved_count: number | null
@@ -1012,6 +1030,15 @@ export type Database = {
         Returns: boolean
       }
       is_hod: { Args: { _user_id: string }; Returns: boolean }
+      log_audit_event: {
+        Args: {
+          p_action: string
+          p_metadata?: Json
+          p_target_id?: string
+          p_target_type?: string
+        }
+        Returns: string
+      }
     }
     Enums: {
       app_role:
