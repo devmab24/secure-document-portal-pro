@@ -26,12 +26,21 @@ interface AuditRow {
   details: string;
 }
 
+interface BurstAlert {
+  user_id: string;
+  download_count: number;
+  window_start: string;
+  last_download: string;
+}
+
 const AuditLogs = () => {
   const { user } = useAuth();
   const [searchTerm, setSearchTerm] = useState("");
   const [actionFilter, setActionFilter] = useState<string>("all");
   const [logs, setLogs] = useState<AuditRow[]>([]);
   const [loading, setLoading] = useState(true);
+  const [alerts, setAlerts] = useState<Array<BurstAlert & { userName: string }>>([]);
+  const [denialCount, setDenialCount] = useState(0);
 
   useEffect(() => {
     if (!user) return;
