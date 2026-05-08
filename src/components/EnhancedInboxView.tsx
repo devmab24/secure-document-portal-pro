@@ -7,6 +7,7 @@ import { Input } from '@/components/ui/input';
 import { DocumentSubmission, DocumentSharingService } from '@/services/documentSharingService';
 import { StorageService } from '@/services/storageService';
 import { logAttachmentAccess } from '@/lib/uploadAttachments';
+import { logStorageEvent } from '@/lib/auditLogger';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
 import { useToast } from '@/hooks/use-toast';
