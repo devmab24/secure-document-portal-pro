@@ -79,6 +79,25 @@ const AuditLogs = () => {
       const userMap = new Map((users || []).map((u: any) => [u.id, `${u.first_name ?? ""} ${u.last_name ?? ""}`.trim() || "Unknown User"]));
       const docMap = new Map((docs || []).map((d: any) => [d.id, d.name]));
 
+      // Pull abnormal-download alerts (RLS naturally scopes to admin/self)
+      const { data: burst } = await supabase
+        .from("abnormal_download_alerts" as any)
+        .select("user_id, download_count, window_start, last_download")
+        .order("download_count", { ascending: false })
+        .limit(20);
+
+      const alertRows = ((burst as any[]) || []).map((b) => ({
+        ...b,
+        userName: userMap.get(b.user_id) || "Unknown User",
+      }));
+
+      // Count storage/policy denials in the last 24h for the security banner
+      const denials = (audit || []).filter(
+        (r: any) =>
+          (r.action === "storage.denied" || r.action === "policy.denied") &&
+          new Date(r.created_at).getTime() > Date.now() - 24 * 60 * 60 * 1000,
+      ).length;
+
       const merged: AuditRow[] = [
         ...(audit || []).map((r: any): AuditRow => ({
           id: `a-${r.id}`,
