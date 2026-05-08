@@ -925,7 +925,6 @@ export type Database = {
           id: string
           is_active: boolean | null
           last_name: string | null
-          password_hash: string | null
           role: string | null
           updated_at: string | null
         }
@@ -937,7 +936,6 @@ export type Database = {
           id?: string
           is_active?: boolean | null
           last_name?: string | null
-          password_hash?: string | null
           role?: string | null
           updated_at?: string | null
         }
@@ -949,7 +947,6 @@ export type Database = {
           id?: string
           is_active?: boolean | null
           last_name?: string | null
-          password_hash?: string | null
           role?: string | null
           updated_at?: string | null
         }
