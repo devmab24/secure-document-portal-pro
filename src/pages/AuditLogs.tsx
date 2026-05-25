@@ -183,15 +183,47 @@ const AuditLogs = () => {
       Details: log.details,
     }));
 
+  const buildAlertRows = () =>
+    alerts.map((a) => ({
+      User: a.userName,
+      UserId: a.user_id,
+      DownloadsLastHour: a.download_count,
+      WindowStart: format(new Date(a.window_start), "yyyy-MM-dd HH:mm"),
+      LastDownload: format(new Date(a.last_download), "yyyy-MM-dd HH:mm"),
+    }));
+
+  const filterSuffix = () => {
+    const parts: string[] = [];
+    if (actionFilter !== "all") parts.push(actionFilter);
+    if (searchTerm.trim()) parts.push(searchTerm.trim().replace(/\s+/g, "-"));
+    return parts.length ? `-${parts.join("-")}` : "";
+  };
+
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <h1 className="text-3xl font-bold tracking-tight">Audit Logs</h1>
         <div className="flex gap-2">
-          <Button variant="outline" size="sm" onClick={() => exportToCSV(buildExportRows(), "audit-logs")}>
+          <Button
+            variant="outline"
+            size="sm"
+            disabled={filteredLogs.length === 0}
+            onClick={() => exportToCSV(buildExportRows(), `audit-logs${filterSuffix()}`)}
+          >
             <FileDown className="mr-2 h-4 w-4" /> CSV
           </Button>
-          <Button variant="outline" size="sm" onClick={() => exportToPDF(buildExportRows(), "audit-logs", "FMC Jalingo - Audit Logs Report")}>
+          <Button
+            variant="outline"
+            size="sm"
+            disabled={filteredLogs.length === 0}
+            onClick={() =>
+              exportToPDF(
+                buildExportRows(),
+                `audit-logs${filterSuffix()}`,
+                "FMC Jalingo - Audit Logs Report",
+              )
+            }
+          >
             <FileDown className="mr-2 h-4 w-4" /> PDF
           </Button>
         </div>
@@ -200,24 +232,52 @@ const AuditLogs = () => {
       {(alerts.length > 0 || denialCount > 0) && (
         <Card className="border-destructive/40">
           <CardHeader className="pb-3">
-            <CardTitle className="flex items-center gap-2 text-destructive">
-              <ShieldAlert className="h-5 w-5" />
-              Security Alerts
-            </CardTitle>
-            <CardDescription>
-              {denialCount > 0 && (
-                <span className="mr-4">
-                  <AlertTriangle className="inline h-3.5 w-3.5 mr-1 text-amber-600" />
-                  {denialCount} access denial{denialCount === 1 ? "" : "s"} in the last 24h
-                </span>
-              )}
+            <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-3">
+              <div>
+                <CardTitle className="flex items-center gap-2 text-destructive">
+                  <ShieldAlert className="h-5 w-5" />
+                  Security Alerts
+                </CardTitle>
+                <CardDescription>
+                  {denialCount > 0 && (
+                    <span className="mr-4">
+                      <AlertTriangle className="inline h-3.5 w-3.5 mr-1 text-amber-600" />
+                      {denialCount} access denial{denialCount === 1 ? "" : "s"} in the last 24h
+                    </span>
+                  )}
+                  {alerts.length > 0 && (
+                    <span>
+                      <AlertTriangle className="inline h-3.5 w-3.5 mr-1 text-destructive" />
+                      {alerts.length} user{alerts.length === 1 ? "" : "s"} with abnormal download activity
+                    </span>
+                  )}
+                </CardDescription>
+              </div>
               {alerts.length > 0 && (
-                <span>
-                  <AlertTriangle className="inline h-3.5 w-3.5 mr-1 text-destructive" />
-                  {alerts.length} user{alerts.length === 1 ? "" : "s"} with abnormal download activity
-                </span>
+                <div className="flex gap-2 shrink-0">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => exportToCSV(buildAlertRows(), "security-alerts")}
+                  >
+                    <FileDown className="mr-2 h-4 w-4" /> CSV
+                  </Button>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() =>
+                      exportToPDF(
+                        buildAlertRows(),
+                        "security-alerts",
+                        "FMC Jalingo - Security Alerts",
+                      )
+                    }
+                  >
+                    <FileDown className="mr-2 h-4 w-4" /> PDF
+                  </Button>
+                </div>
               )}
-            </CardDescription>
+            </div>
           </CardHeader>
           {alerts.length > 0 && (
             <CardContent>
