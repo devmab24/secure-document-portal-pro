@@ -39,10 +39,41 @@ const NotificationBell = () => {
   }, [user?.id]);
 
   useEffect(() => {
+    if (!user?.id) return;
     fetchNotifications();
-    const interval = setInterval(fetchNotifications, 30000); // poll every 30s
-    return () => clearInterval(interval);
-  }, [fetchNotifications]);
+
+    // Realtime subscription — instant updates on insert/update/delete
+    const channel = supabase
+      .channel(`notifications:${user.id}`)
+      .on(
+        "postgres_changes",
+        {
+          event: "*",
+          schema: "public",
+          table: "notifications",
+          filter: `user_id=eq.${user.id}`,
+        },
+        (payload) => {
+          fetchNotifications();
+          if (payload.eventType === "INSERT") {
+            const n = payload.new as { title?: string; message?: string };
+            toast({
+              title: n.title ?? "New notification",
+              description: n.message,
+            });
+          }
+        }
+      )
+      .subscribe();
+
+    // Lightweight safety-net poll every 2 min in case socket drops
+    const interval = setInterval(fetchNotifications, 120000);
+
+    return () => {
+      supabase.removeChannel(channel);
+      clearInterval(interval);
+    };
+  }, [user?.id, fetchNotifications]);
 
   const handleMarkAsRead = async (id: string) => {
     await NotificationService.markAsRead(id);
