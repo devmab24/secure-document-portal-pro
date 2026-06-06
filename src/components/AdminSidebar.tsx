@@ -85,8 +85,8 @@ const AdminSidebar = () => {
           </SidebarGroupContent>
         </SidebarGroup>
 
-        {/* Super Admin Only - User Management */}
-        {isSuperAdmin && (
+        {/* Admin & Super Admin - User & Role Management */}
+        {isAdmin && (
           <SidebarGroup>
             <SidebarGroupLabel className={collapsed ? "sr-only" : ""}>
               User Management
@@ -95,18 +95,9 @@ const AdminSidebar = () => {
               <SidebarMenu>
                 <SidebarMenuItem>
                   <SidebarMenuButton asChild>
-                    <NavLink to="/dashboard/admin/users/manage" className={getNavClass}>
+                    <NavLink to="/dashboard/admin/users" className={getNavClass}>
                       <UserCog className="h-5 w-5" />
-                      {!collapsed && <span>Manage Users</span>}
-                    </NavLink>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-                
-                <SidebarMenuItem>
-                  <SidebarMenuButton asChild>
-                    <NavLink to="/dashboard/admin/users/roles" className={getNavClass}>
-                      <Users className="h-5 w-5" />
-                      {!collapsed && <span>Role Management</span>}
+                      {!collapsed && <span>Users & Roles</span>}
                     </NavLink>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
