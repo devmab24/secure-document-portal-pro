@@ -142,6 +142,7 @@ const App = () => (
                     <Route path="inbox" element={<Inbox />} />
                     {/* <Route path="department" element={<DepartmentDashboard />} /> */}
                     <Route path="staff-lists" element={<Users />} />
+                    <Route path="users" element={<UserManagement />} />
                     <Route path="uploads" element={<Upload />} />
                     <Route path="documents" element={<Documents />} />
                     <Route path="approvals" element={<DepartmentDashboard />} />
