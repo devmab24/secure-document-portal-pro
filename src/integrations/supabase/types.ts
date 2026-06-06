@@ -892,6 +892,33 @@ export type Database = {
         }
         Relationships: []
       }
+      security_alert_config: {
+        Row: {
+          abnormal_activity_notify: boolean
+          id: boolean
+          notification_dedup_minutes: number
+          storage_denied_threshold_per_hour: number
+          updated_at: string
+          updated_by: string | null
+        }
+        Insert: {
+          abnormal_activity_notify?: boolean
+          id?: boolean
+          notification_dedup_minutes?: number
+          storage_denied_threshold_per_hour?: number
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Update: {
+          abnormal_activity_notify?: boolean
+          id?: boolean
+          notification_dedup_minutes?: number
+          storage_denied_threshold_per_hour?: number
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Relationships: []
+      }
       user_roles: {
         Row: {
           assigned_at: string | null
