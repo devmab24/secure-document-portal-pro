@@ -5,7 +5,7 @@ import { SeedDocuments } from '@/components/SeedDocuments';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
-import { Database, Users, FileText, LogIn, Loader2 } from 'lucide-react';
+import { Database, Users, FileText, LogIn, Loader2, ShieldCheck } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 
@@ -26,8 +26,31 @@ const testUsers = [
 
 const DatabaseSeeding = () => {
   const [loggingIn, setLoggingIn] = useState<string | null>(null);
+  const [bootstrapping, setBootstrapping] = useState(false);
   const navigate = useNavigate();
   const { toast } = useToast();
+
+  const handleBootstrapSuperAdmin = async () => {
+    setBootstrapping(true);
+    try {
+      const { data, error } = await supabase.functions.invoke('bootstrap-superadmin');
+      if (error) throw error;
+      if (data?.alreadySeeded) {
+        toast({ title: 'Already seeded', description: data.message });
+      } else if (data?.ok) {
+        toast({
+          title: 'Super Admin created',
+          description: `${data.email} / ${data.password}`,
+        });
+      } else {
+        toast({ title: 'Failed', description: data?.error ?? 'Unknown error', variant: 'destructive' });
+      }
+    } catch (e: any) {
+      toast({ title: 'Failed', description: e.message, variant: 'destructive' });
+    } finally {
+      setBootstrapping(false);
+    }
+  };
 
   const handleQuickLogin = async (email: string) => {
     setLoggingIn(email);
@@ -142,6 +165,25 @@ const DatabaseSeeding = () => {
                   <div><strong>Medical Records:</strong> /dashboard/medical-records</div>
                   <div><strong>HOD:</strong> /dashboard/hod</div>
                   <div><strong>Staff:</strong> /dashboard/staff</div>
+                </div>
+              </div>
+
+              <div className="mt-6 p-4 border border-primary/30 rounded-lg bg-primary/5">
+                <div className="flex items-start justify-between gap-4 flex-wrap">
+                  <div>
+                    <h4 className="font-semibold flex items-center gap-2">
+                      <ShieldCheck className="h-4 w-4 text-primary" />
+                      Bootstrap real Super Admin
+                    </h4>
+                    <p className="text-sm text-muted-foreground mt-1">
+                      One-time setup: creates <code className="bg-muted px-1.5 py-0.5 rounded">superadmin@fmcjalingo.test</code> (password <code className="bg-muted px-1.5 py-0.5 rounded">password123</code>) with the SUPER_ADMIN role.
+                      Locked after first run.
+                    </p>
+                  </div>
+                  <Button onClick={handleBootstrapSuperAdmin} disabled={bootstrapping}>
+                    {bootstrapping ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : <ShieldCheck className="h-4 w-4 mr-2" />}
+                    Seed Super Admin
+                  </Button>
                 </div>
               </div>
             </CardContent>
