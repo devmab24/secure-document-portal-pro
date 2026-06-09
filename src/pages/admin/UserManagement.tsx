@@ -28,8 +28,9 @@ import {
 } from "lucide-react";
 
 const ALL_ROLES: UserRole[] = [
-  UserRole.SUPER_ADMIN, UserRole.ADMIN, UserRole.CMD, UserRole.CMAC,
-  UserRole.DIRECTOR_ADMIN, UserRole.HEAD_OF_NURSING, UserRole.CHIEF_ACCOUNTANT,
+  UserRole.SUPER_ADMIN, UserRole.ADMIN, UserRole.BOARD_MEMBER, UserRole.AUDITOR,
+  UserRole.CMD, UserRole.CMAC, UserRole.DIRECTOR_ADMIN,
+  UserRole.HEAD_OF_NURSING, UserRole.CHIEF_ACCOUNTANT,
   UserRole.CHIEF_PROCUREMENT_OFFICER, UserRole.MEDICAL_RECORDS_OFFICER,
   UserRole.REGISTRY, UserRole.HOD, UserRole.HEAD_OF_UNIT, UserRole.STAFF,
 ];
