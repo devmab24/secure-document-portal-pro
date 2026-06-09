@@ -921,23 +921,29 @@ export type Database = {
       }
       user_roles: {
         Row: {
+          acting_until: string | null
           assigned_at: string | null
           assigned_by: string | null
           id: string
+          is_acting: boolean
           role: Database["public"]["Enums"]["app_role"]
           user_id: string
         }
         Insert: {
+          acting_until?: string | null
           assigned_at?: string | null
           assigned_by?: string | null
           id?: string
+          is_acting?: boolean
           role: Database["public"]["Enums"]["app_role"]
           user_id: string
         }
         Update: {
+          acting_until?: string | null
           assigned_at?: string | null
           assigned_by?: string | null
           id?: string
+          is_acting?: boolean
           role?: Database["public"]["Enums"]["app_role"]
           user_id?: string
         }
@@ -1050,6 +1056,8 @@ export type Database = {
         Returns: boolean
       }
       is_admin: { Args: { _user_id: string }; Returns: boolean }
+      is_auditor: { Args: { _user_id: string }; Returns: boolean }
+      is_board_member: { Args: { _user_id: string }; Returns: boolean }
       is_director_admin: { Args: { _user_id: string }; Returns: boolean }
       is_executive: { Args: { _user_id: string }; Returns: boolean }
       is_head_of_unit: {
