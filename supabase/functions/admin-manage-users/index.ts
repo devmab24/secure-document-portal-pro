@@ -57,8 +57,7 @@ Deno.serve(async (req) => {
       .eq("user_id", callerId);
     const roleSet = new Set((callerRoles ?? []).map((r) => r.role));
     const isSuperAdmin = roleSet.has("SUPER_ADMIN");
-    const isAdmin =
-      isSuperAdmin || roleSet.has("ADMIN") || roleSet.has("CMD");
+    const isAdmin = isSuperAdmin || roleSet.has("ADMIN");
     if (!isAdmin) return json({ error: "Forbidden" }, 403);
 
     const body = await req.json().catch(() => ({}));
