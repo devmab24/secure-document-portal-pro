@@ -13,7 +13,9 @@ export enum UserRole {
   HEAD_OF_UNIT = "HEAD_OF_UNIT", // Head of Unit (Administrative Units)
   STAFF = "STAFF",     // Regular Staff
   ADMIN = "ADMIN",     // System Administrator
-  SUPER_ADMIN = "SUPER_ADMIN"  // Super Administrator
+  SUPER_ADMIN = "SUPER_ADMIN",  // Super Administrator
+  BOARD_MEMBER = "BOARD_MEMBER", // Board of Management Member (governance oversight)
+  AUDITOR = "AUDITOR"  // Internal Auditor (read-only oversight)
 }
 
 // Department Enum

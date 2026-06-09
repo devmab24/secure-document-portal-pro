@@ -22,7 +22,8 @@ type Action =
   | "delete_user";
 
 const ALL_ROLES = [
-  "SUPER_ADMIN", "ADMIN", "CMD", "CMAC", "DIRECTOR_ADMIN",
+  "SUPER_ADMIN", "ADMIN", "BOARD_MEMBER", "AUDITOR",
+  "CMD", "CMAC", "DIRECTOR_ADMIN",
   "HEAD_OF_NURSING", "CHIEF_ACCOUNTANT", "CHIEF_PROCUREMENT_OFFICER",
   "MEDICAL_RECORDS_OFFICER", "REGISTRY", "HOD", "HEAD_OF_UNIT", "STAFF",
 ] as const;
@@ -56,8 +57,7 @@ Deno.serve(async (req) => {
       .eq("user_id", callerId);
     const roleSet = new Set((callerRoles ?? []).map((r) => r.role));
     const isSuperAdmin = roleSet.has("SUPER_ADMIN");
-    const isAdmin =
-      isSuperAdmin || roleSet.has("ADMIN") || roleSet.has("CMD");
+    const isAdmin = isSuperAdmin || roleSet.has("ADMIN");
     if (!isAdmin) return json({ error: "Forbidden" }, 403);
 
     const body = await req.json().catch(() => ({}));
