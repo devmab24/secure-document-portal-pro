@@ -1083,6 +1083,8 @@ export type Database = {
         | "ADMIN"
         | "SUPER_ADMIN"
         | "HEAD_OF_UNIT"
+        | "BOARD_MEMBER"
+        | "AUDITOR"
       service_type: "clinical" | "non_clinical" | "administrative"
     }
     CompositeTypes: {
@@ -1225,6 +1227,8 @@ export const Constants = {
         "ADMIN",
         "SUPER_ADMIN",
         "HEAD_OF_UNIT",
+        "BOARD_MEMBER",
+        "AUDITOR",
       ],
       service_type: ["clinical", "non_clinical", "administrative"],
     },
