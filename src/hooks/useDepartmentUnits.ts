@@ -28,7 +28,7 @@ export interface Department {
   name: string;
   code: string | null;
   description: string | null;
-  service_type: 'clinical' | 'non_clinical' | 'administrative' | null;
+  service_type: 'clinical' | 'non_clinical' | 'administrative' | 'nursing' | 'finance' | 'audit' | null;
   level: number | null;
   parent_id: string | null;
   head_user_id: string | null;
