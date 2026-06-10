@@ -1091,6 +1091,7 @@ export type Database = {
     Functions: {
       can_access_attachment: { Args: { p_path: string }; Returns: boolean }
       can_route_documents: { Args: { _user_id: string }; Returns: boolean }
+      can_view_board_documents: { Args: { _user_id: string }; Returns: boolean }
       get_department_hierarchy: {
         Args: { dept_id: string }
         Returns: {
