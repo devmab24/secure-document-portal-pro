@@ -114,6 +114,7 @@ export type Database = {
           code: string | null
           created_at: string | null
           description: string | null
+          directorate_id: string | null
           head_user_id: string | null
           id: string
           is_active: boolean | null
@@ -129,6 +130,7 @@ export type Database = {
           code?: string | null
           created_at?: string | null
           description?: string | null
+          directorate_id?: string | null
           head_user_id?: string | null
           id?: string
           is_active?: boolean | null
@@ -144,6 +146,7 @@ export type Database = {
           code?: string | null
           created_at?: string | null
           description?: string | null
+          directorate_id?: string | null
           head_user_id?: string | null
           id?: string
           is_active?: boolean | null
@@ -156,6 +159,13 @@ export type Database = {
           updated_at?: string | null
         }
         Relationships: [
+          {
+            foreignKeyName: "departments_directorate_id_fkey"
+            columns: ["directorate_id"]
+            isOneToOne: false
+            referencedRelation: "directorates"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "departments_head_user_id_fkey"
             columns: ["head_user_id"]
@@ -205,6 +215,53 @@ export type Database = {
           {
             foreignKeyName: "digital_signatures_user_id_fkey"
             columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      directorates: {
+        Row: {
+          code: string
+          created_at: string
+          description: string | null
+          head_user_id: string | null
+          id: string
+          is_active: boolean
+          name: string
+          reports_to: Database["public"]["Enums"]["reports_to_type"]
+          type: Database["public"]["Enums"]["directorate_type"]
+          updated_at: string
+        }
+        Insert: {
+          code: string
+          created_at?: string
+          description?: string | null
+          head_user_id?: string | null
+          id?: string
+          is_active?: boolean
+          name: string
+          reports_to?: Database["public"]["Enums"]["reports_to_type"]
+          type: Database["public"]["Enums"]["directorate_type"]
+          updated_at?: string
+        }
+        Update: {
+          code?: string
+          created_at?: string
+          description?: string | null
+          head_user_id?: string | null
+          id?: string
+          is_active?: boolean
+          name?: string
+          reports_to?: Database["public"]["Enums"]["reports_to_type"]
+          type?: Database["public"]["Enums"]["directorate_type"]
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "directorates_head_user_id_fkey"
+            columns: ["head_user_id"]
             isOneToOne: false
             referencedRelation: "users"
             referencedColumns: ["id"]
@@ -1043,6 +1100,7 @@ export type Database = {
           path: string[]
         }[]
       }
+      get_user_directorate: { Args: { _user_id: string }; Returns: string }
       get_user_role: {
         Args: { _user_id: string }
         Returns: Database["public"]["Enums"]["app_role"]
@@ -1059,6 +1117,10 @@ export type Database = {
       is_auditor: { Args: { _user_id: string }; Returns: boolean }
       is_board_member: { Args: { _user_id: string }; Returns: boolean }
       is_director_admin: { Args: { _user_id: string }; Returns: boolean }
+      is_directorate_head: {
+        Args: { _directorate_id: string; _user_id: string }
+        Returns: boolean
+      }
       is_executive: { Args: { _user_id: string }; Returns: boolean }
       is_head_of_unit: {
         Args: { _unit_id: string; _user_id: string }
@@ -1093,7 +1155,22 @@ export type Database = {
         | "HEAD_OF_UNIT"
         | "BOARD_MEMBER"
         | "AUDITOR"
-      service_type: "clinical" | "non_clinical" | "administrative"
+      directorate_type:
+        | "OFFICE_OF_CMD"
+        | "CLINICAL_SERVICES"
+        | "NURSING_SERVICES"
+        | "ADMINISTRATION"
+        | "FINANCE_ACCOUNTS"
+        | "INTERNAL_AUDIT"
+        | "BOARD"
+      reports_to_type: "CMD" | "BOARD"
+      service_type:
+        | "clinical"
+        | "non_clinical"
+        | "administrative"
+        | "nursing"
+        | "finance"
+        | "audit"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -1238,7 +1315,24 @@ export const Constants = {
         "BOARD_MEMBER",
         "AUDITOR",
       ],
-      service_type: ["clinical", "non_clinical", "administrative"],
+      directorate_type: [
+        "OFFICE_OF_CMD",
+        "CLINICAL_SERVICES",
+        "NURSING_SERVICES",
+        "ADMINISTRATION",
+        "FINANCE_ACCOUNTS",
+        "INTERNAL_AUDIT",
+        "BOARD",
+      ],
+      reports_to_type: ["CMD", "BOARD"],
+      service_type: [
+        "clinical",
+        "non_clinical",
+        "administrative",
+        "nursing",
+        "finance",
+        "audit",
+      ],
     },
   },
 } as const
