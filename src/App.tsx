@@ -83,6 +83,9 @@ const HeadOfUnitDashboard = lazy(() => import("./pages/head-of-unit/HeadOfUnitDa
 const HeadOfUnitInbox = lazy(() => import("./pages/head-of-unit/HeadOfUnitInbox"));
 const HeadOfUnitMyUnit = lazy(() => import("./pages/head-of-unit/HeadOfUnitMyUnit"));
 
+// Board Member Pages
+const BoardMemberDashboard = lazy(() => import("./pages/board-member/BoardMemberDashboard"));
+
 // Shared Pages
 const Documents = lazy(() => import("./pages/Documents"));
 const Upload = lazy(() => import("./pages/Upload"));
