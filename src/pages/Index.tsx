@@ -48,6 +48,9 @@ const Index = () => {
         case UserRole.HOD:
           navigate('/dashboard/hod');
           break;
+        case UserRole.BOARD_MEMBER:
+          navigate('/dashboard/board-member');
+          break;
         case UserRole.STAFF:
           navigate('/dashboard/staff');
           break;
