@@ -123,7 +123,47 @@ A central `identity` project + JWT validation is documented as a fallback (Optio
 
 ## 11. Open Items / Next Iterations
 
-- Directorate table to formally group HODs under their directorate head.
 - UI affordances for setting `is_acting` / `acting_until` from the User Management screen.
 - `source_app` column on `audit_logs` and `notifications` once Digital Library work begins.
 - Auditor read-only dashboard surfacing `audit_logs` with filters and export.
+- Directorate filter in User Management; directorate-head assignment UI.
+
+---
+
+## 12. Addendum v2.2 — Directorate & Board-Restricted Scope
+
+- New `public.directorates` table sits between CMD and Departments (6 seeded: Clinical Services / CMAC, Nursing Services, Administration, Finance & Accounts, Internal Audit, Office of the CMD).
+- `departments.directorate_id` FK + helpers `get_user_directorate(uuid)`, `is_directorate_head(uuid, uuid)`.
+- Board-restricted documents: helper `can_view_board_documents(uuid)` (true for `SUPER_ADMIN`, `BOARD_MEMBER`, `CMD` honouring `acting_until`).
+- RLS on `public.documents` rewritten so executives, admins, HODs and assignees only see rows where `board_restricted = false`. A dedicated policy grants the Board cohort full access to `board_restricted = true` rows.
+- `BEFORE INSERT/UPDATE` trigger `enforce_board_restriction_setter()` blocks anyone outside the Board cohort from setting or clearing the `board_restricted` flag (defence in depth).
+
+## 13. Addendum v2.3 — Board Member Dashboard
+
+A dedicated workspace for `BOARD_MEMBER` users (also accessible to `SUPER_ADMIN`).
+
+**Route:** `/dashboard/board-member` (sub-routes: `restricted`, `approvals`, `documents`, `inbox`, `settings`).
+
+**Capabilities:**
+- KPI cards: visible documents in scope, board-restricted count, pending approvals, approved.
+- **Visibility toggle** (`Show only board-restricted`) — defaults ON. When ON, the table is filtered to `board_restricted = true`; when OFF, the table shows the full set of documents the caller can read under RLS, so the Board can see how restricted items relate to the open document corpus.
+- Per-row **approval visibility**: status badge (`DRAFT / SUBMITTED / UNDER_REVIEW / APPROVED / REJECTED`) + an Approval column showing whether approval is required and whether an approver is currently assigned.
+- **Restriction toggle action** (`Mark Board-only` / `Lift restriction`) — calls a direct `documents` update; the DB trigger guarantees only Board cohort can change the flag, so the UI button is safe regardless of caller.
+- Search by document name.
+
+**Routing changes:** `Login.tsx` and `Index.tsx` now redirect a `BOARD_MEMBER` to `/dashboard/board-member`. `AuthContext.normalizeRole` recognises `BOARD_MEMBER` (and the `BOARD`, `BOARD_OF_MANAGEMENT`, `AUDITOR`, `INTERNAL_AUDITOR` aliases).
+
+**Components added:** `BoardMemberProtectedRoute`, `BoardMemberLayout`, `BoardMemberSidebar`, `pages/board-member/BoardMemberDashboard.tsx`.
+
+## 14. Next Critical Issue (recommended)
+
+**Acting / delegation UI** is the next priority. The database already supports `is_acting` + `acting_until`, and every governance helper (`is_admin`, `is_board_member`, `is_auditor`, `can_view_board_documents`) honours expiry — but there is currently no surface in User Management to set or revoke a time-boxed acting assignment. Without it, the only way a CMD or Board Member can delegate to a deputy is to grant a permanent role, which defeats the separation-of-duties model introduced in v2.1. Recommended scope for the next change:
+
+1. In `UserManagement.tsx`, when assigning a role, expose an `Acting until` date-time picker and an `Is acting` switch.
+2. Show a clear "Acting (expires {date})" badge in the role list.
+3. Add a "Revoke now" action that nulls `acting_until` to `now()`.
+4. Audit-log `role.delegated` and `role.delegation.revoked`.
+5. A nightly edge function (or a `LISTEN`/cron) that emits an in-app notification to admins when a delegation expires within 24 h.
+
+This unlocks safe leave-cover for CMD/CMAC/Board, and is a prerequisite for the upcoming Digital Library identity-core sharing work.
+
