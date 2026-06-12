@@ -348,6 +348,17 @@ const App = () => (
                     <Route path="forms/my-forms" element={<MyForms />} />
                   </Route>
 
+                  {/* Board Member routes - All under /dashboard/board-member */}
+                  <Route path="/dashboard/board-member" element={<BoardMemberProtectedRoute />}>
+                    <Route index element={<BoardMemberDashboard />} />
+                    <Route path="restricted" element={<BoardMemberDashboard />} />
+                    <Route path="approvals" element={<BoardMemberDashboard />} />
+                    <Route path="documents" element={<Documents />} />
+                    <Route path="inbox" element={<Inbox />} />
+                    <Route path="settings" element={<Settings />} />
+                  </Route>
+
+
                   {/* Catch all route */}
                   <Route path="*" element={<NotFound />} />
                 </Routes>
