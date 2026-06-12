@@ -1,7 +1,7 @@
 # FMC Jalingo Document Management System — Product Requirements Document
 
-**Version:** 2.1 (Governance Hardened)
-**Last updated:** 2026-06-09
+**Version:** 2.3 (Board Member Dashboard)
+**Last updated:** 2026-06-12
 **Owner:** FMC Jalingo IT / Digital Transformation
 
 ---
