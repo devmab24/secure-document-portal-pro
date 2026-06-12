@@ -23,6 +23,7 @@ import StaffProtectedRoute from "@/components/StaffProtectedRoute";
 import RegistryProtectedRoute from "@/components/RegistryProtectedRoute";
 import DirectorAdminProtectedRoute from "@/components/DirectorAdminProtectedRoute";
 import HeadOfUnitProtectedRoute from "@/components/HeadOfUnitProtectedRoute";
+import BoardMemberProtectedRoute from "@/components/BoardMemberProtectedRoute";
 import CmdDepartmentsList from "./components/CmdDepartmentsList";
 
 // Lazy load components
@@ -81,6 +82,9 @@ const MedicalRecordsDashboard = lazy(() => import("./pages/medical-records/Medic
 const HeadOfUnitDashboard = lazy(() => import("./pages/head-of-unit/HeadOfUnitDashboard"));
 const HeadOfUnitInbox = lazy(() => import("./pages/head-of-unit/HeadOfUnitInbox"));
 const HeadOfUnitMyUnit = lazy(() => import("./pages/head-of-unit/HeadOfUnitMyUnit"));
+
+// Board Member Pages
+const BoardMemberDashboard = lazy(() => import("./pages/board-member/BoardMemberDashboard"));
 
 // Shared Pages
 const Documents = lazy(() => import("./pages/Documents"));
@@ -343,6 +347,17 @@ const App = () => (
                     <Route path="forms/create/:templateId" element={<FormCreate />} />
                     <Route path="forms/my-forms" element={<MyForms />} />
                   </Route>
+
+                  {/* Board Member routes - All under /dashboard/board-member */}
+                  <Route path="/dashboard/board-member" element={<BoardMemberProtectedRoute />}>
+                    <Route index element={<BoardMemberDashboard />} />
+                    <Route path="restricted" element={<BoardMemberDashboard />} />
+                    <Route path="approvals" element={<BoardMemberDashboard />} />
+                    <Route path="documents" element={<Documents />} />
+                    <Route path="inbox" element={<Inbox />} />
+                    <Route path="settings" element={<Settings />} />
+                  </Route>
+
 
                   {/* Catch all route */}
                   <Route path="*" element={<NotFound />} />

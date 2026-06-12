@@ -71,6 +71,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         return UserRole.ADMIN;
       case UserRole.SUPER_ADMIN:
         return UserRole.SUPER_ADMIN;
+      case UserRole.BOARD_MEMBER:
+      case "BOARD":
+      case "BOARD_OF_MANAGEMENT":
+        return UserRole.BOARD_MEMBER;
+      case UserRole.AUDITOR:
+      case "INTERNAL_AUDITOR":
+        return UserRole.AUDITOR;
       default:
         return UserRole.STAFF;
     }

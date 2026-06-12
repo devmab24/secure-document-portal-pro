@@ -59,6 +59,9 @@ const Login = () => {
         case UserRole.MEDICAL_RECORDS_OFFICER:
         case 'MEDICAL_RECORDS_OFFICER':
             return '/dashboard/medical-records';
+        case UserRole.BOARD_MEMBER:
+        case 'BOARD_MEMBER':
+            return '/dashboard/board-member';
         default:
             return '/dashboard/staff';
         }
