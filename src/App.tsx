@@ -23,6 +23,7 @@ import StaffProtectedRoute from "@/components/StaffProtectedRoute";
 import RegistryProtectedRoute from "@/components/RegistryProtectedRoute";
 import DirectorAdminProtectedRoute from "@/components/DirectorAdminProtectedRoute";
 import HeadOfUnitProtectedRoute from "@/components/HeadOfUnitProtectedRoute";
+import BoardMemberProtectedRoute from "@/components/BoardMemberProtectedRoute";
 import CmdDepartmentsList from "./components/CmdDepartmentsList";
 
 // Lazy load components
