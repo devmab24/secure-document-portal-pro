@@ -1,4 +1,4 @@
-import { MockDepartment } from '../../../mock-db/index';
+import { MockDepartment } from '../../../../mock-db/index';
 
 const BASE_URL = '/mock-db';
 
