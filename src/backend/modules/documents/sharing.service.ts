@@ -1,6 +1,6 @@
 
 import { supabase } from "@/integrations/supabase/client";
-import { NotificationService } from "./notificationService";
+import { NotificationService } from "@/backend/modules/notifications/notifications.service";
 
 export interface DocumentSubmission {
   id: string;

@@ -1,7 +1,7 @@
 
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 import { MockUser } from '../../../mock-db/index';
-import { UsersAPI, apiCall } from '../../services/api';
+import { UsersAPI, apiCall } from '@/backend/modules/mock-api';
 
 // Async thunks using the API layer
 export const fetchUsers = createAsyncThunk(

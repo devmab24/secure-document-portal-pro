@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
-import { DocumentSubmission, DocumentSharingService } from '@/services/documentSharingService';
+import { DocumentSubmission, DocumentSharingService } from '@/backend/modules/documents/sharing.service';
 
 export interface DocumentSharingState {
   submissions: DocumentSubmission[];

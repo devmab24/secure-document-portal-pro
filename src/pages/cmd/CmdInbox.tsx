@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { CmdReviewDialog } from '@/components/CmdReviewDialog';
-import { DocumentSubmission, DocumentSharingService } from '@/services/documentSharingService';
+import { DocumentSubmission, DocumentSharingService } from '@/backend/modules/documents/sharing.service';
 import { Search, Clock, CheckCircle, XCircle, MessageSquare, FileText, Inbox, Share } from 'lucide-react';
 import { format } from 'date-fns';
 import { Link } from 'react-router-dom';

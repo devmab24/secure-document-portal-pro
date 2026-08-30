@@ -3,7 +3,7 @@
 // import { Button } from '@/components/ui/button';
 // import { Badge } from '@/components/ui/badge';
 // import { Separator } from '@/components/ui/separator';
-// import { MockDataService } from '@/services/mockDataService';
+// import { MockDataService } from '@/backend/modules/mock/mockData.service';
 // import { useToast } from '@/hooks/use-toast';
 // import { UserRole, Department } from '@/lib/types';
 // import { 

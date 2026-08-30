@@ -23,7 +23,7 @@ import {
   Building2
 } from 'lucide-react';
 import { format } from 'date-fns';
-import { InterDepartmentService, InterDepartmentMessage } from '@/services/interDepartmentService';
+import { InterDepartmentService, InterDepartmentMessage } from '@/backend/modules/messaging/interDepartment.service';
 import { Department, UserRole } from '@/lib/types';
 
 const InterDepartmentMessaging = () => {

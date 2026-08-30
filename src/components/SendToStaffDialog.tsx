@@ -12,7 +12,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useAppDispatch } from '@/store';
 import { submitDocument } from '@/store/slices/documentSharingSlice';
 import { supabase } from '@/integrations/supabase/client';
-import { uploadAttachments, AttachmentProgress } from '@/lib/uploadAttachments';
+import { uploadAttachments, AttachmentProgress } from '@/backend/modules/storage/attachments.service';
 import { AttachmentsField } from '@/components/AttachmentsField';
 
 interface StaffMember {

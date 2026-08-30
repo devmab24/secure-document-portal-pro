@@ -6,7 +6,7 @@ import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { SendToHodDialog } from '@/components/SendToHodDialog';
-import { DocumentSubmission, DocumentSharingService } from '@/services/documentSharingService';
+import { DocumentSubmission, DocumentSharingService } from '@/backend/modules/documents/sharing.service';
 import { useAuth } from '@/contexts/AuthContext';
 import { useAppDispatch, useAppSelector } from '@/store';
 import { loadUserSubmissions, updateSubmissionStatus } from '@/store/slices/documentSharingSlice';

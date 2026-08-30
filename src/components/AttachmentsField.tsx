@@ -9,7 +9,7 @@ import {
   MAX_FILE_SIZE_BYTES,
   MAX_TOTAL_SIZE_BYTES,
   validateAttachments,
-} from '@/lib/uploadAttachments';
+} from '@/backend/modules/storage/attachments.service';
 import { useToast } from '@/hooks/use-toast';
 
 interface AttachmentsFieldProps {
