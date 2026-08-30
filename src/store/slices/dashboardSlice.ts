@@ -1,6 +1,6 @@
 
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
-import { DocumentsAPI, apiCall } from '../../services/api';
+import { DocumentsAPI, apiCall } from '@/backend/modules/mock-api';
 
 export const fetchDashboardStats = createAsyncThunk(
   'dashboard/fetchStats',

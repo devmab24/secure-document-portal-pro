@@ -2,7 +2,7 @@
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 import { Document, DocumentStatus, DocumentShare, ShareStatus, DocumentVersion, DigitalSignature } from '@/lib/types';
 import { MockDocument } from '../../../mock-db/index';
-import { DocumentsAPI, apiCall } from '../../services/api';
+import { DocumentsAPI, apiCall } from '@/backend/modules/mock-api';
 
 // Update async thunks to use the API layer
 export const fetchDocuments = createAsyncThunk(
