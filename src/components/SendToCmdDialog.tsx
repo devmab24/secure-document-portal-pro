@@ -8,9 +8,9 @@ import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/hooks/use-toast';
 import { Send } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
-import { DocumentSharingService } from '@/services/documentSharingService';
+import { DocumentSharingService } from '@/backend/modules/documents/sharing.service';
 import { supabase } from '@/integrations/supabase/client';
-import { uploadAttachments, AttachmentProgress } from '@/lib/uploadAttachments';
+import { uploadAttachments, AttachmentProgress } from '@/backend/modules/storage/attachments.service';
 import { AttachmentsField } from '@/components/AttachmentsField';
 
 interface SendToCmdDialogProps {

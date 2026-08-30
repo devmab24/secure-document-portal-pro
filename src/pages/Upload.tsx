@@ -17,7 +17,7 @@ import { useToast } from "@/components/ui/use-toast";
 import { Card, CardContent } from "@/components/ui/card";
 import { Upload as UploadIcon, X, Check, AlertCircle } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
-import { StorageService } from "@/services/storageService";
+import { StorageService } from "@/backend/modules/storage/storage.service";
 import { Progress } from "@/components/ui/progress";
 
 const Upload = () => {

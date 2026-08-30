@@ -8,7 +8,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useAppDispatch, useAppSelector } from '@/store';
 import { loadSubmissionsToUser, loadPendingSubmissions, updateSubmissionStatus } from '@/store/slices/documentSharingSlice';
 import { fetchDocuments } from '@/store/slices/documentSlice';
-import { DocumentSubmission } from '@/services/documentSharingService';
+import { DocumentSubmission } from '@/backend/modules/documents/sharing.service';
 import { UserRole, Department } from '@/lib/types';
 import { 
   FileText, 

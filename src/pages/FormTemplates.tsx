@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
-import { FormsService } from '@/services/formsService';
+import { FormsService } from '@/backend/modules/forms/forms.service';
 import { FormTemplateWithAccess } from '@/lib/mock/forms';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';

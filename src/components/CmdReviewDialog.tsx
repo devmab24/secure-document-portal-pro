@@ -9,7 +9,7 @@ import { Separator } from '@/components/ui/separator';
 import { CheckCircle, XCircle, MessageSquare, PenTool, Eye } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { useAuth } from '@/contexts/AuthContext';
-import { DocumentSubmission, DocumentSharingService } from '@/services/documentSharingService';
+import { DocumentSubmission, DocumentSharingService } from '@/backend/modules/documents/sharing.service';
 import { format } from 'date-fns';
 
 interface CmdReviewDialogProps {

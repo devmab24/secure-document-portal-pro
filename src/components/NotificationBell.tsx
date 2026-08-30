@@ -12,7 +12,7 @@ import {
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
 import { useAuth } from "@/contexts/AuthContext";
-import { NotificationService, Notification } from "@/services/notificationService";
+import { NotificationService, Notification } from "@/backend/modules/notifications/notifications.service";
 import { formatDistanceToNow } from "date-fns";
 
 const typeColors: Record<string, string> = {
