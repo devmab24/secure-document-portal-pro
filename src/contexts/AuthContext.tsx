@@ -2,6 +2,7 @@ import React, { createContext, useContext, useEffect, useState } from "react";
 import { User, Session } from "@supabase/supabase-js";
 import { supabase } from "@/integrations/supabase/client";
 import { UserRole, Department } from "@/lib/types";
+import { normalizeUserRole } from "@/lib/roleRoutes";
 
 interface AuthUser {
   id: string;
@@ -31,57 +32,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   console.log("AuthProvider rendering, isLoading:", isLoading, "user:", user?.email || "none");
 
-  const normalizeRole = (rawRole: unknown): UserRole => {
-    const role = String(rawRole ?? "").trim();
-
-    // Handle legacy/alternate role names coming from old seed data or manual inserts
-    switch (role) {
-      case UserRole.CMD:
-        return UserRole.CMD;
-      case UserRole.CMAC:
-      case "CMAC_OFFICER":
-        return UserRole.CMAC;
-      case UserRole.HEAD_OF_NURSING:
-      case "HEAD_NURSING":
-      case "HEAD_OF_NURSING_OFFICER":
-        return UserRole.HEAD_OF_NURSING;
-      case UserRole.REGISTRY:
-      case "REGISTRY_OFFICER":
-        return UserRole.REGISTRY;
-      case UserRole.DIRECTOR_ADMIN:
-      case "DIRECTORADMIN":
-      case "DIRECTOR_ADMIN_OFFICER":
-        return UserRole.DIRECTOR_ADMIN;
-      case UserRole.CHIEF_ACCOUNTANT:
-      case "CA":
-        return UserRole.CHIEF_ACCOUNTANT;
-      case UserRole.CHIEF_PROCUREMENT_OFFICER:
-      case "CHIEF_PROCUREMENT":
-      case "CPO":
-        return UserRole.CHIEF_PROCUREMENT_OFFICER;
-      case UserRole.MEDICAL_RECORDS_OFFICER:
-      case "MEDICAL_RECORDS":
-      case "MEDRECORDS":
-        return UserRole.MEDICAL_RECORDS_OFFICER;
-      case UserRole.HOD:
-        return UserRole.HOD;
-      case UserRole.STAFF:
-        return UserRole.STAFF;
-      case UserRole.ADMIN:
-        return UserRole.ADMIN;
-      case UserRole.SUPER_ADMIN:
-        return UserRole.SUPER_ADMIN;
-      case UserRole.BOARD_MEMBER:
-      case "BOARD":
-      case "BOARD_OF_MANAGEMENT":
-        return UserRole.BOARD_MEMBER;
-      case UserRole.AUDITOR:
-      case "INTERNAL_AUDITOR":
-        return UserRole.AUDITOR;
-      default:
-        return UserRole.STAFF;
-    }
-  };
+  const normalizeRole = (rawRole: unknown): UserRole => normalizeUserRole(rawRole);
 
   const fetchUserProfile = async (userId: string) => {
     try {

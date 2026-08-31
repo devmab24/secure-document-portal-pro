@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { useAuth } from '@/contexts/AuthContext';
-import { UserRole } from '@/lib/types';
+import { getDashboardRoute } from '@/lib/roleRoutes';
 import { FileText, Shield, Users, Zap } from 'lucide-react';
 
 const Index = () => {
@@ -13,50 +13,8 @@ const Index = () => {
 
   useEffect(() => {
     if (!isLoading && user) {
-      // Redirect authenticated users to their appropriate dashboard based on role
-      switch (user.role) {
-        case UserRole.SUPER_ADMIN:
-          navigate('/dashboard/super-admin');
-          break;
-        case UserRole.ADMIN:
-          navigate('/dashboard/admin');
-          break;
-        case UserRole.CMD:
-          navigate('/dashboard/cmd');
-          break;
-        case UserRole.CMAC:
-          navigate('/dashboard/cmac');
-          break;
-        case UserRole.HEAD_OF_NURSING:
-          navigate('/dashboard/head-of-nursing');
-          break;
-        case UserRole.CHIEF_ACCOUNTANT:
-          navigate('/dashboard/chief-accountant');
-          break;
-        case UserRole.CHIEF_PROCUREMENT_OFFICER:
-          navigate('/dashboard/chief-procurement');
-          break;
-        case UserRole.MEDICAL_RECORDS_OFFICER:
-          navigate('/dashboard/medical-records');
-          break;
-        case UserRole.REGISTRY:
-          navigate('/dashboard/registry');
-          break;
-        case UserRole.DIRECTOR_ADMIN:
-          navigate('/dashboard/director-admin');
-          break;
-        case UserRole.HOD:
-          navigate('/dashboard/hod');
-          break;
-        case UserRole.BOARD_MEMBER:
-          navigate('/dashboard/board-member');
-          break;
-        case UserRole.STAFF:
-          navigate('/dashboard/staff');
-          break;
-        default:
-          navigate('/dashboard');
-      }
+      // Single source of truth for role -> dashboard mapping
+      navigate(getDashboardRoute(user.role), { replace: true });
     }
   }, [user, isLoading, navigate]);
 
