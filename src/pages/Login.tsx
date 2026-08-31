@@ -8,7 +8,7 @@ import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
 import { useAuth } from '@/contexts/AuthContext';
 import { useEffect } from 'react';
-import { UserRole } from '@/lib/types';
+import { getDashboardRoute } from '@/lib/roleRoutes';
 
 const Login = () => {
     const [email, setEmail] = useState('');
@@ -17,55 +17,6 @@ const Login = () => {
     const { login, user } = useAuth();
     const navigate = useNavigate();
     const location = useLocation(); 
-
-    // Helper function to get dashboard route based on user role
-    const getDashboardRoute = (userRole: UserRole | string) => {
-        const role = userRole as string;
-        switch (role) {
-        case UserRole.CMD:
-        case 'CMD':
-            return '/dashboard/cmd';
-        case UserRole.HOD:
-        case 'HOD':
-            return '/dashboard/hod';
-        case UserRole.ADMIN:
-        case 'ADMIN':
-            return '/dashboard/admin';
-        case UserRole.SUPER_ADMIN:
-        case 'SUPER_ADMIN':
-            return '/dashboard/super-admin';
-        case UserRole.STAFF:
-        case 'STAFF':
-            return '/dashboard/staff';
-        case UserRole.CMAC:
-        case 'CMAC':
-            return '/dashboard/cmac';
-        case UserRole.HEAD_OF_NURSING:
-        case 'HEAD_OF_NURSING':
-            return '/dashboard/head-of-nursing';
-        case UserRole.REGISTRY:
-        case 'REGISTRY':
-        case 'REGISTRY_OFFICER':
-            return '/dashboard/registry';
-        case UserRole.DIRECTOR_ADMIN:
-        case 'DIRECTOR_ADMIN':
-            return '/dashboard/director-admin';
-        case UserRole.CHIEF_ACCOUNTANT:
-        case 'CHIEF_ACCOUNTANT':
-            return '/dashboard/chief-accountant';
-        case UserRole.CHIEF_PROCUREMENT_OFFICER:
-        case 'CHIEF_PROCUREMENT_OFFICER':
-            return '/dashboard/chief-procurement';
-        case UserRole.MEDICAL_RECORDS_OFFICER:
-        case 'MEDICAL_RECORDS_OFFICER':
-            return '/dashboard/medical-records';
-        case UserRole.BOARD_MEMBER:
-        case 'BOARD_MEMBER':
-            return '/dashboard/board-member';
-        default:
-            return '/dashboard/staff';
-        }
-    };
 
     // Get the redirect path from location state or default to root
     const from = (location.state as { from?: { pathname: string } })?.from?.pathname || '/';

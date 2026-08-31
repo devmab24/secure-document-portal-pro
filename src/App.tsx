@@ -3,7 +3,7 @@ import { Suspense, lazy } from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { ReduxProvider } from "@/providers/ReduxProvider";
 import { ThemeProvider } from "@/contexts/ThemeContext";
@@ -29,7 +29,7 @@ import CmdDepartmentsList from "./components/CmdDepartmentsList";
 // Lazy load components
 const Index = lazy(() => import("./pages/Index"));
 const Login = lazy(() => import("./pages/Login"));
-const Dashboard = lazy(() => import("./pages/Dashboard"));
+const RedirectDashboard = lazy(() => import("./Dashboard"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 
 // Super Admin Pages
@@ -123,6 +123,9 @@ const App = () => (
                   <Route path="/login" element={<Login />} />
                   <Route path="/auth" element={<Login />} />
                   
+                  {/* Generic dashboard entry - redirects to the role dashboard */}
+                  <Route path="/dashboard" element={<RedirectDashboard />} />
+
                   {/* Database Seeding Route for Testing */}
                   <Route path="/database-seeding" element={<DatabaseSeeding />} />
 
@@ -138,6 +141,8 @@ const App = () => (
                     <Route path="settings/profiles" element={<Settings />} />
                     <Route path="settings/notifications" element={<Settings />} />
                     <Route path="settings/accounts" element={<Settings />} />
+                    {/* Unknown sub-path falls back to this role dashboard */}
+                    <Route path="*" element={<Navigate to="." replace />} />
                   </Route>
 
                   {/* Admin specific routes - All under /dashboard/admin */}
@@ -150,10 +155,15 @@ const App = () => (
                     <Route path="uploads" element={<Upload />} />
                     <Route path="documents" element={<Documents />} />
                     <Route path="approvals" element={<DepartmentDashboard />} />
+                    <Route path="audit" element={<AuditLogs />} />
+                    <Route path="audits" element={<AuditLogs />} />
+                    <Route path="reports" element={<AdminDashboard />} />
                     <Route path="settings" element={<Settings />} />
                     <Route path="settings/profiles" element={<Settings />} />
                     <Route path="settings/notifications" element={<Settings />} />
                     <Route path="settings/accounts" element={<Settings />} />
+                    {/* Unknown sub-path falls back to this role dashboard */}
+                    <Route path="*" element={<Navigate to="." replace />} />
                   </Route>
 
                   {/* CMD specific routes - All under /dashboard/cmd */}
@@ -161,6 +171,7 @@ const App = () => (
                     <Route index element={<CmdDashboard />} />
                     <Route path="departments" element={<CmdDepartmentsList />} />
                     <Route path="uploads" element={<CmdUpload />} />
+                    <Route path="upload" element={<CmdUpload />} />
                     <Route path="documents" element={<CmdDocuments />} />
                     <Route path="inbox" element={<CmdInbox />} />
                     <Route path="approvals" element={<CmdDashboard />} />
@@ -180,6 +191,8 @@ const App = () => (
                     <Route path="forms/my-forms" element={<MyForms />} />
                     <Route path="forms/view/:formId" element={<MyForms />} />
                     <Route path="forms/edit/:formId" element={<FormCreate />} />
+                    {/* Unknown sub-path falls back to this role dashboard */}
+                    <Route path="*" element={<Navigate to="." replace />} />
                   </Route>
 
                   {/* HOD Routes */}
@@ -206,6 +219,8 @@ const App = () => (
                     <Route path="forms/my-forms" element={<MyForms />} />
                     <Route path="forms/view/:formId" element={<MyForms />} />
                     <Route path="forms/edit/:formId" element={<FormCreate />} />
+                    {/* Unknown sub-path falls back to this role dashboard */}
+                    <Route path="*" element={<Navigate to="." replace />} />
                   </Route>
 
                   {/* Staff specific routes - All under /dashboard/staff */}
@@ -228,6 +243,8 @@ const App = () => (
                     <Route path="forms/my-forms" element={<MyForms />} />
                     <Route path="forms/view/:formId" element={<MyForms />} />
                     <Route path="forms/edit/:formId" element={<FormCreate />} />
+                    {/* Unknown sub-path falls back to this role dashboard */}
+                    <Route path="*" element={<Navigate to="." replace />} />
                   </Route>
 
                   {/* Registry specific routes - All under /dashboard/registry */}
@@ -237,8 +254,17 @@ const App = () => (
                     <Route path="upload" element={<Upload />} />
                     <Route path="inbox" element={<Inbox />} />
                     <Route path="audit" element={<AuditLogs />} />
+                    <Route path="audits" element={<AuditLogs />} />
+                    <Route path="uploads" element={<Upload />} />
+                    <Route path="inter-department" element={<InterDepartmentCommunication />} />
                     <Route path="document-communication" element={<DocumentCommunication />} />
+                    <Route path="users" element={<Users />} />
                     <Route path="settings" element={<Settings />} />
+                    <Route path="settings/profiles" element={<Settings />} />
+                    <Route path="settings/notifications" element={<Settings />} />
+                    <Route path="settings/accounts" element={<Settings />} />
+                    {/* Unknown sub-path falls back to this role dashboard */}
+                    <Route path="*" element={<Navigate to="." replace />} />
                   </Route>
 
                   {/* Director of Admin specific routes - All under /dashboard/director-admin */}
@@ -251,6 +277,8 @@ const App = () => (
                     <Route path="document-communication" element={<DocumentCommunication />} />
                     <Route path="users" element={<Users />} />
                     <Route path="settings" element={<Settings />} />
+                    {/* Unknown sub-path falls back to this role dashboard */}
+                    <Route path="*" element={<Navigate to="." replace />} />
                   </Route>
 
                   {/* CMAC specific routes - All under /dashboard/cmac */}
@@ -265,6 +293,8 @@ const App = () => (
                     <Route path="document-communication" element={<DocumentCommunication />} />
                     <Route path="medical-staff" element={<Users />} />
                     <Route path="settings" element={<Settings />} />
+                    {/* Unknown sub-path falls back to this role dashboard */}
+                    <Route path="*" element={<Navigate to="." replace />} />
                   </Route>
 
                   {/* Head of Nursing specific routes - All under /dashboard/head-of-nursing */}
@@ -280,6 +310,8 @@ const App = () => (
                     <Route path="audits" element={<AuditLogs />} />
                     <Route path="document-communication" element={<DocumentCommunication />} />
                     <Route path="settings" element={<Settings />} />
+                    {/* Unknown sub-path falls back to this role dashboard */}
+                    <Route path="*" element={<Navigate to="." replace />} />
                   </Route>
 
                   {/* Chief Accountant specific routes - All under /dashboard/chief-accountant */}
@@ -293,6 +325,8 @@ const App = () => (
                     <Route path="audits" element={<AuditLogs />} />
                     <Route path="document-communication" element={<DocumentCommunication />} />
                     <Route path="settings" element={<Settings />} />
+                    {/* Unknown sub-path falls back to this role dashboard */}
+                    <Route path="*" element={<Navigate to="." replace />} />
                   </Route>
 
                   {/* Chief Procurement Officer specific routes - All under /dashboard/chief-procurement */}
@@ -310,6 +344,8 @@ const App = () => (
                     <Route path="audits" element={<AuditLogs />} />
                     <Route path="document-communication" element={<DocumentCommunication />} />
                     <Route path="settings" element={<Settings />} />
+                    {/* Unknown sub-path falls back to this role dashboard */}
+                    <Route path="*" element={<Navigate to="." replace />} />
                   </Route>
 
                   {/* Medical Records Officer specific routes - All under /dashboard/medical-records */}
@@ -327,6 +363,8 @@ const App = () => (
                     <Route path="audits" element={<AuditLogs />} />
                     <Route path="document-communication" element={<DocumentCommunication />} />
                     <Route path="settings" element={<Settings />} />
+                    {/* Unknown sub-path falls back to this role dashboard */}
+                    <Route path="*" element={<Navigate to="." replace />} />
                   </Route>
 
                   {/* Head of Unit specific routes - All under /dashboard/head-of-unit */}
@@ -346,6 +384,8 @@ const App = () => (
                     <Route path="forms" element={<FormTemplates />} />
                     <Route path="forms/create/:templateId" element={<FormCreate />} />
                     <Route path="forms/my-forms" element={<MyForms />} />
+                    {/* Unknown sub-path falls back to this role dashboard */}
+                    <Route path="*" element={<Navigate to="." replace />} />
                   </Route>
 
                   {/* Board Member routes - All under /dashboard/board-member */}
@@ -356,6 +396,8 @@ const App = () => (
                     <Route path="documents" element={<Documents />} />
                     <Route path="inbox" element={<Inbox />} />
                     <Route path="settings" element={<Settings />} />
+                    {/* Unknown sub-path falls back to this role dashboard */}
+                    <Route path="*" element={<Navigate to="." replace />} />
                   </Route>
 
 
