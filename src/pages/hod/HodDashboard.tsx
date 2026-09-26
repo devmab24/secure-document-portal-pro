@@ -162,7 +162,7 @@ const HodDashboard = () => {
           </CardHeader>
           <CardContent className="space-y-3">
             <Button asChild className="w-full bg-green-600 hover:bg-green-700">
-              <Link to="/dashboard/documents">
+              <Link to="/dashboard/hod/documents">
                 <PenTool className="h-4 w-4 mr-2" />
                 Sign Documents
               </Link>
