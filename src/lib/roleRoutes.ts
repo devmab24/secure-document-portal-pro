@@ -19,7 +19,7 @@ export const ROLE_DASHBOARD_ROUTES: Record<UserRole, string> = {
   [UserRole.HOD]: "/dashboard/hod",
   [UserRole.HEAD_OF_UNIT]: "/dashboard/head-of-unit",
   [UserRole.BOARD_MEMBER]: "/dashboard/board-member",
-  [UserRole.AUDITOR]: "/dashboard/board-member",
+  [UserRole.AUDITOR]: "/dashboard/auditor",
   [UserRole.STAFF]: "/dashboard/staff",
 };
 

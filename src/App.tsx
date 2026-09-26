@@ -24,6 +24,7 @@ import RegistryProtectedRoute from "@/components/RegistryProtectedRoute";
 import DirectorAdminProtectedRoute from "@/components/DirectorAdminProtectedRoute";
 import HeadOfUnitProtectedRoute from "@/components/HeadOfUnitProtectedRoute";
 import BoardMemberProtectedRoute from "@/components/BoardMemberProtectedRoute";
+import AuditorProtectedRoute from "@/components/AuditorProtectedRoute";
 import CmdDepartmentsList from "./components/CmdDepartmentsList";
 
 // Lazy load components
@@ -100,6 +101,7 @@ const DocumentView = lazy(() => import("./pages/DocumentView"));
 const InterDepartmentCommunication = lazy(() => import("./pages/InterDepartmentCommunication"));
 const DocumentCommunication = lazy(() => import("./pages/DocumentCommunication"));
 const AuditLogs = lazy(() => import("./pages/AuditLogs"));
+const AuditorDashboard = lazy(() => import("./pages/auditor/AuditorDashboard"));
 const DatabaseSeeding = lazy(() => import("./pages/DatabaseSeeding"));
 // const CoreTesting = lazy(() => import("./pages/CoreTesting"));
 
@@ -400,6 +402,18 @@ const App = () => (
                     <Route path="*" element={<Navigate to="." replace />} />
                   </Route>
 
+
+                  {/* Auditor routes - read-only oversight under /dashboard/auditor */}
+                  <Route path="/dashboard/auditor" element={<AuditorProtectedRoute />}>
+                    <Route index element={<AuditorDashboard />} />
+                    <Route path="audit-logs" element={<AuditLogs />} />
+                    <Route path="access-logs" element={<AuditLogs />} />
+                    <Route path="security-alerts" element={<AuditLogs />} />
+                    <Route path="documents" element={<Documents />} />
+                    <Route path="settings" element={<Settings />} />
+                    {/* Unknown sub-path falls back to this role dashboard */}
+                    <Route path="*" element={<Navigate to="." replace />} />
+                  </Route>
 
                   {/* Catch all route */}
                   <Route path="*" element={<NotFound />} />
