@@ -17,6 +17,7 @@ import {
 } from "@/components/ui/sidebar";
 import { useAuth } from "@/contexts/AuthContext";
 import { Department, UserRole } from "@/lib/types";
+import { getDashboardRoute } from "@/lib/roleRoutes";
 
 const DepartmentSpecificSidebar = () => {
   const { state } = useSidebar();
@@ -56,7 +57,10 @@ const DepartmentSpecificSidebar = () => {
     return null;
   }
 
+  // Navigation is scoped to the signed-in user's role dashboard so links always
+  // resolve to real routes (department slugs are only used for labels/icons).
   const departmentSlug = getDepartmentSlug(user.department);
+  const base = getDashboardRoute(user.role);
 
   return (
     <Sidebar
@@ -73,7 +77,7 @@ const DepartmentSpecificSidebar = () => {
             <SidebarMenu>
               <SidebarMenuItem>
                 <SidebarMenuButton asChild>
-                  <NavLink to={`/dashboard/${departmentSlug}`} className={getNavClass}>
+                  <NavLink to={base} className={getNavClass}>
                     {getDepartmentIcon(user.department)}
                     {!collapsed && <span>Dashboard</span>}
                   </NavLink>
@@ -82,7 +86,7 @@ const DepartmentSpecificSidebar = () => {
               
               <SidebarMenuItem>
                 <SidebarMenuButton asChild>
-                  <NavLink to={`/dashboard/${departmentSlug}/documents`} className={getNavClass}>
+                  <NavLink to={`${base}/documents`} className={getNavClass}>
                     <File className="h-5 w-5" />
                     {!collapsed && <span>Documents</span>}
                   </NavLink>
@@ -91,7 +95,7 @@ const DepartmentSpecificSidebar = () => {
               
               <SidebarMenuItem>
                 <SidebarMenuButton asChild>
-                  <NavLink to={`/dashboard/${departmentSlug}/upload`} className={getNavClass}>
+                  <NavLink to={`${base}/upload`} className={getNavClass}>
                     <Upload className="h-5 w-5" />
                     {!collapsed && <span>Upload</span>}
                   </NavLink>
@@ -111,7 +115,7 @@ const DepartmentSpecificSidebar = () => {
               <SidebarMenu>
                 <SidebarMenuItem>
                   <SidebarMenuButton asChild>
-                    <NavLink to={`/dashboard/${departmentSlug}/approvals`} className={getNavClass}>
+                    <NavLink to={`${base}/approvals`} className={getNavClass}>
                       <FileText className="h-5 w-5" />
                       {!collapsed && <span>Pending Approvals</span>}
                     </NavLink>
@@ -120,7 +124,7 @@ const DepartmentSpecificSidebar = () => {
                 
                 <SidebarMenuItem>
                   <SidebarMenuButton asChild>
-                    <NavLink to={`/dashboard/${departmentSlug}/staff`} className={getNavClass}>
+                    <NavLink to={`${base}/staffs`} className={getNavClass}>
                       <Users className="h-5 w-5" />
                       {!collapsed && <span>Department Staff</span>}
                     </NavLink>
@@ -137,7 +141,7 @@ const DepartmentSpecificSidebar = () => {
             <SidebarMenu>
               <SidebarMenuItem>
                 <SidebarMenuButton asChild>
-                  <NavLink to="/settings" className={getNavClass}>
+                  <NavLink to={`${base}/settings`} className={getNavClass}>
                     <Settings className="h-5 w-5" />
                     {!collapsed && <span>Settings</span>}
                   </NavLink>
