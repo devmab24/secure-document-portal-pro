@@ -401,6 +401,18 @@ const App = () => (
                   </Route>
 
 
+                  {/* Auditor routes - read-only oversight under /dashboard/auditor */}
+                  <Route path="/dashboard/auditor" element={<AuditorProtectedRoute />}>
+                    <Route index element={<AuditorDashboard />} />
+                    <Route path="audit-logs" element={<AuditLogs />} />
+                    <Route path="access-logs" element={<AuditLogs />} />
+                    <Route path="security-alerts" element={<AuditLogs />} />
+                    <Route path="documents" element={<Documents />} />
+                    <Route path="settings" element={<Settings />} />
+                    {/* Unknown sub-path falls back to this role dashboard */}
+                    <Route path="*" element={<Navigate to="." replace />} />
+                  </Route>
+
                   {/* Catch all route */}
                   <Route path="*" element={<NotFound />} />
                 </Routes>
