@@ -66,7 +66,7 @@ const MedicalRecordsSidebar = () => {
     {
       title: "Settings",
       icon: Settings,
-      url: "/settings",
+      url: "/dashboard/medical-records/settings",
     },
   ];
 
