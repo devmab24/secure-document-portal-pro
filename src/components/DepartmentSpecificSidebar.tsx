@@ -59,7 +59,6 @@ const DepartmentSpecificSidebar = () => {
 
   // Navigation is scoped to the signed-in user's role dashboard so links always
   // resolve to real routes (department slugs are only used for labels/icons).
-  const departmentSlug = getDepartmentSlug(user.department);
   const base = getDashboardRoute(user.role);
 
   return (
