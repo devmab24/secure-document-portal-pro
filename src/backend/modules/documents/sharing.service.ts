@@ -31,6 +31,9 @@ export interface DocumentSubmission {
   };
 }
 
+const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+const asUuidOrNull = (v?: string | null) => (v && UUID_RE.test(v) ? v : null);
+
 // Map a document_shares row to our DocumentSubmission interface
 function mapShareToSubmission(share: any): DocumentSubmission {
   const metadata = share.feedback ? JSON.parse(share.feedback) : {};
