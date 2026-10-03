@@ -47,7 +47,7 @@ function mapShareToSubmission(share: any): DocumentSubmission {
     toUserId: share.to_user_id || '',
     toUserName: metadata.toUserName || '',
     submissionType: metadata.submissionType || 'staff-to-hod',
-    status: (share.status as DocumentSubmission['status']) || 'pending',
+    status: ((share.status || 'PENDING').toLowerCase() as DocumentSubmission['status']),
     submittedAt: share.shared_at || new Date().toISOString(),
     reviewedAt: share.acknowledged_at || undefined,
     comments: metadata.comments,
@@ -88,7 +88,7 @@ export class DocumentSharingService {
         from_user_id: submission.fromUserId,
         to_user_id: submission.toUserId,
         to_department: submission.fromDepartment,
-        status: 'pending',
+        status: 'PENDING',
         feedback: metadata,
       })
       .select()
@@ -137,7 +137,7 @@ export class DocumentSharingService {
     const { data, error } = await supabase
       .from('document_shares')
       .update({
-        status,
+        status: status.toUpperCase(),
         acknowledged_at: new Date().toISOString(),
         feedback: JSON.stringify(updatedMeta),
       })
@@ -196,7 +196,7 @@ export class DocumentSharingService {
     const { data, error } = await supabase
       .from('document_shares')
       .select('*')
-      .eq('status', 'pending')
+      .eq('status', 'PENDING')
       .order('shared_at', { ascending: false });
 
     if (error) {
@@ -211,7 +211,7 @@ export class DocumentSharingService {
       .from('document_shares')
       .select('*')
       .eq('to_user_id', userId)
-      .eq('status', 'pending')
+      .eq('status', 'PENDING')
       .order('shared_at', { ascending: false });
 
     if (error) return [];
