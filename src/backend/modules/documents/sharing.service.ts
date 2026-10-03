@@ -84,7 +84,7 @@ export class DocumentSharingService {
     const { data, error } = await supabase
       .from('document_shares')
       .insert({
-        document_id: submission.documentId || null,
+        document_id: asUuidOrNull(submission.documentId),
         from_user_id: submission.fromUserId,
         to_user_id: submission.toUserId,
         to_department: submission.fromDepartment,
