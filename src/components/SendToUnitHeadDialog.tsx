@@ -119,7 +119,7 @@ export const SendToUnitHeadDialog: React.FC<SendToUnitHeadDialogProps> = ({
           message_content: message.trim(),
           priority,
           message_type: 'document_routing',
-          document_id: document?.id || null,
+          document_id: document?.id && /^[0-9a-f-]{36}$/i.test(document.id) ? document.id : null,
           metadata: {
             from_role: 'DIRECTOR_ADMIN',
             to_role: 'HEAD_OF_UNIT',
