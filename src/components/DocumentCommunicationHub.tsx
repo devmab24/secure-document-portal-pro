@@ -208,7 +208,7 @@ export const DocumentCommunicationHub = () => {
           document_id: selectedDocument,
           from_user_id: currentUser.id,
           to_user_id: selectedRecipient,
-          status: 'sent'
+          status: 'SENT'
         });
 
       if (error) throw error;
@@ -226,7 +226,7 @@ export const DocumentCommunicationHub = () => {
             message_content: message || 'A document has been shared with you.',
             priority: priority,
             message_type: 'document_share',
-            status: 'sent'
+            status: 'SENT'
           });
       }
 
@@ -257,7 +257,7 @@ export const DocumentCommunicationHub = () => {
     try {
       const { error } = await supabase
         .from('document_shares')
-        .update({ status: 'acknowledged' })
+        .update({ status: 'ACKNOWLEDGED' })
         .eq('id', shareId);
 
       if (error) throw error;
